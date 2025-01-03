@@ -2,15 +2,12 @@
 
 import { useState } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useSearchResults } from '~/hooks/listingSearch'
 
 export function SearchForm() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [address, setAddress] = useState('')
-
-  const { isLoading } = useSearchResults()
 
   function updateSearchParams(params: Record<string, string>) {
     const updatedParams = new URLSearchParams(searchParams.toString())
@@ -50,7 +47,7 @@ export function SearchForm() {
             value='Submit'
             onClick={updateFilters}
           >
-            {isLoading ? 'Loading...' : 'Search'}
+            Search
           </button>
         </fieldset>
       </form>

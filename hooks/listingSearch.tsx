@@ -31,7 +31,7 @@ export type Pagination = {
   numberReturned: number
 }
 
-type GeocodeSearchResults = {
+export type GeocodeSearchResults = {
   boundary: { _id: string; name: string; placeId: string; type: string }
   listings: Listing[]
   pagination: Pagination
