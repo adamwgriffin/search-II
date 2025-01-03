@@ -30,7 +30,10 @@ export function SearchForm() {
 
   return (
     <div className='p-4'>
-      <form name='search-form'>
+      <form name='search-form' onSubmit={(e) => {
+        e.preventDefault()
+        updateFilters()
+      }}>
         <fieldset className='flex gap-x-4'>
           <input
             type='text'
