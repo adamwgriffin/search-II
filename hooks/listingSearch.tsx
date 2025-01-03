@@ -1,10 +1,29 @@
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 
+export type GalleryImage = {
+  _id: string
+  caption: string
+  fullUrl: string
+  galleryUrl: string
+  smallUrl: string
+}
+
+export type Address = {
+  city: string
+  line1: string
+  state: string
+  zip: string
+}
+
 export type Listing = {
   _id: string
   latitude: number
   longitude: number
+  photoGallery: GalleryImage[]
+  address: Address
+  listPrice: number
+  soldPrice?: number
 }
 
 export type Pagination = {

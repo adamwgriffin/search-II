@@ -35,7 +35,7 @@ export function ListingMap() {
         disableDefaultUI={true}
         mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID!}
       >
-        {results?.listings.map((listing) => (
+        {results?.listings?.map((listing) => (
           <Marker
             key={listing._id}
             position={{ lat: listing.latitude, lng: listing.longitude }}

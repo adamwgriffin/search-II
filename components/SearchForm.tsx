@@ -41,7 +41,7 @@ export function SearchForm() {
             value={address}
             autoComplete='off'
             onChange={(e) => setAddress(e.target.value)}
-            className='p-2 rounded-md'
+            className='p-2 rounded-md w-72'
             data-1p-ignore
           />
           <button
