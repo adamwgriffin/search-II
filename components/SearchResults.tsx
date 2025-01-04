@@ -1,5 +1,5 @@
 import type { JSX } from 'react'
-import type { Listing } from '~/hooks/listingSearch'
+import type { Listing } from '~/types'
 import Image from 'next/image'
 
 export type SearchResultsProps = {

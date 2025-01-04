@@ -1,41 +1,6 @@
+import type { GeocodeSearchResults } from '~/types'
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-
-export type GalleryImage = {
-  _id: string
-  caption: string
-  fullUrl: string
-  galleryUrl: string
-  smallUrl: string
-}
-
-export type Address = {
-  city: string
-  line1: string
-  state: string
-  zip: string
-}
-
-export type Listing = {
-  _id: string
-  latitude: number
-  longitude: number
-  photoGallery: GalleryImage[]
-  address: Address
-  listPrice: number
-  soldPrice?: number
-}
-
-export type Pagination = {
-  page: number
-  numberReturned: number
-}
-
-export type GeocodeSearchResults = {
-  boundary: { _id: string; name: string; placeId: string; type: string }
-  listings: Listing[]
-  pagination: Pagination
-}
 
 async function fetchGeocodeSearchResults(
   queryString: string

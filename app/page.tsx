@@ -1,4 +1,4 @@
-import type { GeocodeSearchResults } from '~/hooks/listingSearch'
+import type { GeocodeSearchResults } from '~/types'
 import { SearchForm } from '~/components/SearchForm'
 import { SearchResults } from '~/components/SearchResults'
 import { ListingMap } from '~/components/ListingMap'
