@@ -1,23 +1,36 @@
 'use client'
 
-import type { Listing } from '~/hooks/listingSearch'
-import { type JSX } from 'react'
-import { Map, Marker, useMap } from '@vis.gl/react-google-maps'
+import type { Listing, MultiPolygon, ViewportLatLngBounds } from '~/types'
+import { Map, Marker, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
+import {
+  convertGeojsonCoordinatesToPolygonPaths,
+  getAvailableBounds
+} from '~/lib/polygon'
+import { GoogleMapsPolygonOptions } from '~/lib/googleMapsOptions'
+import { MapBoundary } from './MapBoundary'
 
 export type ListingMapProps = {
   listings: Listing[] | undefined
+  coordinates: MultiPolygon | undefined
+  viewport: ViewportLatLngBounds | undefined
 }
 
-export function ListingMap({ listings = [] }: ListingMapProps): JSX.Element {
+export function ListingMap({
+  listings = [],
+  coordinates,
+  viewport
+}: ListingMapProps) {
+  const apiIsLoaded = useApiIsLoaded()
   const map = useMap()
 
-  if (map && listings?.length) {
-    const bounds = new google.maps.LatLngBounds()
-    listings.forEach((listing) => {
-      bounds.extend(
-        new google.maps.LatLng(listing.latitude, listing.longitude)
-      )
-    })
+  if (!apiIsLoaded) return
+
+  const paths = coordinates
+    ? convertGeojsonCoordinatesToPolygonPaths(coordinates)
+    : null
+
+  const bounds = getAvailableBounds(paths, viewport || null)
+  if (map && bounds) {
     map.fitBounds(bounds)
   }
 
@@ -41,6 +54,11 @@ export function ListingMap({ listings = [] }: ListingMapProps): JSX.Element {
           position={{ lat: listing.latitude, lng: listing.longitude }}
         />
       ))}
+      <MapBoundary
+        paths={paths}
+        visible={true}
+        options={GoogleMapsPolygonOptions}
+      />
     </Map>
   )
 }

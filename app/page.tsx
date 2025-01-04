@@ -9,7 +9,6 @@ export default async function Home({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const queryParams = await searchParams
-  // console.log("queryParams:", queryParams)
   let results
 
   if (queryParams && Object.keys(queryParams).length !== 0) {
@@ -36,7 +35,11 @@ export default async function Home({
           <SearchResults listings={results?.listings} />
         </div>
         <div className='p-4'>
-          <ListingMap listings={results?.listings} />
+          <ListingMap
+            listings={results?.listings}
+            coordinates={results?.boundary?.geometry?.coordinates}
+            viewport={results?.viewport}
+          />
         </div>
       </div>
     </main>
