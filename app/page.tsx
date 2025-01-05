@@ -12,7 +12,7 @@ export default async function Home({
   let results
 
   if (queryParams && Object.keys(queryParams).length !== 0) {
-    // @ts-expect-error Haven't figured out correct type for this yet
+    // @ts-expect-error Haven't figured out correctly type for this yet
     const queryString = new URLSearchParams(queryParams).toString()
     try {
       const res = await fetch(
