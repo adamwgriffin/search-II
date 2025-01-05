@@ -1,33 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { useSearchParams, useRouter, usePathname } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useUpdatedFilters } from '~/hooks/useUpdateFilters'
 
 export function SearchForm() {
-  const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()
+  const updateFilters = useUpdatedFilters()
 
   const [address, setAddress] = useState(searchParams.get('address') ?? '')
-
-  function updateSearchParams(params: Record<string, string>) {
-    const updatedParams = new URLSearchParams(searchParams.toString())
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        updatedParams.set(key, value)
-      } else {
-        updatedParams.delete(key)
-      }
-    })
-
-    router.push(`${pathname}?${updatedParams.toString()}`)
-  }
-
-  function updateFilters() {
-    const updatedFilters = { address: address }
-    updateSearchParams(updatedFilters)
-  }
 
   return (
     <div className='p-4'>
@@ -35,7 +16,7 @@ export function SearchForm() {
         name='search-form'
         onSubmit={(e) => {
           e.preventDefault()
-          updateFilters()
+          updateFilters({ address })
         }}
       >
         <fieldset className='flex gap-x-4'>
@@ -52,7 +33,7 @@ export function SearchForm() {
             type='submit'
             form='search-form'
             value='Submit'
-            onClick={updateFilters}
+            onClick={() => updateFilters({ address })}
           >
             Search
           </button>
