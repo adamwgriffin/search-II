@@ -7,7 +7,8 @@ export function SearchForm() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [address, setAddress] = useState('')
+
+  const [address, setAddress] = useState(searchParams.get('address') ?? '')
 
   function updateSearchParams(params: Record<string, string>) {
     const updatedParams = new URLSearchParams(searchParams.toString())
