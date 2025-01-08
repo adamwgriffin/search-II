@@ -28,10 +28,10 @@ export default async function Home({
   }
 
   return (
-    <main className='grid grid-rows-[auto_1fr] min-h-screen'>
+    <main className='grid grid-rows-[auto_1fr] h-full'>
       <SearchForm />
-      <div className='grid grid-cols-2'>
-        <div className='p-4'>
+      <div className='grid grid-cols-2 h-full min-h-0 min-w-0'>
+        <div className='p-4 overflow-y-auto'>
           <SearchResults listings={results?.listings} />
         </div>
         <div className='p-4'>

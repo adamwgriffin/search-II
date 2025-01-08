@@ -14,7 +14,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
         alt='Listing Image'
         width={300}
         height={300}
-        className='rounded-md'
+        className='rounded-md aspect-square object-cover'
       />
       <div className='pt-2'>
         {formatPrice(listing.soldPrice || listing.listPrice)}
