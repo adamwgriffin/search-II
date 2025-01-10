@@ -14,6 +14,9 @@
     --foreground: #ededed;
     --input-background: gray;
   }
+  * {
+    scrollbar-color: rgb(58, 58, 58) var(--input-background);
+  }
 }
 
 html,
