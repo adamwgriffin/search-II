@@ -5,11 +5,11 @@ import {
   usePathname
 } from 'next/navigation'
 import omitBy from 'lodash/omitBy'
-import { SearchParams } from '~/types'
+import { URLParams } from '~/types'
 
 function getNewSearchParams(
   currentParams: ReadonlyURLSearchParams,
-  newParams: SearchParams
+  newParams: URLParams
 ) {
   const mergedParams = Object.assign(
     Object.fromEntries(currentParams),
@@ -24,7 +24,7 @@ export function useUpdateFilters() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  return function (newParams: SearchParams) {
+  return function (newParams: URLParams) {
     const updatedQueryString = getNewSearchParams(
       searchParams,
       newParams

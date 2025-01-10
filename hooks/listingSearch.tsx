@@ -1,10 +1,10 @@
-import type { GeocodeSearchResults } from '~/types'
+import type { ListingSearchGeocodeResponse } from '~/types'
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 
 async function fetchGeocodeSearchResults(
   queryString: string
-): Promise<GeocodeSearchResults> {
+): Promise<ListingSearchGeocodeResponse> {
   const response = await fetch(`/api/listing/search/geocode?${queryString}`)
   if (!response.ok) {
     throw new Error('Network response was not ok')

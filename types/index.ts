@@ -1,3 +1,5 @@
+export type NextSearchParams = { [key: string]: string | string[] | undefined }
+
 export type GalleryImage = {
   _id: string
   caption: string
@@ -23,7 +25,7 @@ export type Listing = {
   soldPrice?: number
 }
 
-export type Pagination = {
+export type ListingSearchPagination = {
   page: number
   numberReturned: number
 }
@@ -51,11 +53,16 @@ export type ViewportLatLngBounds = {
   southwest: google.maps.LatLngLiteral
 }
 
-export type GeocodeSearchResults = {
+export type ListingSearchGeocodeResponse = {
   boundary?: Boundary
   listings?: Listing[]
-  pagination?: Pagination
+  pagination?: ListingSearchPagination
   viewport?: ViewportLatLngBounds
 }
 
-export type SearchParams = Record<string, string | number | null>
+export type ListingSearchBoundaryResponse = {
+  listings: Listing[]
+  pagination: ListingSearchPagination
+}
+
+export type URLParams = Record<string, string | number | null>

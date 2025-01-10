@@ -1,6 +1,6 @@
 'use client'
 
-import type { GeocodeSearchResults, SearchParams } from '~/types'
+import type { ListingSearchGeocodeResponse, URLParams } from '~/types'
 import { Map, Marker, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
 import {
   convertGeojsonCoordinatesToPolygonPaths,
@@ -16,7 +16,7 @@ import { convertBoundsToParams } from '~/lib/polygon'
 import { useSearchParams } from 'next/navigation'
 
 export type ListingMapProps = {
-  results: GeocodeSearchResults | undefined
+  results: ListingSearchGeocodeResponse | undefined
 }
 
 let userAdjustedMap = false
@@ -53,7 +53,7 @@ export function ListingMap({ results }: ListingMapProps) {
     userAdjustedMap = false
     const mapBounds = map?.getBounds()
     if (!mapBounds) return
-    const updatedFilters: SearchParams = convertBoundsToParams(
+    const updatedFilters: URLParams = convertBoundsToParams(
       mapBounds.toJSON()
     )
     updatedFilters.zoom = map?.getZoom() || GoogleMapsMapOptions.defaultZoom!

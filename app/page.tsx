@@ -1,41 +1,21 @@
-import type { GeocodeSearchResults } from '~/types'
+import type { NextSearchParams } from '~/types'
 import { SearchForm } from '~/components/SearchForm'
 import { SearchResults } from '~/components/SearchResults'
 import { ListingMap } from '~/components/ListingMap'
+import { fetchListings } from '~/lib/fetchListings'
 
 export default async function Home({
   searchParams
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: Promise<NextSearchParams>
 }) {
-  const queryParams = await searchParams
+  const params = await searchParams
 
   let results
 
-  if (queryParams && Object.keys(queryParams).length !== 0) {
-    // console.log("queryParams:", queryParams)
-    let url = 'http://localhost:3001/listing/search'
-    if (queryParams.bounds_north) {
-      if (queryParams.boundary_id) {
-        url += `/boundary/${queryParams.boundary_id}`
-        // Remove params that the listing service doens't recognize
-        delete queryParams.boundary_id
-        delete queryParams.address
-        delete queryParams.zoom
-      } else {
-        url += '/bounds'
-      }
-    } else {
-      url += '/geocode'
-    }
-    // @ts-expect-error Haven't figured out correct type for this yet
-    const queryString = new URLSearchParams(queryParams).toString()
+  if (params && Object.keys(params).length !== 0) {
     try {
-      const res = await fetch(`${url}?${queryString}`)
-      if (!res.ok) {
-        throw new Error(await res.text())
-      }
-      results = (await res.json()) as GeocodeSearchResults
+      results = await fetchListings(params)
     } catch (error) {
       console.error(error)
     }
