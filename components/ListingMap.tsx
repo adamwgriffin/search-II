@@ -6,7 +6,10 @@ import {
   convertGeojsonCoordinatesToPolygonPaths,
   getAvailableBounds
 } from '~/lib/polygon'
-import { GoogleMapsPolygonOptions } from '~/lib/googleMapsOptions'
+import {
+  GoogleMapsMapOptions,
+  GoogleMapsPolygonOptions
+} from '~/lib/googleMapsOptions'
 import { MapBoundary } from './MapBoundary'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import { convertBoundsToParams } from '~/lib'
@@ -74,15 +77,11 @@ export function ListingMap({ results, lat, lng }: ListingMapProps) {
         overflow: 'hidden',
         borderRadius: '.5rem'
       }}
-      defaultCenter={{ lat: 47.6560479, lng: -122.3603527 }}
-      defaultZoom={12}
-      gestureHandling={'greedy'}
-      disableDefaultUI={true}
-      mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID!}
       onDragend={() => {
         userAdjustedMap = true
       }}
       onIdle={handleIdle}
+      {...GoogleMapsMapOptions}
     >
       {results?.listings?.map((listing) => (
         <Marker
