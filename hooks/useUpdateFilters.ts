@@ -4,29 +4,28 @@ import {
   useRouter,
   usePathname
 } from 'next/navigation'
+import omitBy from 'lodash/omitBy'
+import { SearchParams } from '~/types'
 
-function getUpdatedSearchParams(
+function getNewSearchParams(
   currentParams: ReadonlyURLSearchParams,
-  newParams: Record<string, string>
+  newParams: SearchParams
 ) {
-  const updatedParams = new URLSearchParams(currentParams.toString())
-  Object.entries(newParams).forEach(([key, value]) => {
-    if (value) {
-      updatedParams.set(key, value)
-    } else {
-      updatedParams.delete(key)
-    }
-  })
-  return updatedParams
+  const mergedParams = Object.assign(
+    Object.fromEntries(currentParams),
+    newParams
+  )
+  const updatedParams = omitBy(mergedParams, (value) => !value)
+  return new URLSearchParams(updatedParams)
 }
 
-export function useUpdatedFilters() {
+export function useUpdateFilters() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  return function (newParams: Record<string, string>) {
-    const updatedQueryString = getUpdatedSearchParams(
+  return function (newParams: SearchParams) {
+    const updatedQueryString = getNewSearchParams(
       searchParams,
       newParams
     ).toString()

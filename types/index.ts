@@ -57,3 +57,5 @@ export type GeocodeSearchResults = {
   pagination?: Pagination
   viewport?: ViewportLatLngBounds
 }
+
+export type SearchParams = Record<string, string | null>

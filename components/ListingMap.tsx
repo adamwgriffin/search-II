@@ -1,6 +1,6 @@
 'use client'
 
-import type { Listing, MultiPolygon, ViewportLatLngBounds } from '~/types'
+import type { GeocodeSearchResults } from '~/types'
 import { Map, Marker, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
 import {
   convertGeojsonCoordinatesToPolygonPaths,
@@ -8,30 +8,62 @@ import {
 } from '~/lib/polygon'
 import { GoogleMapsPolygonOptions } from '~/lib/googleMapsOptions'
 import { MapBoundary } from './MapBoundary'
+import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { convertBoundsToParams } from '~/lib'
 
 export type ListingMapProps = {
-  listings: Listing[] | undefined
-  coordinates: MultiPolygon | undefined
-  viewport: ViewportLatLngBounds | undefined
+  results: GeocodeSearchResults | undefined
+  lat?: number | undefined
+  lng?: number | undefined
 }
 
-export function ListingMap({
-  listings = [],
-  coordinates,
-  viewport
-}: ListingMapProps) {
+let userAdjustedMap = false
+let previousBoundaryId: string
+
+export function ListingMap({ results, lat, lng }: ListingMapProps) {
   const apiIsLoaded = useApiIsLoaded()
   const map = useMap()
+  const updateFilters = useUpdateFilters()
 
   if (!apiIsLoaded) return
 
+  const coordinates = results?.boundary?.geometry?.coordinates
   const paths = coordinates
     ? convertGeojsonCoordinatesToPolygonPaths(coordinates)
     : null
 
-  const bounds = getAvailableBounds(paths, viewport || null)
-  if (map && bounds) {
-    map.fitBounds(bounds)
+  const bounds = getAvailableBounds(paths, results?.viewport || null)
+
+  // console.log('results?.boundary?._id:', results?.boundary?._id)
+  // console.log('previousBoundaryId:', previousBoundaryId)
+
+  const boundaryId = results?.boundary?._id
+
+  if (map && lat && lng) {
+    map.setCenter({ lat, lng })
+  } else if (map && bounds && boundaryId) {
+    if (!previousBoundaryId || previousBoundaryId !== boundaryId) {
+      map.fitBounds(bounds)
+    }
+    previousBoundaryId = boundaryId
+  }
+
+  function handleIdle() {
+    if (!userAdjustedMap) return
+    userAdjustedMap = false
+    const mapBounds = map?.getBounds()
+    const center = map?.getCenter()
+    if (!mapBounds || !center) return
+    const { lat, lng } = center.toJSON()
+    const updatedFilters: Record<string, string> = {
+      ...convertBoundsToParams(mapBounds.toJSON()),
+      center_lat: lat.toString(),
+      center_lng: lng.toString()
+    }
+    if (boundaryId) {
+      updatedFilters.boundary_id = boundaryId
+    }
+    updateFilters(updatedFilters)
   }
 
   return (
@@ -47,8 +79,12 @@ export function ListingMap({
       gestureHandling={'greedy'}
       disableDefaultUI={true}
       mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID!}
+      onDragend={() => {
+        userAdjustedMap = true
+      }}
+      onIdle={handleIdle}
     >
-      {listings.map((listing) => (
+      {results?.listings?.map((listing) => (
         <Marker
           key={listing._id}
           position={{ lat: listing.latitude, lng: listing.longitude }}
