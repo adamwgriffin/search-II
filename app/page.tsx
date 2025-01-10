@@ -36,16 +36,16 @@ export default async function Home({
     } else {
       url += '/geocode'
     }
-    // @ts-expect-error Haven't figured out correctly type for this yet
+    // @ts-expect-error Haven't figured out correct type for this yet
     const queryString = new URLSearchParams(queryParams).toString()
     try {
       const res = await fetch(`${url}?${queryString}`)
       if (!res.ok) {
-        console.error('Error in try block:', res)
+        throw new Error(await res.text())
       }
       results = (await res.json()) as GeocodeSearchResults
     } catch (error) {
-      console.error('Error in catch block:', error)
+      console.error(error)
     }
   }
 
