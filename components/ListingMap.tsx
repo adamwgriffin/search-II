@@ -72,8 +72,6 @@ export function ListingMap({ results, lat, lng }: ListingMapProps) {
   return (
     <Map
       style={{
-        width: '100%',
-        height: '100%',
         overflow: 'hidden',
         borderRadius: '.5rem'
       }}
