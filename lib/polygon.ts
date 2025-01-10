@@ -1,5 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
-import type { PolygonPaths, MultiPolygon, ViewportLatLngBounds } from '../types'
+import type { PolygonPaths, MultiPolygon, ViewportLatLngBounds, ListingSearchGeocodeResponse } from '../types'
 
 /*
 we need to transform the geojson we get from the service into a shape that works for the Polygon class we need to use
@@ -32,8 +32,8 @@ but instead we need:
   ]
 ]
 */
-// TODO: this should be recursive instead. also this type is not really a MultiPolygon. it's only the coordinates from a
-// MultiPolygon
+// TODO: this should be recursive instead. also this type is not really a
+// MultiPolygon. it's only the coordinates from a MultiPolygon
 export const convertGeojsonCoordinatesToPolygonPaths = (
   geoJsonCoordinates: MultiPolygon
 ): PolygonPaths => {
@@ -44,8 +44,9 @@ export const convertGeojsonCoordinatesToPolygonPaths = (
   })
 }
 
-// most examples use polygon.getPaths() to extend the bounds, but that data is the same as the geojson coordinates we
-// used to create the polygon paths, so we might as well just use that data since we already have it
+// most examples use polygon.getPaths() to extend the bounds, but that data is
+// the same as the geojson coordinates we used to create the polygon paths, so
+// we might as well just use that data since we already have it
 export const getGeoLayerBounds = (geoLayerCoordinates: PolygonPaths) => {
   const bounds = new google.maps.LatLngBounds()
   geoLayerCoordinates.forEach((latLngArr) =>
@@ -96,14 +97,21 @@ function boundsPresent(queryParams: ReadonlyURLSearchParams) {
   return requiredKeys.every((key) => queryParamsKeys.includes(key))
 }
 
+export function getPolygonPaths(results: ListingSearchGeocodeResponse | null) {
+  const coordinates = results?.boundary?.geometry?.coordinates
+  return coordinates
+    ? convertGeojsonCoordinatesToPolygonPaths(coordinates)
+    : null
+}
+
 export function getAvailableBounds(
   queryParams: ReadonlyURLSearchParams,
-  paths: PolygonPaths | null,
+  polygonPaths: PolygonPaths | null,
   viewport: ViewportLatLngBounds | null
 ) {
   if (boundsPresent(queryParams))
     return convertBoundsParamsToBounds(queryParams)
-  if (paths) return getGeoLayerBounds(paths)
+  if (polygonPaths) return getGeoLayerBounds(polygonPaths)
   if (viewport) return convertViewportToLatLngBoundsLiteral(viewport)
   return null
 }

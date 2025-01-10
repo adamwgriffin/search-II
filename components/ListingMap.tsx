@@ -2,10 +2,7 @@
 
 import type { ListingSearchGeocodeResponse, URLParams } from '~/types'
 import { Map, Marker, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
-import {
-  convertGeojsonCoordinatesToPolygonPaths,
-  getAvailableBounds
-} from '~/lib/polygon'
+import { getPolygonPaths, getAvailableBounds } from '~/lib/polygon'
 import {
   GoogleMapsMapOptions,
   GoogleMapsPolygonOptions
@@ -29,14 +26,11 @@ export function ListingMap({ results }: ListingMapProps) {
 
   if (!apiIsLoaded) return
 
-  const coordinates = results?.boundary?.geometry?.coordinates
-  const paths = coordinates
-    ? convertGeojsonCoordinatesToPolygonPaths(coordinates)
-    : null
+  const polygonPaths = getPolygonPaths(results)
 
   const bounds = getAvailableBounds(
     queryParams,
-    paths,
+    polygonPaths,
     results?.viewport || null
   )
 
@@ -81,7 +75,7 @@ export function ListingMap({ results }: ListingMapProps) {
         />
       ))}
       <MapBoundary
-        paths={paths}
+        paths={polygonPaths}
         visible={true}
         options={GoogleMapsPolygonOptions}
       />
