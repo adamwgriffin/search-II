@@ -9,17 +9,7 @@ export default async function Home({
 }: {
   searchParams: Promise<NextSearchParams>
 }) {
-  const params = await searchParams
-
-  let results
-
-  if (params && Object.keys(params).length !== 0) {
-    try {
-      results = await fetchListings(params)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const results = await fetchListings(await searchParams)
 
   return (
     <main className='grid grid-rows-[auto_1fr] h-full'>

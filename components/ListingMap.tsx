@@ -16,7 +16,7 @@ import { convertBoundsToParams } from '~/lib/polygon'
 import { useSearchParams } from 'next/navigation'
 
 export type ListingMapProps = {
-  results: ListingSearchGeocodeResponse | undefined
+  results: ListingSearchGeocodeResponse | null
 }
 
 let userAdjustedMap = false
@@ -53,9 +53,7 @@ export function ListingMap({ results }: ListingMapProps) {
     userAdjustedMap = false
     const mapBounds = map?.getBounds()
     if (!mapBounds) return
-    const updatedFilters: URLParams = convertBoundsToParams(
-      mapBounds.toJSON()
-    )
+    const updatedFilters: URLParams = convertBoundsToParams(mapBounds.toJSON())
     updatedFilters.zoom = map?.getZoom() || GoogleMapsMapOptions.defaultZoom!
     if (boundaryId) {
       updatedFilters.boundary_id = boundaryId

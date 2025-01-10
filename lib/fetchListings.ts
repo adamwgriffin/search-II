@@ -5,9 +5,9 @@ import type {
 } from '~/types'
 import omit from 'lodash/omit'
 
-async function http<T>(url: string, queryParams: NextSearchParams) {
+async function http<T>(url: string, params: NextSearchParams) {
   const queryString = new URLSearchParams(
-    queryParams as Record<string, string>
+    params as Record<string, string> // The current TS type for this is not correct
   ).toString()
   const res = await fetch(
     `${process.env.LISTING_SEARCH_ENDPOINT!}${url}?${queryString}`
@@ -18,33 +18,29 @@ async function http<T>(url: string, queryParams: NextSearchParams) {
   return (await res.json()) as T
 }
 
-function selectParamsForGeocodeSearch(queryParams: NextSearchParams) {
-  return queryParams
+function paramsForGeospatialSearch(params: NextSearchParams) {
+  return omit(params, 'boundary_id', 'address', 'zoom')
 }
 
-function selectParamsForGeospatialSearch(queryParams: NextSearchParams) {
-  return omit(queryParams, 'boundary_id', 'address', 'zoom')
+async function searchNewLocation(params: NextSearchParams) {
+  return http<ListingSearchGeocodeResponse>('/geocode', params)
 }
 
-async function newLocationGeocodeSearch(queryParams: NextSearchParams) {
-  return http<ListingSearchGeocodeResponse>(
-    '/geocode',
-    selectParamsForGeocodeSearch(queryParams)
-  )
-}
-
-async function searchCurrentLocation(queryParams: NextSearchParams) {
-  const url = queryParams.boundary_id
-    ? `/boundary/${queryParams.boundary_id}`
-    : '/bounds'
+async function searchCurrentLocation(params: NextSearchParams) {
+  const url = params.boundary_id ? `/boundary/${params.boundary_id}` : '/bounds'
   return http<ListingSearchBoundaryResponse>(
     url,
-    selectParamsForGeospatialSearch(queryParams)
+    paramsForGeospatialSearch(params)
   )
 }
 
-export async function fetchListings(queryParams: NextSearchParams) {
-  return queryParams.bounds_north
-    ? searchCurrentLocation(queryParams)
-    : newLocationGeocodeSearch(queryParams)
+export async function fetchListings(params: NextSearchParams) {
+  try {
+    return params.bounds_north
+      ? searchCurrentLocation(params)
+      : searchNewLocation(params)
+  } catch (error) {
+    console.error(error)
+    return null
+  }
 }
