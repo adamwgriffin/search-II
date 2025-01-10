@@ -58,4 +58,4 @@ export type GeocodeSearchResults = {
   viewport?: ViewportLatLngBounds
 }
 
-export type SearchParams = Record<string, string | null>
+export type SearchParams = Record<string, string | number | null>

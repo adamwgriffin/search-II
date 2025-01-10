@@ -1,3 +1,4 @@
+import { ReadonlyURLSearchParams } from 'next/navigation'
 import type { PolygonPaths, MultiPolygon, ViewportLatLngBounds } from '../types'
 
 /*
@@ -63,10 +64,45 @@ export const convertViewportToLatLngBoundsLiteral = (
   return bounds.toJSON()
 }
 
+export function convertBoundsToParams(bounds: google.maps.LatLngBoundsLiteral) {
+  const { north, east, south, west } = bounds
+  return {
+    bounds_north: north,
+    bounds_east: east,
+    bounds_south: south,
+    bounds_west: west
+  }
+}
+
+export function convertBoundsParamsToBounds(
+  queryParams: ReadonlyURLSearchParams
+): google.maps.LatLngBoundsLiteral {
+  return {
+    north: Number(queryParams.get('bounds_north')),
+    east: Number(queryParams.get('bounds_east')),
+    south: Number(queryParams.get('bounds_south')),
+    west: Number(queryParams.get('bounds_west'))
+  }
+}
+
+function boundsPresent(queryParams: ReadonlyURLSearchParams) {
+  const requiredKeys = [
+    'bounds_north',
+    'bounds_east',
+    'bounds_south',
+    'bounds_west'
+  ]
+  const queryParamsKeys = Array.from(queryParams.keys())
+  return requiredKeys.every((key) => queryParamsKeys.includes(key))
+}
+
 export function getAvailableBounds(
+  queryParams: ReadonlyURLSearchParams,
   paths: PolygonPaths | null,
   viewport: ViewportLatLngBounds | null
 ) {
+  if (boundsPresent(queryParams))
+    return convertBoundsParamsToBounds(queryParams)
   if (paths) return getGeoLayerBounds(paths)
   if (viewport) return convertViewportToLatLngBoundsLiteral(viewport)
   return null

@@ -9,16 +9,6 @@ export default async function Home({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const queryParams = await searchParams
-  
-  // Get center if available
-  const centerLat = queryParams.center_lat
-    ? Number(queryParams.center_lat)
-    : undefined
-  const centerLng = queryParams.center_lng
-    ? Number(queryParams.center_lng)
-    : undefined
-  delete queryParams.center_lat
-  delete queryParams.center_lng
 
   let results
 
@@ -28,8 +18,10 @@ export default async function Home({
     if (queryParams.bounds_north) {
       if (queryParams.boundary_id) {
         url += `/boundary/${queryParams.boundary_id}`
+        // Remove params that the listing service doens't recognize
         delete queryParams.boundary_id
         delete queryParams.address
+        delete queryParams.zoom
       } else {
         url += '/bounds'
       }
@@ -57,7 +49,7 @@ export default async function Home({
           <SearchResults listings={results?.listings} />
         </div>
         <div className='p-4'>
-          <ListingMap results={results} lat={centerLat} lng={centerLng} />
+          <ListingMap results={results} />
         </div>
       </div>
     </main>

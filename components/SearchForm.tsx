@@ -20,8 +20,7 @@ export function SearchForm() {
       bounds_south: null,
       bounds_west: null,
       boundary_id: null,
-      center_lat: null,
-      center_lng: null
+      zoom: null
     })
   }
 
