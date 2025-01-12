@@ -10,7 +10,10 @@ async function http<T>(url: string, params: NextSearchParams) {
     params as Record<string, string> // The current TS type for this is not correct
   ).toString()
   const res = await fetch(
-    `${process.env.LISTING_SEARCH_ENDPOINT!}${url}?${queryString}`
+    `${process.env.LISTING_SEARCH_ENDPOINT!}${url}?${queryString}`,
+    {
+      cache: 'force-cache'
+    }
   )
   if (!res.ok) {
     throw new Error(await res.text())
