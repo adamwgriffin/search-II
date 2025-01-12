@@ -8,18 +8,18 @@ export type ListingCardsProps = {
 
 export function ListingCard({ listing }: ListingCardsProps) {
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       <Image
         src={listing.photoGallery[0].smallUrl}
         alt='Listing Image'
         width={300}
         height={300}
-        className='rounded-md aspect-square object-cover'
+        className='rounded-lg aspect-square object-cover'
       />
-      <div className='pt-2'>
+      <div className=''>
         {formatPrice(listing.soldPrice || listing.listPrice)}
       </div>
-      <address className='not-italic pt-2'>
+      <address className='not-italic'>
         <div>{listing.address.line1}</div>
         <div>{`${listing.address.city}, ${listing.address.state} ${listing.address.zip}`}</div>
       </address>
