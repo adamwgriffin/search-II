@@ -35,6 +35,7 @@ async function searchCurrentLocation(params: NextSearchParams) {
 }
 
 export async function fetchListings(params: NextSearchParams) {
+  if (!params || Object.keys(params).length === 0) return null
   try {
     return params.bounds_north
       ? searchCurrentLocation(params)
