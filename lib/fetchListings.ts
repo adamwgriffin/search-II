@@ -1,38 +1,32 @@
-import type {
-  NextSearchParams,
-  ListingSearchGeocodeResponse,
-  ListingSearchBoundaryResponse
-} from '~/types'
 import omit from 'lodash/omit'
-
-async function http<T>(url: string, params: NextSearchParams) {
-  const queryString = new URLSearchParams(
-    params as Record<string, string> // The current TS type for this is not correct
-  ).toString()
-  const res = await fetch(
-    `${process.env.LISTING_SEARCH_ENDPOINT!}${url}?${queryString}`,
-    {
-      cache: 'force-cache'
-    }
-  )
-  if (!res.ok) {
-    throw new Error(await res.text())
-  }
-  return (await res.json()) as T
-}
+import { http } from '~/lib/http'
+import type {
+  ListingSearchBoundaryResponse,
+  ListingSearchGeocodeResponse,
+  NextSearchParams
+} from '~/types'
 
 function paramsForGeospatialSearch(params: NextSearchParams) {
   return omit(params, 'boundary_id', 'address', 'zoom')
 }
 
+async function getListings<T>(url: string, params: NextSearchParams) {
+  return http<T>(
+    `${process.env.NEXT_PUBLIC_LISTING_SEARCH_ENDPOINT!}${url}`,
+    params,
+    {
+      cache: 'force-cache'
+    }
+  )
+}
+
 async function searchNewLocation(params: NextSearchParams) {
-  return http<ListingSearchGeocodeResponse>('/geocode', params)
+  return getListings<ListingSearchGeocodeResponse>('/geocode', params)
 }
 
 async function searchCurrentLocation(params: NextSearchParams) {
-  const url = params.boundary_id ? `/boundary/${params.boundary_id}` : '/bounds'
-  return http<ListingSearchBoundaryResponse>(
-    url,
+  return getListings<ListingSearchBoundaryResponse>(
+    params.boundary_id ? `/boundary/${params.boundary_id}` : '/bounds',
     paramsForGeospatialSearch(params)
   )
 }
