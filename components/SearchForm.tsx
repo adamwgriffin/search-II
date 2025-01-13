@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { FaSearch } from "react-icons/fa";
 
 export function SearchForm() {
   const searchParams = useSearchParams()
@@ -33,7 +34,7 @@ export function SearchForm() {
           setFiltersForNewSearch()
         }}
       >
-        <fieldset className='flex gap-x-4'>
+        <fieldset className='flex gap-x-3'>
           <input
             type='text'
             name='address'
@@ -50,7 +51,7 @@ export function SearchForm() {
             value='Submit'
             onClick={setFiltersForNewSearch}
           >
-            Search
+            <FaSearch size={26} />
           </button>
         </fieldset>
       </form>
