@@ -1,9 +1,4 @@
-export type SearchParamsInit =
-  | string
-  | string[][]
-  | Record<string, string>
-  | URLSearchParams
-  | undefined
+import { objectToQueryString } from './listingSearchParams'
 
 export async function http<T>(
   url: string,
@@ -20,9 +15,3 @@ export async function http<T>(
   return (await res.json()) as T
 }
 
-function objectToQueryString(params: object) {
-  // Casting params as SearchParamsInit because the current type provided by Typescript for this is not correct
-  return new URLSearchParams(
-    params as SearchParamsInit
-  ).toString()
-}

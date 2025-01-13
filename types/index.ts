@@ -1,3 +1,10 @@
+export type SearchParamsInit =
+  | string
+  | string[][]
+  | Record<string, string>
+  | URLSearchParams
+  | undefined
+
 export type NextSearchParams = { [key: string]: string | string[] | undefined }
 
 export type GalleryImage = {

@@ -1,29 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
-import { FaSearch } from "react-icons/fa";
+import { useState } from 'react'
+import { FaSearch } from 'react-icons/fa'
+import { useSearchNewLocation } from '~/hooks/useSearchNewLocation'
 
 export function SearchForm() {
   const searchParams = useSearchParams()
-  const updateFilters = useUpdateFilters()
+  const searchNewLocation = useSearchNewLocation()
 
   const [address, setAddress] = useState(searchParams.get('address') ?? '')
-
-  function setFiltersForNewSearch() {
-    updateFilters({
-      address,
-      // Setting these to null will cause them to be removed from the url. When
-      // bounds are absent we do a new search by fetching from the /geocode endpoint
-      bounds_north: null,
-      bounds_east: null,
-      bounds_south: null,
-      bounds_west: null,
-      boundary_id: null,
-      zoom: null
-    })
-  }
 
   return (
     <div className='p-4'>
@@ -31,7 +17,7 @@ export function SearchForm() {
         name='search-form'
         onSubmit={(e) => {
           e.preventDefault()
-          setFiltersForNewSearch()
+          searchNewLocation(address)
         }}
       >
         <fieldset className='flex gap-x-3'>
@@ -49,7 +35,7 @@ export function SearchForm() {
             type='submit'
             form='search-form'
             value='Submit'
-            onClick={setFiltersForNewSearch}
+            onClick={() => searchNewLocation(address)}
           >
             <FaSearch size={26} />
           </button>
