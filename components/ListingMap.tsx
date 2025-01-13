@@ -1,16 +1,20 @@
 'use client'
 
-import type { ListingSearchGeocodeResponse, URLParams } from '~/types'
-import { Map, Marker, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
-import { getPolygonPaths, getAvailableBounds } from '~/lib/polygon'
+import { Map, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
+import { useSearchParams } from 'next/navigation'
+import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
   GoogleMapsMapOptions,
   GoogleMapsPolygonOptions
 } from '~/lib/googleMapsOptions'
+import {
+  convertBoundsToParams,
+  getAvailableBounds,
+  getPolygonPaths
+} from '~/lib/polygon'
+import type { ListingSearchGeocodeResponse, URLParams } from '~/types'
+import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
-import { convertBoundsToParams } from '~/lib/polygon'
-import { useSearchParams } from 'next/navigation'
 
 export type ListingMapProps = {
   results: ListingSearchGeocodeResponse | null
@@ -69,10 +73,7 @@ export function ListingMap({ results }: ListingMapProps) {
       zoom={zoom}
     >
       {results?.listings?.map((listing) => (
-        <Marker
-          key={listing._id}
-          position={{ lat: listing.latitude, lng: listing.longitude }}
-        />
+        <ListingMarker key={listing._id} listing={listing} />
       ))}
       <MapBoundary
         paths={polygonPaths}
