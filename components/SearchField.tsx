@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { useSearchNewLocation } from '~/hooks/useSearchNewLocation'
 
-export function SearchForm() {
+export function SearchField() {
   const searchParams = useSearchParams()
   const searchNewLocation = useSearchNewLocation()
 
