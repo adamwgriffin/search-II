@@ -36,7 +36,7 @@ export function SearchField() {
           value='Submit'
           onClick={() => searchNewLocation(address)}
         >
-          <FaSearch size={26} />
+          <FaSearch className='text-3xl' />
         </button>
       </fieldset>
     </form>
