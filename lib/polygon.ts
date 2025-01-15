@@ -1,5 +1,10 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
-import type { PolygonPaths, MultiPolygon, ViewportLatLngBounds, ListingSearchGeocodeResponse } from '../types'
+import type {
+  PolygonPaths,
+  MultiPolygon,
+  ViewportLatLngBounds,
+  ListingSearchGeocodeResponse
+} from '../types'
 
 /*
 we need to transform the geojson we get from the service into a shape that works for the Polygon class we need to use
