@@ -1,17 +1,17 @@
 import { objectToQueryString } from './listingSearchParams'
+import isEmpty from 'lodash/isEmpty'
 
-export async function http<T>(
+export async function http<T = unknown>(
   url: string,
-  searchParams: object | undefined,
+  searchParams?: object,
   options: RequestInit = {}
 ) {
-  const urlWithParams = searchParams
-    ? `${url}?${objectToQueryString(searchParams)}`
-    : url
+  const urlWithParams = isEmpty(searchParams)
+    ? url
+    : `${url}?${objectToQueryString(searchParams)}`
   const res = await fetch(urlWithParams, options)
   if (!res.ok) {
     throw new Error(await res.text())
   }
   return (await res.json()) as T
 }
-
