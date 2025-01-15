@@ -21,5 +21,6 @@ export const GoogleMapsMapOptions: MapProps = {
   },
   defaultZoom: 12,
   disableDefaultUI: true,
-  gestureHandling: 'greedy'
+  gestureHandling: 'greedy',
+  clickableIcons: false
 }
