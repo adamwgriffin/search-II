@@ -1,25 +1,37 @@
 import type { NextSearchParams } from '~/types'
 import { SearchResults } from '~/components/SearchResults'
-import { ListingMap } from '~/components/ListingMap'
-import { fetchListings } from '~/lib/fetchListings'
 import { SearchHeader } from '~/components/SearchHeader'
+import { Suspense } from 'react'
+import { SearchResultsLoading } from '~/components/SearchResultsLoading'
+import { ListingMapLoading } from '~/components/ListingMapLoading'
+import { ListingMapServerComponent } from '~/components/ListingMapServerComponent'
 
 export default async function Home({
   searchParams
 }: {
   searchParams: Promise<NextSearchParams>
 }) {
-  const results = await fetchListings(await searchParams)
+  const params = await searchParams
 
   return (
     <main className='grid grid-rows-[auto_1fr] h-full'>
       <SearchHeader />
       <div className='grid grid-cols-2 h-full min-h-0 min-w-0'>
         <div className='p-4 overflow-y-auto'>
-          <SearchResults listings={results?.listings} />
+          <Suspense
+            key={JSON.stringify(params)}
+            fallback={<SearchResultsLoading />}
+          >
+            <SearchResults searchParams={params} />
+          </Suspense>
         </div>
         <div className='p-4'>
-          <ListingMap results={results} />
+          <Suspense
+            key={JSON.stringify(params)}
+            fallback={<ListingMapLoading />}
+          >
+            <ListingMapServerComponent searchParams={params} />
+          </Suspense>
         </div>
       </div>
     </main>

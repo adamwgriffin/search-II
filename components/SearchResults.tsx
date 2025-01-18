@@ -1,17 +1,17 @@
-import type { JSX } from 'react'
-import type { Listing } from '~/types'
 import { ListingCard } from './ListingCard'
+import { fetchListings } from '~/lib/fetchListings'
+import { NextSearchParams } from '~/types'
 
 export type SearchResultsProps = {
-  listings: Listing[] | undefined
+  searchParams: NextSearchParams
 }
 
-export function SearchResults({
-  listings = []
-}: SearchResultsProps): JSX.Element {
+export async function SearchResults({ searchParams }: SearchResultsProps) {
+  const results = await fetchListings(searchParams)
+
   return (
     <ul className='grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-4 overflow-y-auto'>
-      {listings.map((listing) => (
+      {results?.listings?.map((listing) => (
         <li key={listing._id}>
           <ListingCard listing={listing} />
         </li>

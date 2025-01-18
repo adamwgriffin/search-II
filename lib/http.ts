@@ -6,6 +6,7 @@ export async function http<T = unknown>(
   searchParams?: object,
   options: RequestInit = {}
 ) {
+  // await new Promise((resovle) => setTimeout(resovle, 2000))
   const urlWithParams = isEmpty(searchParams)
     ? url
     : `${url}?${objectToQueryString(searchParams)}`
