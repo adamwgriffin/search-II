@@ -24,7 +24,12 @@ export function ListingMap() {
   const map = useMap()
   const queryParams = useSearchParams()
   const updateFilters = useUpdateFilters()
-  const { data: results } = useSearchResults()
+  // We're setting showCurrentDataWhileFetching so that the map markers won't
+  // blink from being re-rendered each time the map is moved and a new data
+  // fetch happens
+  const { data: results } = useSearchResults({
+    showCurrentDataWhileFetching: true
+  })
 
   if (!apiIsLoaded) return
 

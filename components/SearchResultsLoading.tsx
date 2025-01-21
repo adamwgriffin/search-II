@@ -15,12 +15,6 @@ export function SearchResultsLoading() {
       <li>
         <ListingCardLoading />
       </li>
-      <li>
-        <ListingCardLoading />
-      </li>
-      <li>
-        <ListingCardLoading />
-      </li>
     </>
   )
 }
