@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { http } from '~/lib/http'
 
-type BoundaryParams = {
+type BoundaryParams = Promise<{
   boundary_id: string
-}
+}>
 
 export async function GET(
   request: NextRequest,
