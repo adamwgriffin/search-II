@@ -15,6 +15,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
         width={300}
         height={300}
         className='rounded-lg aspect-square object-cover'
+        priority
       />
       <div className=''>
         {formatPrice(listing.soldPrice || listing.listPrice)}
