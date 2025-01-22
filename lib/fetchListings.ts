@@ -10,23 +10,19 @@ function paramsForGeospatialSearch(params: NextSearchParams) {
   return omit(params, 'boundary_id', 'address', 'zoom')
 }
 
-async function getListings<T>(url: string, params: NextSearchParams) {
-  return http<T>(
-    `${process.env.NEXT_PUBLIC_LISTING_SEARCH_ENDPOINT!}${url}`,
-    params,
-    {
-      cache: 'force-cache'
-    }
-  )
+async function getListings<T>(endpoint: string, params: NextSearchParams) {
+  return http<T>(`http://localhost:3001/listing/search/${endpoint}`, params, {
+    cache: 'force-cache'
+  })
 }
 
 async function searchNewLocation(params: NextSearchParams) {
-  return getListings<ListingSearchGeocodeResponse>('/geocode', params)
+  return getListings<ListingSearchGeocodeResponse>('geocode', params)
 }
 
 async function searchCurrentLocation(params: NextSearchParams) {
   return getListings<ListingSearchBoundaryResponse>(
-    params.boundary_id ? `/boundary/${params.boundary_id}` : '/bounds',
+    params.boundary_id ? `boundary/${params.boundary_id}` : 'bounds',
     paramsForGeospatialSearch(params)
   )
 }
