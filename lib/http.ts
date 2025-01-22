@@ -19,5 +19,6 @@ export async function http<T = unknown>(
   if (!res.ok) {
     throw new Error(await res.text())
   }
-  return (await res.json()) as T
+  const data: T = await res.json()
+  return data
 }
