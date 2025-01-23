@@ -1,9 +1,9 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import type {
-  PolygonPaths,
+  ListingSearchGeocodeResponse,
   MultiPolygon,
-  ViewportLatLngBounds,
-  ListingSearchGeocodeResponse
+  PolygonPaths,
+  ViewportLatLngBounds
 } from '../types'
 
 /*
@@ -70,36 +70,19 @@ export const convertViewportToLatLngBoundsLiteral = (
   return bounds.toJSON()
 }
 
-export function convertBoundsToParams(bounds: google.maps.LatLngBoundsLiteral) {
-  const { north, east, south, west } = bounds
+export function convertBoundsToURLBoundsParam(
+  bounds: google.maps.LatLngBounds
+) {
   return {
-    bounds_north: north,
-    bounds_east: east,
-    bounds_south: south,
-    bounds_west: west
+    bounds: bounds.toUrlValue()
   }
 }
 
-export function convertBoundsParamsToBounds(
-  queryParams: ReadonlyURLSearchParams
+export function convertURLBoundsParamToLatLngBoundsLiteral(
+  boundsString: string
 ): google.maps.LatLngBoundsLiteral {
-  return {
-    north: Number(queryParams.get('bounds_north')),
-    east: Number(queryParams.get('bounds_east')),
-    south: Number(queryParams.get('bounds_south')),
-    west: Number(queryParams.get('bounds_west'))
-  }
-}
-
-function boundsPresent(queryParams: ReadonlyURLSearchParams) {
-  const requiredKeys = [
-    'bounds_north',
-    'bounds_east',
-    'bounds_south',
-    'bounds_west'
-  ]
-  const queryParamsKeys = Array.from(queryParams.keys())
-  return requiredKeys.every((key) => queryParamsKeys.includes(key))
+  const [south, west, north, east] = boundsString.split(',').map(Number)
+  return { south, west, north, east }
 }
 
 export function getPolygonPaths(results: ListingSearchGeocodeResponse | null) {
@@ -114,8 +97,9 @@ export function getAvailableBounds(
   polygonPaths: PolygonPaths | null,
   viewport: ViewportLatLngBounds | null
 ) {
-  if (boundsPresent(queryParams))
-    return convertBoundsParamsToBounds(queryParams)
+  const boundsString = queryParams.get('bounds')
+  if (boundsString !== null)
+    return convertURLBoundsParamToLatLngBoundsLiteral(boundsString)
   if (polygonPaths) return getGeoLayerBounds(polygonPaths)
   if (viewport) return convertViewportToLatLngBoundsLiteral(viewport)
   return null

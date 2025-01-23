@@ -1,14 +1,32 @@
 import omit from 'lodash/omit'
+import type { ReadonlyURLSearchParams } from 'next/navigation'
 import { http } from '~/lib/http'
 import type {
   ListingSearchBoundaryResponse,
   ListingSearchGeocodeResponse,
   URLParams
 } from '~/types'
-import type { ReadonlyURLSearchParams } from 'next/navigation'
 
-function paramsForGeospatialSearch(params: URLParams) {
+function removeUnnecessaryUrlParams(params: URLParams) {
   return omit(params, 'boundary_id', 'address', 'zoom')
+}
+
+function convertURLBoundsParamToListingServiceParams(boundsString: string) {
+  const [bounds_south, bounds_west, bounds_north, bounds_east] =
+    boundsString.split(',')
+  return { bounds_south, bounds_west, bounds_north, bounds_east }
+}
+
+// TODO: Validate params with Zod instead
+function paramsForGeospatialSearch(params: URLParams) {
+  const paramsRemoved = removeUnnecessaryUrlParams(params)
+  if (typeof paramsRemoved.bounds !== 'string') {
+    throw new Error('Bounds not included in params')
+  }
+  const newParams = convertURLBoundsParamToListingServiceParams(
+    paramsRemoved.bounds
+  )
+  return newParams
 }
 
 async function getListings<T>(endpoint: string, params: URLParams) {
@@ -29,7 +47,7 @@ async function searchCurrentLocation(params: URLParams) {
 export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
   if (searchParams.size === 0) return null
   const params = Object.fromEntries(searchParams.entries())
-  return params.bounds_north
+  return params.bounds
     ? await searchCurrentLocation(params)
     : await searchNewLocation(params)
 }

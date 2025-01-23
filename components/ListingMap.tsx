@@ -2,20 +2,20 @@
 
 import { Map, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
 import { useSearchParams } from 'next/navigation'
+import { useSearchResults } from '~/hooks/useSearchResults'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
   GoogleMapsMapOptions,
   GoogleMapsPolygonOptions
 } from '~/lib/googleMapsOptions'
 import {
-  convertBoundsToParams,
+  convertBoundsToURLBoundsParam,
   getAvailableBounds,
   getPolygonPaths
 } from '~/lib/polygon'
 import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
-import { useSearchResults } from '~/hooks/useSearchResults'
 
 let userAdjustedMap = false
 
@@ -53,7 +53,7 @@ export function ListingMap() {
     userAdjustedMap = false
     const mapBounds = map?.getBounds()
     if (!mapBounds) return
-    const updatedFilters: URLParams = convertBoundsToParams(mapBounds.toJSON())
+    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
     updatedFilters.zoom = map?.getZoom() || GoogleMapsMapOptions.defaultZoom!
     if (results && 'boundary' in results && results?.boundary?._id) {
       updatedFilters.boundary_id = results.boundary._id

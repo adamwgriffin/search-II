@@ -1,4 +1,4 @@
-import { SearchParamsInit } from '~/types'
+import { SearchParamsInit, URLParams } from '~/types'
 
 export const GeospatialSearchParams = [
   'bounds_north',
@@ -9,7 +9,9 @@ export const GeospatialSearchParams = [
   'zoom'
 ]
 
-export function objectToQueryString(params: object) {
+export function objectToQueryString(params: URLParams) {
   // Casting params as SearchParamsInit because the current type provided by Typescript for this is not correct
-  return new URLSearchParams(params as SearchParamsInit).toString()
+  return new URLSearchParams(params as SearchParamsInit)
+    .toString()
+    .replace(/%2C/g, ',') // Don't encode commas in url params
 }
