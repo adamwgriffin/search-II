@@ -1,7 +1,7 @@
-import { SearchResults } from '~/components/SearchResults'
+import { Suspense } from 'react'
 import { ListingMap } from '~/components/ListingMap'
 import { SearchHeader } from '~/components/SearchHeader'
-import { Suspense } from 'react'
+import { SearchResults } from '~/components/SearchResults'
 
 export default async function Home() {
   return (
