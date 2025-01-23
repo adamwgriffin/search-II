@@ -1,17 +1,27 @@
-import type { JSX } from 'react'
-import type { Listing } from '~/types'
-import { ListingCard } from './ListingCard'
+'use client'
 
-export type SearchResultsProps = {
-  listings: Listing[] | undefined
-}
+import { ListingCard } from '~/components/ListingCard'
+import { useSearchResults } from '~/hooks/useSearchResults'
+import { SearchResultsLoading } from '~/components/SearchResultsLoading'
 
-export function SearchResults({
-  listings = []
-}: SearchResultsProps): JSX.Element {
+export function SearchResults() {
+  const { data: results, isLoading, isError } = useSearchResults()
+
+  if (isError) {
+    return <p>Something went wrong</p>
+  }
+
+  if (isLoading) {
+    return (
+      <ul className='grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-4 overflow-y-auto'>
+        <SearchResultsLoading />
+      </ul>
+    )
+  }
+
   return (
     <ul className='grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-4 overflow-y-auto'>
-      {listings.map((listing) => (
+      {results?.listings?.map((listing) => (
         <li key={listing._id}>
           <ListingCard listing={listing} />
         </li>

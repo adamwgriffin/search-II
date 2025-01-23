@@ -12,35 +12,37 @@ import {
   getAvailableBounds,
   getPolygonPaths
 } from '~/lib/polygon'
-import type { ListingSearchGeocodeResponse, URLParams } from '~/types'
+import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
-
-export type ListingMapProps = {
-  results: ListingSearchGeocodeResponse | null
-}
+import { useSearchResults } from '~/hooks/useSearchResults'
 
 let userAdjustedMap = false
 
-export function ListingMap({ results }: ListingMapProps) {
+export function ListingMap() {
   const apiIsLoaded = useApiIsLoaded()
   const map = useMap()
   const queryParams = useSearchParams()
   const updateFilters = useUpdateFilters()
+  // We're setting showCurrentDataWhileFetching so that the map markers won't
+  // blink from being re-rendered each time the map is moved and a new data
+  // fetch happens
+  const { data: results } = useSearchResults({
+    showCurrentDataWhileFetching: true
+  })
 
   if (!apiIsLoaded) return
 
-  const polygonPaths = getPolygonPaths(results)
+  const polygonPaths =
+    results && 'boundary' in results ? getPolygonPaths(results) : null
 
   const bounds = getAvailableBounds(
     queryParams,
     polygonPaths,
-    results?.viewport || null
+    results && 'viewport' in results ? results.viewport || null : null
   )
 
   const zoom = Number(queryParams.get('zoom')) || null
-
-  const boundaryId = results?.boundary?._id
 
   if (bounds) {
     map?.fitBounds(bounds)
@@ -53,8 +55,8 @@ export function ListingMap({ results }: ListingMapProps) {
     if (!mapBounds) return
     const updatedFilters: URLParams = convertBoundsToParams(mapBounds.toJSON())
     updatedFilters.zoom = map?.getZoom() || GoogleMapsMapOptions.defaultZoom!
-    if (boundaryId) {
-      updatedFilters.boundary_id = boundaryId
+    if (results && 'boundary' in results && results?.boundary?._id) {
+      updatedFilters.boundary_id = results.boundary._id
     }
     updateFilters(updatedFilters)
   }

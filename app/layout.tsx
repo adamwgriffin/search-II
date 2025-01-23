@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import GoogleMapsProvider from '~/providers/GoogleMapsProvider'
+import ReactQueryClientProvider from '~/providers/ReactQueryClientProvider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <GoogleMapsProvider>{children}</GoogleMapsProvider>
+        <GoogleMapsProvider>
+          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+        </GoogleMapsProvider>
       </body>
     </html>
   )

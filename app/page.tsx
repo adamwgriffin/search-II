@@ -1,25 +1,22 @@
-import type { NextSearchParams } from '~/types'
 import { SearchResults } from '~/components/SearchResults'
 import { ListingMap } from '~/components/ListingMap'
-import { fetchListings } from '~/lib/fetchListings'
 import { SearchHeader } from '~/components/SearchHeader'
+import { Suspense } from 'react'
 
-export default async function Home({
-  searchParams
-}: {
-  searchParams: Promise<NextSearchParams>
-}) {
-  const results = await fetchListings(await searchParams)
-
+export default async function Home() {
   return (
     <main className='grid grid-rows-[auto_1fr] h-full'>
       <SearchHeader />
       <div className='grid grid-cols-2 h-full min-h-0 min-w-0'>
         <div className='p-4 overflow-y-auto'>
-          <SearchResults listings={results?.listings} />
+          <Suspense>
+            <SearchResults />
+          </Suspense>
         </div>
         <div className='p-4'>
-          <ListingMap results={results} />
+          <Suspense>
+            <ListingMap />
+          </Suspense>
         </div>
       </div>
     </main>
