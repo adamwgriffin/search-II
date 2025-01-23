@@ -17,7 +17,6 @@ export function ListingCardLoading() {
         <div className='w-3/5 h-4 rounded-md bg-gray-200 dark:bg-gray-700 mb-3'></div>
         <div className='w-3/5 h-4 rounded-md bg-gray-200 dark:bg-gray-700'></div>
       </div>
-      <span className='sr-only'>Loading...</span>
     </div>
   )
 }
