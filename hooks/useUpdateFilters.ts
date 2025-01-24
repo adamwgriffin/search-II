@@ -1,7 +1,8 @@
+import isEqual from 'lodash/isEqual'
 import omitBy from 'lodash/omitBy'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { objectToQueryString } from '~/lib/listingSearchParams'
-import { URLParams } from '~/types'
+import { DefaultFilters, objectToQueryString } from '~/lib/listingSearchParams'
+import type { URLParams } from '~/types'
 
 export function useUpdateFilters() {
   const router = useRouter()
@@ -9,9 +10,12 @@ export function useUpdateFilters() {
   const searchParams = useSearchParams()
 
   return function (newParams: URLParams) {
-    const mergedParams = { ...Object.fromEntries(searchParams), ...newParams }
-    const nonEmptyparams = omitBy(mergedParams, (value) => !value)
-    const updatedQueryString = objectToQueryString(nonEmptyparams)
+    const merged = { ...Object.fromEntries(searchParams), ...newParams }
+    const truthyValues = omitBy(merged, (value) => !value)
+    const defaultsRemoved = omitBy(truthyValues, (value, key) =>
+      isEqual(value, DefaultFilters[key])
+    )
+    const updatedQueryString = objectToQueryString(defaultsRemoved)
     const url =
       updatedQueryString === '' ? pathname : `${pathname}?${updatedQueryString}`
     router.push(url)

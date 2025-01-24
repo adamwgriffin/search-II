@@ -9,6 +9,11 @@ export const GeospatialSearchParams = [
   'zoom'
 ]
 
+export const DefaultFilters: URLParams = {
+  sort_by: 'listedDate',
+  sort_direction: 'desc'
+}
+
 export function objectToQueryString(params: URLParams) {
   // Casting params as SearchParamsInit because the current type provided by Typescript for this is not correct
   return new URLSearchParams(params as SearchParamsInit)

@@ -3,9 +3,10 @@
 import { useSearchParams } from 'next/navigation'
 import type { ChangeEvent } from 'react'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { DefaultFilters } from '~/lib/listingSearchParams'
 import type { SortDirection, SortType } from '~/types'
 
-export interface SortTypeLabels {
+export type SortTypeLabels = {
   label: string
   type: SortType
   direction: SortDirection
@@ -48,8 +49,9 @@ export function SortMenu() {
   const searchParams = useSearchParams()
   const updateFilters = useUpdateFilters()
 
-  const sort_by = searchParams.get('sort_by') || 'listedDate'
-  const sort_direction = searchParams.get('sort_direction') || 'desc'
+  const sort_by = searchParams.get('sort_by') || DefaultFilters.sort_by
+  const sort_direction =
+    searchParams.get('sort_direction') || DefaultFilters.sort_direction
 
   function getCurrentSortType() {
     return SortTypeLabels.find(
