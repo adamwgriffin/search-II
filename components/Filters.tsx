@@ -1,6 +1,6 @@
-import { Beds } from '~/components/Beds'
-import { Baths } from '~/components/Baths'
 import { Suspense } from 'react'
+import { Baths } from '~/components/Baths'
+import { Beds } from '~/components/Beds'
 
 export function Filters() {
   return (
