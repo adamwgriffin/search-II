@@ -1,9 +1,9 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { ChangeEvent } from 'react'
+import type { ChangeEvent } from 'react'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
-import { SortDirection, SortType } from '~/types'
+import type { SortDirection, SortType } from '~/types'
 
 export interface SortTypeLabels {
   label: string

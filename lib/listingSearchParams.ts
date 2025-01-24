@@ -1,4 +1,4 @@
-import { SearchParamsInit, URLParams } from '~/types'
+import type { SearchParamsInit, URLParams } from '~/types'
 
 export const GeospatialSearchParams = [
   'bounds_north',
