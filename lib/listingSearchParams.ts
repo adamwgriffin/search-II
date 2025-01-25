@@ -1,13 +1,6 @@
 import type { SearchParamsInit, URLParams } from '~/types'
 
-export const GeospatialSearchParams = [
-  'bounds_north',
-  'bounds_east',
-  'bounds_south',
-  'bounds_west',
-  'boundary_id',
-  'zoom'
-]
+export const GeospatialSearchParams = ['bounds', 'boundary_id', 'zoom']
 
 export const DefaultFilters: URLParams = {
   sort_by: 'listedDate',
