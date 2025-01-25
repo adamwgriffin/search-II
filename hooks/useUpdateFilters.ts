@@ -12,9 +12,12 @@ export function useUpdateFilters() {
   return function (newParams: URLParams) {
     const merged = { ...Object.fromEntries(searchParams), ...newParams }
     const truthyValues = omitBy(merged, (value) => !value)
-    const defaultsRemoved = omitBy(truthyValues, (value, key) =>
-      isEqual(value, DefaultFilters[key])
-    )
+    const defaultsRemoved = omitBy(truthyValues, (value, key) => {
+      return (
+        DefaultFilters.hasOwnProperty(key) &&
+        isEqual(DefaultFilters[key], value)
+      )
+    })
     const updatedQueryString = objectToQueryString(defaultsRemoved)
     const url =
       updatedQueryString === '' ? pathname : `${pathname}?${updatedQueryString}`
