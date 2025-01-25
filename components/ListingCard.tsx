@@ -14,7 +14,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
         alt='Listing Image'
         width={300}
         height={300}
-        className='rounded-lg aspect-square object-cover'
+        className='w-full rounded-lg aspect-square object-cover'
         priority
       />
       <div className=''>
