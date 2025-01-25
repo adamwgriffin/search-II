@@ -10,7 +10,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
   return (
     <div className='flex flex-col gap-3'>
       <Image
-        src={listing.photoGallery[0].smallUrl}
+        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${listing.photoGallery[0].url}`}
         alt='Listing Image'
         width={300}
         height={300}

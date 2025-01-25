@@ -7,12 +7,10 @@ export type SearchParamsInit =
 
 export type NextSearchParams = { [key: string]: string | string[] | undefined }
 
-export type GalleryImage = {
+export type PhotoGalleryImage = {
   _id: string
-  caption: string
-  fullUrl: string
-  galleryUrl: string
-  smallUrl: string
+  url: string
+  caption?: string
 }
 
 export type Address = {
@@ -26,7 +24,7 @@ export type Listing = {
   _id: string
   latitude: number
   longitude: number
-  photoGallery: GalleryImage[]
+  photoGallery: PhotoGalleryImage[]
   address: Address
   listPrice: number
   soldPrice?: number
