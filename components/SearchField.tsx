@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { useSearchNewLocation } from '~/hooks/useSearchNewLocation'
+import { Input } from '~/components/ui/input'
 
 export function SearchField() {
   const searchParams = useSearchParams()
@@ -20,7 +21,7 @@ export function SearchField() {
       }}
     >
       <fieldset className='flex gap-x-3'>
-        <input
+        <Input
           type='text'
           name='address'
           value={address}

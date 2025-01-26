@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 
 export function SearchHeader() {
   return (
-    <header className='grid grid-cols-[1fr_auto_auto_minmax(0,1fr)] items-center gap-8 p-4'>
+    <header className='grid grid-cols-[1fr_auto_auto_1fr] items-center gap-8 p-4'>
       <Logo />
       <Suspense>
         <SearchField />

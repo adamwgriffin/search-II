@@ -1,10 +1,14 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import type { ChangeEvent } from 'react'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
-import { DefaultFilters } from '~/lib/listingSearchParams'
 import type { SortDirection, SortType } from '~/types'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '~/components/ui/select'
 
 export type SortTypeLabels = {
   label: string
@@ -46,25 +50,14 @@ export const SortTypeLabels: SortTypeLabels[] = [
 ]
 
 export function SortMenu() {
-  const searchParams = useSearchParams()
   const updateFilters = useUpdateFilters()
-
-  const sort_by = searchParams.get('sort_by') || DefaultFilters.sort_by
-  const sort_direction =
-    searchParams.get('sort_direction') || DefaultFilters.sort_direction
-
-  function getCurrentSortType() {
-    return SortTypeLabels.find(
-      ({ type, direction }) => type === sort_by && direction === sort_direction
-    )
-  }
 
   function findSortTypeByLabel(sortLabel: string) {
     return SortTypeLabels.find(({ label }) => label === sortLabel)
   }
 
-  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    const sortTypeLabel = findSortTypeByLabel(e.target.value)
+  function handleChange(value: string) {
+    const sortTypeLabel = findSortTypeByLabel(value)
     if (!sortTypeLabel) return
     updateFilters({
       sort_by: sortTypeLabel.type,
@@ -73,14 +66,17 @@ export function SortMenu() {
   }
 
   return (
-    <select
-      value={getCurrentSortType()?.label}
-      onChange={handleChange}
-      className='rounded-md p-1 dark:bg-gray-500 dark:text-inherit'
-    >
-      {SortTypeLabels.map(({ type, label, direction }) => (
-        <option key={`${type}-${direction}`}>{label}</option>
-      ))}
-    </select>
+    <Select onValueChange={handleChange}>
+      <SelectTrigger className='w-44 rounded-lg p-2 dark:bg-gray-500 dark:text-inherit'>
+        <SelectValue placeholder='Sort by' />
+      </SelectTrigger>
+      <SelectContent>
+        {SortTypeLabels.map(({ type, label, direction }) => (
+          <SelectItem key={`${type}-${direction}`} value={label}>
+            {label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }

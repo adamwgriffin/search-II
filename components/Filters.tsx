@@ -1,14 +1,24 @@
-import { Suspense } from 'react'
-import { Baths } from '~/components/Baths'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from '~/components/ui/dropdown-menu'
 import { Beds } from '~/components/Beds'
+import { Baths } from '~/components/Baths'
+import { Suspense } from 'react'
 
 export function Filters() {
   return (
-    <form className='flex gap-4'>
-      <Suspense>
-        <Beds />
-        <Baths />
-      </Suspense>
-    </form>
+    <DropdownMenu>
+      <DropdownMenuTrigger>Filters</DropdownMenuTrigger>
+      <DropdownMenuContent align='end'>
+        <form className='flex flex-col gap-4 p-4'>
+          <Suspense>
+            <Beds />
+            <Baths />
+          </Suspense>
+        </form>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
