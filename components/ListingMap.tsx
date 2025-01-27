@@ -16,6 +16,7 @@ import {
 import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
+import { useMemo } from 'react'
 
 let userAdjustedMap = false
 
@@ -30,6 +31,23 @@ export function ListingMap() {
   const { data: results } = useSearchResults({
     showCurrentDataWhileFetching: true
   })
+  // If the user changes the sort criteria, it will cause the markers to
+  // re-render on the map, even if the have the exact same listing data, which
+  // is yet another thing that makes the markers blink. It seems that
+  // overlapping markers are placed with a different zIndex depending on
+  // what order they were rendered in. Keeping the order stable by making sure
+  // they always sort the same way fixes this.
+  const listings = useMemo(() => {
+    return (results?.listings || []).toSorted((a, b) => {
+      // Sort by longitude if latitude was already sorted, in descending order
+      // (East to West)
+      if (a.latitude === b.latitude) {
+        return b.longitude - a.longitude
+      }
+      // Sort by latitude first. Sescending order, North to South.
+      return b.latitude - a.latitude
+    })
+  }, [results?.listings])
 
   if (!apiIsLoaded) return
 
@@ -74,8 +92,8 @@ export function ListingMap() {
       onIdle={handleIdle}
       zoom={zoom}
     >
-      {results?.listings?.map((listing) => (
-        <ListingMarker key={listing._id} listing={listing} />
+      {listings.map((listing) => (
+        <ListingMarker key={listing._id} listing={listings} />
       ))}
       <MapBoundary
         paths={polygonPaths}
