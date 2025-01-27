@@ -2,16 +2,22 @@ import { AdvancedMarker } from '@vis.gl/react-google-maps'
 import { type Listing } from '~/types'
 import { formatPriceAbbreviated } from '~/lib/listingHelpers'
 
-export type ListingMarkerProps = {
-  listing: Listing
-}
+export type ListingMarkerProps = Pick<
+  Listing,
+  'latitude' | 'longitude' | 'listPrice' | 'soldPrice'
+>
 
-export function ListingMarker({ listing }: ListingMarkerProps) {
+export function ListingMarker({
+  latitude,
+  longitude,
+  listPrice,
+  soldPrice
+}: ListingMarkerProps) {
   return (
     <AdvancedMarker
       position={{
-        lat: listing.latitude,
-        lng: listing.longitude
+        lat: latitude,
+        lng: longitude
       }}
     >
       <div
@@ -22,7 +28,7 @@ export function ListingMarker({ listing }: ListingMarkerProps) {
         font-medium bg-white text-black dark:bg-gray-600 dark:text-white
         '
       >
-        {formatPriceAbbreviated(listing.soldPrice || listing.listPrice)}
+          {formatPriceAbbreviated(soldPrice || listPrice)}
       </div>
     </AdvancedMarker>
   )

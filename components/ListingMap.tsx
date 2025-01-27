@@ -92,8 +92,14 @@ export function ListingMap() {
       onIdle={handleIdle}
       zoom={zoom}
     >
-      {listings.map((listing) => (
-        <ListingMarker key={listing._id} listing={listings} />
+      {listings.map((l) => (
+        <ListingMarker
+          key={l._id}
+          latitude={l.latitude}
+          longitude={l.longitude}
+          listPrice={l.listPrice}
+          soldPrice={l.soldPrice}
+        />
       ))}
       <MapBoundary
         paths={polygonPaths}
