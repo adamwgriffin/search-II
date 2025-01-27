@@ -7,11 +7,11 @@ import type {
   URLParams
 } from '~/types'
 
-function removeUnnecessaryUrlParams(params: URLParams) {
-  return omit(params, 'boundary_id', 'address', 'zoom')
+function removeNonListingServiceParams(params: URLParams) {
+  return omit(params, 'bounds', 'boundary_id', 'address', 'zoom')
 }
 
-function convertURLBoundsParamToListingServiceParams(boundsString: string) {
+function convertBoundsParamToListingServiceBounds(boundsString: string) {
   const [bounds_south, bounds_west, bounds_north, bounds_east] =
     boundsString.split(',')
   return { bounds_south, bounds_west, bounds_north, bounds_east }
@@ -19,14 +19,14 @@ function convertURLBoundsParamToListingServiceParams(boundsString: string) {
 
 // TODO: Validate params with Zod instead
 function paramsForGeospatialSearch(params: URLParams) {
-  const paramsRemoved = removeUnnecessaryUrlParams(params)
-  if (typeof paramsRemoved.bounds !== 'string') {
+  if (typeof params.bounds !== 'string') {
     throw new Error('Bounds not included in params')
   }
-  const newParams = convertURLBoundsParamToListingServiceParams(
-    paramsRemoved.bounds
+  const listingServiceBounds = convertBoundsParamToListingServiceBounds(
+    params.bounds
   )
-  return newParams
+  const newParams = removeNonListingServiceParams(params)
+  return { ...newParams, ...listingServiceBounds }
 }
 
 async function getListings<T>(endpoint: string, params: URLParams) {
