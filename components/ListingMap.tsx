@@ -28,7 +28,7 @@ export function ListingMap() {
   // We're setting showCurrentDataWhileFetching so that the map markers won't
   // blink from being re-rendered each time the map is moved and a new data
   // fetch happens
-  const { data: results } = useSearchResults({
+  const { data: results, isFetching } = useSearchResults({
     showCurrentDataWhileFetching: true
   })
   // If the user changes the sort criteria, it will cause the markers to
@@ -99,6 +99,7 @@ export function ListingMap() {
           longitude={l.longitude}
           listPrice={l.listPrice}
           soldPrice={l.soldPrice}
+          loading={isFetching}
         />
       ))}
       <MapBoundary
