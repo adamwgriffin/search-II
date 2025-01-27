@@ -9,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '~/components/ui/select'
+import { useSearchParams } from 'next/navigation'
+import { ParamDefaults } from '~/lib/listingSearchParams'
 
 export type SortTypeLabels = {
   label: string
@@ -50,11 +52,22 @@ export const SortTypeLabels: SortTypeLabels[] = [
 ]
 
 export function SortMenu() {
+  const searchParams = useSearchParams()
   const updateFilters = useUpdateFilters()
 
   function findSortTypeByLabel(sortLabel: string) {
     return SortTypeLabels.find(({ label }) => label === sortLabel)
   }
+
+  function getCurrentSortType() {
+    return SortTypeLabels.find(
+      ({ type, direction }) => type === sort_by && direction === sort_direction
+    )
+  }
+
+  const sort_by = searchParams.get('sort_by') || ParamDefaults.sort_by
+  const sort_direction =
+    searchParams.get('sort_direction') || ParamDefaults.sort_direction
 
   function handleChange(value: string) {
     const sortTypeLabel = findSortTypeByLabel(value)
@@ -66,7 +79,7 @@ export function SortMenu() {
   }
 
   return (
-    <Select onValueChange={handleChange}>
+    <Select onValueChange={handleChange} value={getCurrentSortType()?.label}>
       <SelectTrigger className='w-44 rounded-lg p-2 dark:bg-gray-500 dark:text-inherit'>
         <SelectValue placeholder='Sort by' />
       </SelectTrigger>
