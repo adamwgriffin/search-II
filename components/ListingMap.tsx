@@ -1,6 +1,6 @@
 'use client'
 
-import { Map, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
+import { Map, useMap } from '@vis.gl/react-google-maps'
 import { type ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { ZoomControl } from '~/components/ZoomControl'
@@ -22,7 +22,6 @@ function getZoomFromSearchParams(searchParams: ReadonlyURLSearchParams) {
 }
 
 export function ListingMap() {
-  const apiIsLoaded = useApiIsLoaded()
   const map = useMap()
   const updateFiltersOnMapIdle = useRef(false)
   const updateFilters = useUpdateFilters()
@@ -82,8 +81,6 @@ export function ListingMap() {
       map.setZoom(zoom)
     }
   }, [bounds, map, zoom])
-
-  if (!apiIsLoaded) return
 
   return (
     <Map
