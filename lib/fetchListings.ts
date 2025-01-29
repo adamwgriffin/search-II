@@ -1,14 +1,14 @@
 import omit from 'lodash/omit'
 import type { ReadonlyURLSearchParams } from 'next/navigation'
 import { http } from '~/lib/http'
-import type {
-  ListingSearchBoundaryResponse,
-  ListingSearchGeocodeResponse,
-  URLParams
-} from '~/types'
+import type { ListingSearchResponse, URLParams } from '~/types'
 
 function removeNonListingServiceParams(params: URLParams) {
-  return omit(params, 'bounds', 'boundary_id', 'address', 'zoom')
+  return omit(params, 'bounds', 'boundary_id', 'zoom')
+}
+
+function removeNonGeospatialParams(params: URLParams) {
+  return omit(params, 'address')
 }
 
 function convertBoundsParamToListingServiceBounds(boundsString: string) {
@@ -25,7 +25,9 @@ function paramsForGeospatialSearch(params: URLParams) {
   const listingServiceBounds = convertBoundsParamToListingServiceBounds(
     params.bounds
   )
-  const newParams = removeNonListingServiceParams(params)
+  const newParams = removeNonListingServiceParams(
+    removeNonGeospatialParams(params)
+  )
   return { ...newParams, ...listingServiceBounds }
 }
 
@@ -34,18 +36,21 @@ async function getListings<T>(endpoint: string, params: URLParams) {
 }
 
 async function searchNewLocation(params: URLParams) {
-  return getListings<ListingSearchGeocodeResponse>('geocode', params)
+  return getListings<ListingSearchResponse>(
+    'geocode',
+    removeNonListingServiceParams(params)
+  )
 }
 
 async function searchCurrentLocation(params: URLParams) {
-  return getListings<ListingSearchBoundaryResponse>(
+  return getListings<ListingSearchResponse>(
     params.boundary_id ? `boundary/${params.boundary_id}` : 'bounds',
     paramsForGeospatialSearch(params)
   )
 }
 
 export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
-  if (searchParams.size === 0) return null
+  if (searchParams.size === 0) return {}
   const params = Object.fromEntries(searchParams.entries())
   return params.bounds
     ? await searchCurrentLocation(params)

@@ -58,16 +58,11 @@ export type ViewportLatLngBounds = {
   southwest: google.maps.LatLngLiteral
 }
 
-export type ListingSearchGeocodeResponse = {
+export type ListingSearchResponse = {
   boundary?: Boundary
   listings?: Listing[]
   pagination?: ListingSearchPagination
   viewport?: ViewportLatLngBounds
-}
-
-export type ListingSearchBoundaryResponse = {
-  listings: Listing[]
-  pagination: ListingSearchPagination
 }
 
 export type URLParams = Record<string, string | number | null>

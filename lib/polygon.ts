@@ -1,10 +1,4 @@
-import type { ReadonlyURLSearchParams } from 'next/navigation'
-import type {
-  ListingSearchGeocodeResponse,
-  MultiPolygon,
-  PolygonPaths,
-  ViewportLatLngBounds
-} from '../types'
+import type { MultiPolygon, PolygonPaths, ViewportLatLngBounds } from '../types'
 
 /*
 we need to transform the geojson we get from the service into a shape that works for the Polygon class we need to use
@@ -85,22 +79,19 @@ export function convertURLBoundsParamToLatLngBoundsLiteral(
   return { south, west, north, east }
 }
 
-export function getPolygonPaths(results: ListingSearchGeocodeResponse | null) {
-  const coordinates = results?.boundary?.geometry?.coordinates
+export function getPolygonPaths(coordinates: MultiPolygon | undefined) {
   return coordinates
     ? convertGeojsonCoordinatesToPolygonPaths(coordinates)
     : null
 }
 
 export function getAvailableBounds(
-  queryParams: ReadonlyURLSearchParams,
-  polygonPaths: PolygonPaths | null,
-  viewport: ViewportLatLngBounds | null
+  boundsParam: string | null,
+  polygonPaths: PolygonPaths | undefined,
+  viewport: ViewportLatLngBounds | undefined
 ) {
-  const boundsString = queryParams.get('bounds')
-  if (boundsString !== null)
-    return convertURLBoundsParamToLatLngBoundsLiteral(boundsString)
+  if (boundsParam)
+    return convertURLBoundsParamToLatLngBoundsLiteral(boundsParam)
   if (polygonPaths) return getGeoLayerBounds(polygonPaths)
   if (viewport) return convertViewportToLatLngBoundsLiteral(viewport)
-  return null
 }

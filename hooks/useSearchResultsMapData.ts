@@ -2,14 +2,17 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
-import { getAvailableBounds, getPolygonPaths } from '~/lib/polygon'
+import {
+  convertGeojsonCoordinatesToPolygonPaths,
+  getAvailableBounds
+} from '~/lib/polygon'
 import { searchQueryOptions } from '~/lib/queries'
 
 /**
  * A hook that handles computing derived data from the search results for the
  * ListingMap. It also handles memoization and placholder data for listings.
  */
-export function useSearchResultsMapData(apiIsLoaded: boolean) {
+export function useSearchResultsMapData() {
   const searchParams = useSearchParams()
   // Using keepPreviousData with placeholderData keeps the data from the last
   // request so that we can still show the current data while new data is being
@@ -22,7 +25,7 @@ export function useSearchResultsMapData(apiIsLoaded: boolean) {
     placeholderData: keepPreviousData
   })
 
-  const results = queryResult.data || {}
+  const results = queryResult.data
 
   // If the user changes the sort criteria, it will cause the markers to
   // re-render on the map, even if the have the exact same listing data, which
@@ -35,22 +38,25 @@ export function useSearchResultsMapData(apiIsLoaded: boolean) {
     return sortListingsByLatLng(results.listings)
   }, [results?.listings])
 
-  if (!apiIsLoaded)
-    return {
-      listings,
-      bounds: null,
-      boundaryId: null,
-      polygonPaths: null,
-      queryResult
-    }
+  const polygonPaths = useMemo(() => {
+    const coordinates = results?.boundary?.geometry?.coordinates
+    if (!coordinates) return
+    return convertGeojsonCoordinatesToPolygonPaths(coordinates)
+  }, [results?.boundary?.geometry?.coordinates])
 
-  const polygonPaths = 'boundary' in results ? getPolygonPaths(results) : null
+  const bounds = useMemo(() => {
+    return getAvailableBounds(
+      searchParams.get('bounds'),
+      polygonPaths,
+      results?.viewport
+    )
+  }, [polygonPaths, results?.viewport, searchParams])
 
-  const boundaryId = 'boundary' in results ? results.boundary?._id : null
-
-  const viewport = 'viewport' in results ? results.viewport || null : null
-
-  const bounds = getAvailableBounds(searchParams, polygonPaths, viewport)
-
-  return { listings, bounds, boundaryId, polygonPaths, queryResult }
+  return {
+    listings,
+    bounds,
+    boundaryId: results?.boundary?._id,
+    polygonPaths,
+    queryResult
+  }
 }

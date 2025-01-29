@@ -1,7 +1,8 @@
 'use client'
 
 import { Map, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
-import { useSearchParams } from 'next/navigation'
+import { type ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useRef } from 'react'
 import { useSearchResultsMapData } from '~/hooks/useSearchResultsMapData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
@@ -13,36 +14,53 @@ import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
 
-let userAdjustedMap = false
+function getZoomFromSearchParams(searchParams: ReadonlyURLSearchParams) {
+  return searchParams.get('zoom') !== null
+    ? Number(searchParams.get('zoom'))
+    : null
+}
 
 export function ListingMap() {
-  const searchParams = useSearchParams()
   const apiIsLoaded = useApiIsLoaded()
   const map = useMap()
+  const updateFiltersOnMapIdle = useRef(false)
   const updateFilters = useUpdateFilters()
   const { listings, bounds, boundaryId, polygonPaths, queryResult } =
-    useSearchResultsMapData(apiIsLoaded)
+    useSearchResultsMapData()
+  const searchParams = useSearchParams()
+  const zoom = getZoomFromSearchParams(searchParams)
 
-  if (!apiIsLoaded) return
-
-  if (bounds) {
-    map?.fitBounds(bounds)
-  }
-
-  const zoom = Number(searchParams.get('zoom')) || null
-
-  function handleIdle() {
-    if (!userAdjustedMap) return
-    userAdjustedMap = false
+  const handleIdle = useCallback(() => {
+    if (!updateFiltersOnMapIdle.current) return
+    updateFiltersOnMapIdle.current = false
     const mapBounds = map?.getBounds()
     if (!mapBounds) return
     const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
-    updatedFilters.zoom = map?.getZoom() || GoogleMapsMapOptions.defaultZoom!
+    const mapZoom = map?.getZoom()
+    if (mapZoom) {
+      updatedFilters.zoom = mapZoom
+    }
     if (boundaryId) {
       updatedFilters.boundary_id = boundaryId
     }
     updateFilters(updatedFilters)
-  }
+  }, [boundaryId, map, updateFilters])
+
+  const handleUserAdjustedMap = useCallback(() => {
+    updateFiltersOnMapIdle.current = true
+  }, [])
+
+  useEffect(() => {
+    if (!map) return
+    if (bounds) {
+      map.fitBounds(bounds)
+    }
+    if (zoom !== null) {
+      map.setZoom(zoom)
+    }
+  }, [bounds, map, zoom])
+
+  if (!apiIsLoaded) return
 
   return (
     <Map
@@ -51,11 +69,8 @@ export function ListingMap() {
         borderRadius: '.5rem'
       }}
       {...GoogleMapsMapOptions}
-      onDragend={() => {
-        userAdjustedMap = true
-      }}
+      onDragend={handleUserAdjustedMap}
       onIdle={handleIdle}
-      zoom={zoom}
     >
       {listings.map((l) => (
         <ListingMarker

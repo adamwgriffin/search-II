@@ -2,7 +2,7 @@ import type { PolygonPaths } from '~/types'
 import { useMap } from '@vis.gl/react-google-maps'
 
 export type MapBoundaryProps = {
-  paths: PolygonPaths | null
+  paths: PolygonPaths | undefined
   visible: boolean
   options: google.maps.PolygonOptions
 }
