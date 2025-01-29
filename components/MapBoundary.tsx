@@ -1,5 +1,6 @@
-import type { PolygonPaths } from '~/types'
 import { useMap } from '@vis.gl/react-google-maps'
+import { useRef } from 'react'
+import type { PolygonPaths } from '~/types'
 
 export type MapBoundaryProps = {
   paths: PolygonPaths | undefined
@@ -7,19 +8,18 @@ export type MapBoundaryProps = {
   options: google.maps.PolygonOptions
 }
 
-let polygon: google.maps.Polygon
-
-export function MapBoundary ({
+export function MapBoundary({
   paths,
   visible = true,
   options = {}
 }: MapBoundaryProps) {
   const map = useMap()
+  const polygon = useRef<google.maps.Polygon | null>(null)
 
-  polygon ||= new google.maps.Polygon()
-  polygon.setMap(map)
-  if (paths) polygon.setPaths(paths)
-  polygon.setOptions({ ...options, visible })
+  polygon.current ||= new google.maps.Polygon()
+  polygon.current.setMap(map)
+  if (paths) polygon.current.setPaths(paths)
+  polygon.current.setOptions({ ...options, visible })
 
   return null
 }
