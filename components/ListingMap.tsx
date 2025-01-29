@@ -3,6 +3,7 @@
 import { Map, useApiIsLoaded, useMap } from '@vis.gl/react-google-maps'
 import { type ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
+import { ZoomControl } from '~/components/ZoomControl'
 import { useSearchResultsMapData } from '~/hooks/useSearchResultsMapData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
@@ -46,9 +47,31 @@ export function ListingMap() {
     updateFilters(updatedFilters)
   }, [boundaryId, map, updateFilters])
 
+  const handleZoomIn = useCallback(() => {
+    if (map) {
+      const currentZoom = map?.getZoom()
+      const newZoom = typeof currentZoom == 'number' ? currentZoom + 1 : 1
+      updateFilters({ zoom: newZoom })
+    }
+  }, [map, updateFilters])
+
+  const handleZoomOut = useCallback(() => {
+    if (map) {
+      const currentZoom = map?.getZoom()
+      const newZoom = typeof currentZoom == 'number' ? currentZoom - 1 : 1
+      updateFilters({ zoom: newZoom })
+    }
+  }, [map, updateFilters])
+
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true
   }, [])
+
+  useEffect(() => {
+    map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap)
+    return () =>
+      map?.getDiv()?.removeEventListener('wheel', handleUserAdjustedMap)
+  }, [handleUserAdjustedMap, map])
 
   useEffect(() => {
     if (!map) return
@@ -87,6 +110,7 @@ export function ListingMap() {
         visible={true}
         options={GoogleMapsPolygonOptions}
       />
+      <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
     </Map>
   )
 }
