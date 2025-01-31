@@ -10,7 +10,7 @@ export function ZoomControl({ onZoomIn, onZoomOut }: ZoomControlProps) {
     <div
       className='
         absolute bottom-2 right-4 flex flex-col items-center justify-center gap-2
-        rounded-md shadow-gray-500 bg-background p-2
+        rounded-md shadow-sm shadow-gray-500 bg-background p-2
       '
     >
       <button aria-label='Zoom in' className='' onClick={onZoomIn}>
