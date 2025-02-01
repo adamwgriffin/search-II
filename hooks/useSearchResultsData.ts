@@ -4,16 +4,14 @@ import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
 import {
   convertGeojsonCoordinatesToPolygonPaths,
-  convertURLBoundsParamToLatLngBoundsLiteral,
   getAvailableBoundsFromSearchResults
 } from '~/lib/polygon'
 import { searchQueryOptions } from '~/lib/queries'
 
 /**
- * A hook that handles computing derived data from the search results for the
- * ListingMap. It also handles memoization and placholder data for listings.
+ * A hook that handles computing derived data from the search results.
  */
-export function useSearchResultsMapData() {
+export function useSearchResultsData() {
   const searchParams = useSearchParams()
   // Using keepPreviousData with placeholderData keeps the data from the last
   // request so that we can still show the current data while new data is being
@@ -27,8 +25,6 @@ export function useSearchResultsMapData() {
   })
 
   const results = queryResult.data
-
-  const boundaryId = results?.boundary?._id
 
   // If the user changes the sort criteria, it will cause the markers to
   // re-render on the map, even if the have the exact same listing data, which
@@ -47,30 +43,15 @@ export function useSearchResultsMapData() {
     return convertGeojsonCoordinatesToPolygonPaths(coordinates)
   }, [results?.boundary?.geometry?.coordinates])
 
-  const searchResultsBounds = useMemo(() => {
+  const bounds = useMemo(() => {
     return getAvailableBoundsFromSearchResults(polygonPaths, results?.viewport)
   }, [polygonPaths, results?.viewport])
 
-  const urlBoundsParam = useMemo(() => {
-    const boundsParam = searchParams.get('bounds')
-    if (boundsParam)
-      return convertURLBoundsParamToLatLngBoundsLiteral(boundsParam)
-  }, [searchParams])
-
-  const showMapBoundary = useMemo(() => {
-    return (
-      Boolean(boundaryId && urlBoundsParam) ||
-      Boolean(!boundaryId && !urlBoundsParam)
-    )
-  }, [boundaryId, urlBoundsParam])
-
   return {
     queryResult,
-    boundaryId,
+    boundaryId: results?.boundary?._id,
     listings,
     polygonPaths,
-    searchResultsBounds,
-    urlBoundsParam,
-    showMapBoundary
+    bounds
   }
 }

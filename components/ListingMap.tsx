@@ -1,11 +1,11 @@
 'use client'
 
 import { Map, useMap } from '@vis.gl/react-google-maps'
-import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { BoundaryControl } from '~/components/BoundaryControl'
 import { ZoomControl } from '~/components/ZoomControl'
-import { useSearchResultsMapData } from '~/hooks/useSearchResultsMapData'
+import { useSearchParamsState } from '~/hooks/useSearchParamsState'
+import { useSearchResultsData } from '~/hooks/useSearchResultsData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
   GoogleMapsMapOptions,
@@ -20,16 +20,10 @@ export function ListingMap() {
   const map = useMap()
   const updateFiltersOnMapIdle = useRef(false)
   const updateFilters = useUpdateFilters()
-  const {
-    queryResult,
-    boundaryId,
-    listings,
-    polygonPaths,
-    searchResultsBounds,
-    urlBoundsParam,
-    showMapBoundary
-  } = useSearchResultsMapData()
-  const searchParams = useSearchParams()
+  const params = useSearchParamsState()
+  const results = useSearchResultsData()
+
+  const { isFetching } = results.queryResult
 
   const handleIdle = useCallback(() => {
     if (!updateFiltersOnMapIdle.current) return
@@ -41,32 +35,31 @@ export function ListingMap() {
     if (mapZoom) {
       updatedFilters.zoom = mapZoom
     }
-    if (boundaryId) {
-      updatedFilters.boundary_id = boundaryId
+    if (results.boundaryId) {
+      updatedFilters.boundary_id = results.boundaryId
     }
     updateFilters(updatedFilters)
-  }, [boundaryId, map, updateFilters])
+  }, [results.boundaryId, map, updateFilters])
 
   const handleZoomIn = useCallback(() => {
-    if (map) {
-      const currentZoom = map.getZoom()
-      const newZoom = typeof currentZoom == 'number' ? currentZoom + 1 : 1
-      updateFilters({ zoom: newZoom })
-    }
+    if (!map) return
+    const currentZoom = map.getZoom()
+    const newZoom = typeof currentZoom == 'number' ? currentZoom + 1 : 1
+    updateFilters({ zoom: newZoom })
   }, [map, updateFilters])
 
   const handleZoomOut = useCallback(() => {
-    if (map) {
-      const currentZoom = map?.getZoom()
-      const newZoom = typeof currentZoom == 'number' ? currentZoom - 1 : 1
-      updateFilters({ zoom: newZoom })
-    }
+    if (!map) return
+    const currentZoom = map?.getZoom()
+    const newZoom = typeof currentZoom == 'number' ? currentZoom - 1 : 1
+    updateFilters({ zoom: newZoom })
   }, [map, updateFilters])
 
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true
   }, [])
 
+  // TODO: Use AbortController for this instead
   useEffect(() => {
     map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap)
     return () =>
@@ -77,24 +70,25 @@ export function ListingMap() {
     // No bounds param in the url means it's a new search, so call fitBounds()
     // to adjust the map to fit the new boundary that was returned from the
     // search results
-    if (map && !urlBoundsParam && searchResultsBounds) {
-      map.fitBounds(searchResultsBounds)
+    if (!map) return
+    if (!params.bounds && results.bounds) {
+      map.fitBounds(results.bounds)
     }
-  }, [searchResultsBounds, map, searchParams, urlBoundsParam])
+  }, [map, results.bounds, params.bounds])
 
   useEffect(() => {
     // Bounds param is present in the URL, which means we're searching an
     // existing location, so use the bounds & zoom from the url to adjust the
     // map
-    if (map && urlBoundsParam) {
-      const center = new google.maps.LatLngBounds(urlBoundsParam).getCenter()
+    if (!map) return
+    if (params.bounds) {
+      const center = new google.maps.LatLngBounds(params.bounds).getCenter()
       map.setCenter(center)
-      const zoom = searchParams.get('zoom')
-      if (zoom) {
-        map.setZoom(Number(zoom))
+      if (params.zoom) {
+        map.setZoom(params.zoom)
       }
     }
-  }, [map, searchParams, urlBoundsParam])
+  }, [map, params.bounds, params.zoom])
 
   return (
     <Map
@@ -106,22 +100,22 @@ export function ListingMap() {
       onDragend={handleUserAdjustedMap}
       onIdle={handleIdle}
     >
-      {listings.map((l) => (
+      {results.listings.map((l) => (
         <ListingMarker
           key={l._id}
           latitude={l.latitude}
           longitude={l.longitude}
           listPrice={l.listPrice}
           soldPrice={l.soldPrice}
-          loading={queryResult.isFetching}
+          loading={isFetching}
         />
       ))}
       <MapBoundary
-        paths={polygonPaths}
-        visible={showMapBoundary}
+        paths={results.polygonPaths}
+        visible={params.showMapBoundary}
         options={GoogleMapsPolygonOptions}
       />
-      <BoundaryControl loading={queryResult.isFetching} />
+      <BoundaryControl loading={isFetching} />
       <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
     </Map>
   )
