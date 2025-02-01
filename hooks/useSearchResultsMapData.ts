@@ -4,7 +4,8 @@ import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
 import {
   convertGeojsonCoordinatesToPolygonPaths,
-  getAvailableBounds
+  convertURLBoundsParamToLatLngBoundsLiteral,
+  getAvailableBoundsFromSearchResults
 } from '~/lib/polygon'
 import { searchQueryOptions } from '~/lib/queries'
 
@@ -27,6 +28,8 @@ export function useSearchResultsMapData() {
 
   const results = queryResult.data
 
+  const boundaryId = results?.boundary?._id
+
   // If the user changes the sort criteria, it will cause the markers to
   // re-render on the map, even if the have the exact same listing data, which
   // is yet another thing that makes the markers blink. It seems that
@@ -44,19 +47,30 @@ export function useSearchResultsMapData() {
     return convertGeojsonCoordinatesToPolygonPaths(coordinates)
   }, [results?.boundary?.geometry?.coordinates])
 
-  const bounds = useMemo(() => {
-    return getAvailableBounds(
-      searchParams.get('bounds'),
-      polygonPaths,
-      results?.viewport
+  const searchResultsBounds = useMemo(() => {
+    return getAvailableBoundsFromSearchResults(polygonPaths, results?.viewport)
+  }, [polygonPaths, results?.viewport])
+
+  const urlBoundsParam = useMemo(() => {
+    const boundsParam = searchParams.get('bounds')
+    if (boundsParam)
+      return convertURLBoundsParamToLatLngBoundsLiteral(boundsParam)
+  }, [searchParams])
+
+  const showMapBoundary = useMemo(() => {
+    return (
+      Boolean(boundaryId && urlBoundsParam) ||
+      Boolean(!boundaryId && !urlBoundsParam)
     )
-  }, [polygonPaths, results?.viewport, searchParams])
+  }, [boundaryId, urlBoundsParam])
 
   return {
+    queryResult,
+    boundaryId,
     listings,
-    bounds,
-    boundaryId: results?.boundary?._id,
     polygonPaths,
-    queryResult
+    searchResultsBounds,
+    urlBoundsParam,
+    showMapBoundary
   }
 }

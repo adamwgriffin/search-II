@@ -85,13 +85,10 @@ export function getPolygonPaths(coordinates: MultiPolygon | undefined) {
     : null
 }
 
-export function getAvailableBounds(
-  boundsParam: string | null,
+export function getAvailableBoundsFromSearchResults(
   polygonPaths: PolygonPaths | undefined,
   viewport: ViewportLatLngBounds | undefined
 ) {
-  if (boundsParam)
-    return convertURLBoundsParamToLatLngBoundsLiteral(boundsParam)
   if (polygonPaths) return getGeoLayerBounds(polygonPaths)
   if (viewport) return convertViewportToLatLngBoundsLiteral(viewport)
 }

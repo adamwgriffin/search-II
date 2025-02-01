@@ -1,8 +1,9 @@
 'use client'
 
 import { Map, useMap } from '@vis.gl/react-google-maps'
-import { type ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
+import { BoundaryControl } from '~/components/BoundaryControl'
 import { ZoomControl } from '~/components/ZoomControl'
 import { useSearchResultsMapData } from '~/hooks/useSearchResultsMapData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
@@ -15,20 +16,20 @@ import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 import { MapBoundary } from './MapBoundary'
 
-function getZoomFromSearchParams(searchParams: ReadonlyURLSearchParams) {
-  return searchParams.get('zoom') !== null
-    ? Number(searchParams.get('zoom'))
-    : null
-}
-
 export function ListingMap() {
   const map = useMap()
   const updateFiltersOnMapIdle = useRef(false)
   const updateFilters = useUpdateFilters()
-  const { listings, bounds, boundaryId, polygonPaths, queryResult } =
-    useSearchResultsMapData()
+  const {
+    queryResult,
+    boundaryId,
+    listings,
+    polygonPaths,
+    searchResultsBounds,
+    urlBoundsParam,
+    showMapBoundary
+  } = useSearchResultsMapData()
   const searchParams = useSearchParams()
-  const zoom = getZoomFromSearchParams(searchParams)
 
   const handleIdle = useCallback(() => {
     if (!updateFiltersOnMapIdle.current) return
@@ -48,7 +49,7 @@ export function ListingMap() {
 
   const handleZoomIn = useCallback(() => {
     if (map) {
-      const currentZoom = map?.getZoom()
+      const currentZoom = map.getZoom()
       const newZoom = typeof currentZoom == 'number' ? currentZoom + 1 : 1
       updateFilters({ zoom: newZoom })
     }
@@ -73,14 +74,27 @@ export function ListingMap() {
   }, [handleUserAdjustedMap, map])
 
   useEffect(() => {
-    if (!map) return
-    if (bounds) {
-      map.fitBounds(bounds)
+    // No bounds param in the url means it's a new search, so call fitBounds()
+    // to adjust the map to fit the new boundary that was returned from the
+    // search results
+    if (map && !urlBoundsParam && searchResultsBounds) {
+      map.fitBounds(searchResultsBounds)
     }
-    if (zoom !== null) {
-      map.setZoom(zoom)
+  }, [searchResultsBounds, map, searchParams, urlBoundsParam])
+
+  useEffect(() => {
+    // Bounds param is present in the URL, which means we're searching an
+    // existing location, so use the bounds & zoom from the url to adjust the
+    // map
+    if (map && urlBoundsParam) {
+      const center = new google.maps.LatLngBounds(urlBoundsParam).getCenter()
+      map.setCenter(center)
+      const zoom = searchParams.get('zoom')
+      if (zoom) {
+        map.setZoom(Number(zoom))
+      }
     }
-  }, [bounds, map, zoom])
+  }, [map, searchParams, urlBoundsParam])
 
   return (
     <Map
@@ -104,9 +118,10 @@ export function ListingMap() {
       ))}
       <MapBoundary
         paths={polygonPaths}
-        visible={true}
+        visible={showMapBoundary}
         options={GoogleMapsPolygonOptions}
       />
+      <BoundaryControl loading={queryResult.isFetching} />
       <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
     </Map>
   )
