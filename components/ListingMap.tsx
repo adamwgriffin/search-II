@@ -3,18 +3,21 @@
 import { Map, useMap } from '@vis.gl/react-google-maps'
 import { useCallback, useEffect, useRef } from 'react'
 import { BoundaryControl } from '~/components/BoundaryControl'
+import { MapBoundary } from '~/components/MapBoundary'
 import { ZoomControl } from '~/components/ZoomControl'
 import { useSearchParamsState } from '~/hooks/useSearchParamsState'
 import { useSearchResultsData } from '~/hooks/useSearchResultsData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
 import {
   GoogleMapsMapOptions,
-  GoogleMapsPolygonOptions
+  MapBoundaryStyleOptions
 } from '~/lib/googleMapsOptions'
-import { convertBoundsToURLBoundsParam } from '~/lib/polygon'
+import {
+  convertBoundsToURLBoundsParam,
+  getAvailableBoundsFromSearchResults
+} from '~/lib/polygon'
 import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
-import { MapBoundary } from './MapBoundary'
 
 export function ListingMap() {
   const map = useMap()
@@ -78,20 +81,27 @@ export function ListingMap() {
       map?.getDiv()?.removeEventListener('wheel', handleUserAdjustedMap)
   }, [handleUserAdjustedMap, map])
 
+  // No bounds param in the url means it's a new search, so call fitBounds()
+  // to adjust the map to fit the new boundary that was returned from the
+  // search results
   useEffect(() => {
-    // No bounds param in the url means it's a new search, so call fitBounds()
-    // to adjust the map to fit the new boundary that was returned from the
-    // search results
-    if (!map) return
-    if (!params.bounds && results.bounds) {
-      map.fitBounds(results.bounds)
+    if (!map || params.bounds) return
+    const feature = results.geoJSONBoundary?.id
+      ? map.data.getFeatureById(results.geoJSONBoundary.id)
+      : undefined
+    const bounds = getAvailableBoundsFromSearchResults(
+      feature,
+      results.viewport
+    )
+    if (bounds) {
+      map.fitBounds(bounds)
     }
-  }, [map, results.bounds, params.bounds])
+  }, [map, results.geoJSONBoundary, params.bounds, results.viewport])
 
+  // Bounds param is present in the URL, which means we're searching an
+  // existing location, so use the bounds & zoom from the url to adjust the
+  // map
   useEffect(() => {
-    // Bounds param is present in the URL, which means we're searching an
-    // existing location, so use the bounds & zoom from the url to adjust the
-    // map
     if (!map) return
     if (params.bounds) {
       const center = new google.maps.LatLngBounds(params.bounds).getCenter()
@@ -123,9 +133,8 @@ export function ListingMap() {
         />
       ))}
       <MapBoundary
-        paths={results.polygonPaths}
-        visible={params.showMapBoundary}
-        options={GoogleMapsPolygonOptions}
+        boundary={results.geoJSONBoundary}
+        {...MapBoundaryStyleOptions}
       />
       <BoundaryControl loading={isFetching} />
       <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />

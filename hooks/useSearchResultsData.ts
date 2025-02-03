@@ -2,11 +2,9 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
-import {
-  convertGeojsonCoordinatesToPolygonPaths,
-  getAvailableBoundsFromSearchResults
-} from '~/lib/polygon'
 import { searchQueryOptions } from '~/lib/queries'
+import type { GeoJSONBoundary } from '~/types'
+import { convertBoundaryToGeoJSON } from '~/lib/polygon'
 
 /**
  * A hook that handles computing derived data from the search results.
@@ -37,21 +35,15 @@ export function useSearchResultsData() {
     return sortListingsByLatLng(results.listings)
   }, [results?.listings])
 
-  const polygonPaths = useMemo(() => {
-    const coordinates = results?.boundary?.geometry?.coordinates
-    if (!coordinates) return
-    return convertGeojsonCoordinatesToPolygonPaths(coordinates)
-  }, [results?.boundary?.geometry?.coordinates])
-
-  const bounds = useMemo(() => {
-    return getAvailableBoundsFromSearchResults(polygonPaths, results?.viewport)
-  }, [polygonPaths, results?.viewport])
+  const geoJSONBoundary: GeoJSONBoundary | null = results?.boundary
+    ? convertBoundaryToGeoJSON(results.boundary)
+    : null
 
   return {
     queryResult,
     boundaryId: results?.boundary?._id,
     listings,
-    polygonPaths,
-    bounds
+    geoJSONBoundary,
+    viewport: results?.viewport
   }
 }

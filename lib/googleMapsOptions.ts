@@ -5,7 +5,7 @@ export const GoogleMapsStreetViewURL =
 
 export const GoogleStreetViewMaxImageSize = 640
 
-export const GoogleMapsPolygonOptions: google.maps.PolygonOptions = {
+export const MapBoundaryStyleOptions: google.maps.Data.StyleOptions = {
   strokeColor: 'darkgray',
   strokeOpacity: 1,
   strokeWeight: 2,

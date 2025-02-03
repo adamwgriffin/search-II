@@ -1,25 +1,22 @@
 import { useMap } from '@vis.gl/react-google-maps'
-import { useRef } from 'react'
-import type { PolygonPaths } from '~/types'
+import { useEffect } from 'react'
+import type { GeoJSONBoundary } from '~/types'
 
 export type MapBoundaryProps = {
-  paths: PolygonPaths | undefined
-  visible: boolean
-  options: google.maps.PolygonOptions
-}
+  boundary: GeoJSONBoundary | null
+} & google.maps.Data.StyleOptions
 
-export function MapBoundary({
-  paths,
-  visible = true,
-  options = {}
-}: MapBoundaryProps) {
+export function MapBoundary({ boundary, ...styleOptions }: MapBoundaryProps) {
   const map = useMap()
-  const polygon = useRef<google.maps.Polygon | null>(null)
 
-  polygon.current ||= new google.maps.Polygon()
-  polygon.current.setMap(map)
-  if (paths) polygon.current.setPaths(paths)
-  polygon.current.setOptions({ ...options, visible })
+  useEffect(() => {
+    if (!map || !boundary) return
+    const feature = map.data.addGeoJson(boundary)[0]
+    map.data.setStyle(styleOptions)
+    return () => {
+      map.data.remove(feature)
+    }
+  }, [map, boundary, styleOptions])
 
   return null
 }
