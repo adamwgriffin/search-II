@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
 import { searchQueryOptions } from '~/lib/queries'
 import type { GeoJSONBoundary } from '~/types'
-import { convertBoundaryToGeoJSON } from '~/lib/polygon'
+import { convertBoundaryToGeoJSON } from '~/lib/boundary'
 
 /**
  * A hook that handles computing derived data from the search results.

@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation'
-import { convertURLBoundsParamToLatLngBoundsLiteral } from '~/lib/polygon'
+import { convertURLBoundsParamToLatLngBoundsLiteral } from '~/lib/boundary'
 
 /**
  * A hook that handles computing state derived from the url search params

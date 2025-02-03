@@ -15,7 +15,7 @@ import {
 import {
   convertBoundsToURLBoundsParam,
   getAvailableBoundsFromSearchResults
-} from '~/lib/polygon'
+} from '~/lib/boundary'
 import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 
@@ -74,7 +74,6 @@ export function ListingMap() {
     updateFiltersOnMapIdle.current = true
   }, [])
 
-  // TODO: Use AbortController for this instead
   useEffect(() => {
     map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap)
     return () =>
