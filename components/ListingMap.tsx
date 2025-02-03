@@ -32,28 +32,40 @@ export function ListingMap() {
     if (!mapBounds) return
     const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
     const mapZoom = map?.getZoom()
-    if (mapZoom) {
-      updatedFilters.zoom = mapZoom
-    }
     if (results.boundaryId) {
       updatedFilters.boundary_id = results.boundaryId
+    }
+    if (mapZoom) {
+      updatedFilters.zoom = mapZoom
     }
     updateFilters(updatedFilters)
   }, [results.boundaryId, map, updateFilters])
 
   const handleZoomIn = useCallback(() => {
     if (!map) return
+    const mapBounds = map.getBounds()
+    if (!mapBounds) return
+    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
+    if (results.boundaryId) {
+      updatedFilters.boundary_id = results.boundaryId
+    }
     const currentZoom = map.getZoom()
-    const newZoom = typeof currentZoom == 'number' ? currentZoom + 1 : 1
-    updateFilters({ zoom: newZoom })
-  }, [map, updateFilters])
+    updatedFilters.zoom = currentZoom !== undefined ? currentZoom + 1 : 1
+    updateFilters(updatedFilters)
+  }, [map, results.boundaryId, updateFilters])
 
   const handleZoomOut = useCallback(() => {
     if (!map) return
-    const currentZoom = map?.getZoom()
-    const newZoom = typeof currentZoom == 'number' ? currentZoom - 1 : 1
-    updateFilters({ zoom: newZoom })
-  }, [map, updateFilters])
+    const mapBounds = map.getBounds()
+    if (!mapBounds) return
+    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
+    if (results.boundaryId) {
+      updatedFilters.boundary_id = results.boundaryId
+    }
+    const currentZoom = map.getZoom()
+    updatedFilters.zoom = currentZoom !== undefined ? currentZoom - 1 : 1
+    updateFilters(updatedFilters)
+  }, [map, results.boundaryId, updateFilters])
 
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true
