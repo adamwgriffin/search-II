@@ -8,7 +8,7 @@ function removeNonListingServiceParams(params: URLParams) {
 }
 
 function removeNonGeospatialParams(params: URLParams) {
-  return omit(params, 'address')
+  return omit(params, 'address', 'place_id')
 }
 
 function convertBoundsParamToListingServiceBounds(boundsString: string) {
@@ -17,7 +17,6 @@ function convertBoundsParamToListingServiceBounds(boundsString: string) {
   return { bounds_south, bounds_west, bounds_north, bounds_east }
 }
 
-// TODO: Validate params with Zod instead
 function paramsForGeospatialSearch(params: URLParams) {
   if (typeof params.bounds !== 'string') {
     throw new Error('Bounds not included in params')
@@ -31,20 +30,23 @@ function paramsForGeospatialSearch(params: URLParams) {
   return { ...newParams, ...listingServiceBounds }
 }
 
-async function getListings<T>(endpoint: string, params: URLParams) {
-  return http<T>(`/api/listing/search/${endpoint}`, params)
-}
-
 async function searchNewLocation(params: URLParams) {
-  return getListings<ListingSearchResponse>(
-    'geocode',
+  return http<ListingSearchResponse>(
+    '/api/listing/search/geocode',
     removeNonListingServiceParams(params)
   )
 }
 
 async function searchCurrentLocation(params: URLParams) {
-  return getListings<ListingSearchResponse>(
-    params.boundary_id ? `boundary/${params.boundary_id}` : 'bounds',
+  return http<ListingSearchResponse>(
+    `/api/listing/search/boundary/${params.boundary_id}`,
+    paramsForGeospatialSearch(params)
+  )
+}
+
+async function searchBounds(params: URLParams) {
+  return http<ListingSearchResponse>(
+    '/api/listing/search/bounds',
     paramsForGeospatialSearch(params)
   )
 }
@@ -52,7 +54,21 @@ async function searchCurrentLocation(params: URLParams) {
 export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
   if (searchParams.size === 0) return {}
   const params = Object.fromEntries(searchParams.entries())
-  return params.bounds
-    ? await searchCurrentLocation(params)
-    : await searchNewLocation(params)
+  const location = params.place_id || params.address
+  const { bounds, boundary_id } = params
+  // The user entered a new search in the search field
+  if (location && !bounds) {
+    return await searchNewLocation(params)
+  }
+  // We have previously performed a new search and now we are performing subsequent
+  // searches on the same location with different criteria
+  if (location && bounds && boundary_id) {
+    return await searchCurrentLocation(params)
+  }
+  // The user removed the location boundary so we are just performing searches
+  // on the bounds of the map viewport
+  if (bounds && !location && !boundary_id) {
+    return await searchBounds(params)
+  }
+  return {}
 }

@@ -5,8 +5,6 @@ export type SearchParamsInit =
   | URLSearchParams
   | undefined
 
-export type NextSearchParams = { [key: string]: string | string[] | undefined }
-
 export type PhotoGalleryImage = {
   _id: string
   url: string
@@ -35,15 +33,19 @@ export type ListingSearchPagination = {
   numberReturned: number
 }
 
-export type PolygonPaths = Array<Array<google.maps.LatLngLiteral>>
+export type Position = [longitude: number, latitude: number]
 
-export type MultiPolygon = Array<Array<Array<Array<number>>>>
-
-export type Geometry = {
-  type: 'MultiPolygon' | 'Polygon'
-  coordinates: MultiPolygon
-  _id: string
+export type Polygon = {
+  type: 'Polygon'
+  coordinates: Position[][]
 }
+
+export type MultiPolygon = {
+  type: 'MultiPolygon'
+  coordinates: Position[][][]
+}
+
+export type Geometry = (Polygon | MultiPolygon) & { _id: string }
 
 export type Boundary = {
   _id: string
@@ -51,6 +53,15 @@ export type Boundary = {
   placeId: string
   type: string
   geometry: Geometry
+}
+
+export type GeoJSONBoundary = {
+  type: 'Feature'
+  id: string
+  geometry: {
+    type: 'Polygon' | 'MultiPolygon'
+    coordinates: Position[][] | Position[][][]
+  }
 }
 
 export type ViewportLatLngBounds = {

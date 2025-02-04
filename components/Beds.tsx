@@ -1,13 +1,13 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 
 const Values = ['', '1', '2', '3', '4', '5']
 
 export function Beds() {
   const searchParams = useSearchParams()
-  const updateFilters = useUpdateFilters()
+  const updateSearchParams = useUpdateSearchParams()
 
   return (
     <fieldset className='flex gap-2'>
@@ -19,7 +19,7 @@ export function Beds() {
             name='beds'
             value={value}
             checked={(searchParams.get('beds_min') || '') === value}
-            onChange={() => updateFilters({ beds_min: value })}
+            onChange={() => updateSearchParams({ beds_min: value })}
           />
           {value ? `${value}+` : 'Any'}
         </label>

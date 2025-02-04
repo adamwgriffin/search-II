@@ -1,6 +1,6 @@
 'use client'
 
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 import type { SortDirection, SortType } from '~/types'
 import {
   Select,
@@ -53,7 +53,7 @@ export const SortTypeLabels: SortTypeLabels[] = [
 
 export function SortMenu() {
   const searchParams = useSearchParams()
-  const updateFilters = useUpdateFilters()
+  const updateSearchParams = useUpdateSearchParams()
 
   function findSortTypeByLabel(sortLabel: string) {
     return SortTypeLabels.find(({ label }) => label === sortLabel)
@@ -72,7 +72,7 @@ export function SortMenu() {
   function handleChange(value: string) {
     const sortTypeLabel = findSortTypeByLabel(value)
     if (!sortTypeLabel) return
-    updateFilters({
+    updateSearchParams({
       sort_by: sortTypeLabel.type,
       sort_direction: sortTypeLabel.direction
     })
@@ -80,7 +80,7 @@ export function SortMenu() {
 
   return (
     <Select onValueChange={handleChange} value={getCurrentSortType()?.label}>
-      <SelectTrigger className='w-44 rounded-lg p-2 dark:bg-gray-500 dark:text-inherit'>
+      <SelectTrigger className='w-44 rounded-lg p-2 dark:bg-gray-600 dark:text-inherit'>
         <SelectValue placeholder='Sort by' />
       </SelectTrigger>
       <SelectContent>

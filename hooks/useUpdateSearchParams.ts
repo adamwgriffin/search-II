@@ -2,7 +2,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { getUpdatedQueryString } from '~/lib/listingSearchParams'
 import type { URLParams } from '~/types'
 
-export function useUpdateFilters() {
+export function useUpdateSearchParams() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()

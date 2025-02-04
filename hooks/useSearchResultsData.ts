@@ -2,17 +2,14 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { sortListingsByLatLng } from '~/lib/listingHelpers'
-import {
-  convertGeojsonCoordinatesToPolygonPaths,
-  getAvailableBounds
-} from '~/lib/polygon'
 import { searchQueryOptions } from '~/lib/queries'
+import type { GeoJSONBoundary } from '~/types'
+import { convertBoundaryToGeoJSON } from '~/lib/boundary'
 
 /**
- * A hook that handles computing derived data from the search results for the
- * ListingMap. It also handles memoization and placholder data for listings.
+ * A hook that handles computing derived data from the search results.
  */
-export function useSearchResultsMapData() {
+export function useSearchResultsData() {
   const searchParams = useSearchParams()
   // Using keepPreviousData with placeholderData keeps the data from the last
   // request so that we can still show the current data while new data is being
@@ -38,25 +35,15 @@ export function useSearchResultsMapData() {
     return sortListingsByLatLng(results.listings)
   }, [results?.listings])
 
-  const polygonPaths = useMemo(() => {
-    const coordinates = results?.boundary?.geometry?.coordinates
-    if (!coordinates) return
-    return convertGeojsonCoordinatesToPolygonPaths(coordinates)
-  }, [results?.boundary?.geometry?.coordinates])
-
-  const bounds = useMemo(() => {
-    return getAvailableBounds(
-      searchParams.get('bounds'),
-      polygonPaths,
-      results?.viewport
-    )
-  }, [polygonPaths, results?.viewport, searchParams])
+  const geoJSONBoundary: GeoJSONBoundary | null = results?.boundary
+    ? convertBoundaryToGeoJSON(results.boundary)
+    : null
 
   return {
-    listings,
-    bounds,
+    queryResult,
     boundaryId: results?.boundary?._id,
-    polygonPaths,
-    queryResult
+    listings,
+    geoJSONBoundary,
+    viewport: results?.viewport
   }
 }
