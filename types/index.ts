@@ -29,8 +29,11 @@ export type Listing = {
 }
 
 export type ListingSearchPagination = {
-  page: number
+  numberAvailable: number
+  numberOfPages: number
   numberReturned: number
+  page: number
+  pageSize: number
 }
 
 export type Position = [longitude: number, latitude: number]
