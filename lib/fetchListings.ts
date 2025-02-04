@@ -44,15 +44,37 @@ async function searchNewLocation(params: URLParams) {
 
 async function searchCurrentLocation(params: URLParams) {
   return getListings<ListingSearchResponse>(
-    params.boundary_id ? `boundary/${params.boundary_id}` : 'bounds',
+    `boundary/${params.boundary_id}`,
     paramsForGeospatialSearch(params)
   )
 }
 
+async function searchBounds(params: URLParams) {
+  return getListings<ListingSearchResponse>(
+    'bounds',
+    paramsForGeospatialSearch(params)
+  )
+}
+
+// TODO: Do we actually need to await these functions?
 export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
   if (searchParams.size === 0) return {}
   const params = Object.fromEntries(searchParams.entries())
-  return params.bounds
-    ? await searchCurrentLocation(params)
-    : await searchNewLocation(params)
+  const location = params.place_id || params.address
+  const { bounds, boundary_id } = params
+  // The user entered a new search in the search field
+  if (location && !bounds) {
+    return await searchNewLocation(params)
+  }
+  // We have previously performed a new search and now we are performing subsequent
+  // searches on the same location with different criteria
+  if (location && boundary_id) {
+    return await searchCurrentLocation(params)
+  }
+  // The user removed the location boundary so we are just performing searches
+  // on the bounds of the map viewport
+  if (bounds && !location && !boundary_id) {
+    return await searchBounds(params)
+  }
+  return {}
 }

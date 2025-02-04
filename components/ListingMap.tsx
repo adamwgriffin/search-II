@@ -8,14 +8,11 @@ import { ZoomControl } from '~/components/ZoomControl'
 import { useSearchParamsState } from '~/hooks/useSearchParamsState'
 import { useSearchResultsData } from '~/hooks/useSearchResultsData'
 import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { getAvailableBoundsFromSearchResults } from '~/lib/boundary'
 import {
   GoogleMapsMapOptions,
   MapBoundaryStyleOptions
 } from '~/lib/googleMapsOptions'
-import {
-  convertBoundsToURLBoundsParam,
-  getAvailableBoundsFromSearchResults
-} from '~/lib/boundary'
 import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
 
@@ -31,9 +28,9 @@ export function ListingMap() {
   const handleIdle = useCallback(() => {
     if (!updateFiltersOnMapIdle.current) return
     updateFiltersOnMapIdle.current = false
-    const mapBounds = map?.getBounds()
-    if (!mapBounds) return
-    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
+    const bounds = map?.getBounds()?.toUrlValue()
+    if (!bounds) throw new Error('No bounds available for map')
+    const updatedFilters: URLParams = { bounds }
     const mapZoom = map?.getZoom()
     if (results.boundaryId) {
       updatedFilters.boundary_id = results.boundaryId
@@ -46,9 +43,9 @@ export function ListingMap() {
 
   const handleZoomIn = useCallback(() => {
     if (!map) return
-    const mapBounds = map.getBounds()
-    if (!mapBounds) return
-    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
+    const bounds = map?.getBounds()?.toUrlValue()
+    if (!bounds) throw new Error('No bounds available for map')
+    const updatedFilters: URLParams = { bounds }
     if (results.boundaryId) {
       updatedFilters.boundary_id = results.boundaryId
     }
@@ -59,9 +56,9 @@ export function ListingMap() {
 
   const handleZoomOut = useCallback(() => {
     if (!map) return
-    const mapBounds = map.getBounds()
-    if (!mapBounds) return
-    const updatedFilters: URLParams = convertBoundsToURLBoundsParam(mapBounds)
+    const bounds = map?.getBounds()?.toUrlValue()
+    if (!bounds) throw new Error('No bounds available for map')
+    const updatedFilters: URLParams = { bounds }
     if (results.boundaryId) {
       updatedFilters.boundary_id = results.boundaryId
     }

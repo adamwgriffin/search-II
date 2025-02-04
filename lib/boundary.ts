@@ -1,13 +1,5 @@
 import type { Boundary, GeoJSONBoundary, ViewportLatLngBounds } from '../types'
 
-export function convertBoundsToURLBoundsParam(
-  bounds: google.maps.LatLngBounds
-) {
-  return {
-    bounds: bounds.toUrlValue()
-  }
-}
-
 // Setting id on the top level instead of inside "properties" makes it so
 // map.data.getFeatureById() will find it automatically without us having to
 // specify idPropertyName when adding the geojson.
