@@ -8,7 +8,7 @@ function removeNonListingServiceParams(params: URLParams) {
 }
 
 function removeNonGeospatialParams(params: URLParams) {
-  return omit(params, 'address')
+  return omit(params, 'address', 'place_id')
 }
 
 function convertBoundsParamToListingServiceBounds(boundsString: string) {
@@ -17,7 +17,6 @@ function convertBoundsParamToListingServiceBounds(boundsString: string) {
   return { bounds_south, bounds_west, bounds_north, bounds_east }
 }
 
-// TODO: Validate params with Zod instead
 function paramsForGeospatialSearch(params: URLParams) {
   if (typeof params.bounds !== 'string') {
     throw new Error('Bounds not included in params')
@@ -31,32 +30,27 @@ function paramsForGeospatialSearch(params: URLParams) {
   return { ...newParams, ...listingServiceBounds }
 }
 
-async function getListings<T>(endpoint: string, params: URLParams) {
-  return http<T>(`/api/listing/search/${endpoint}`, params)
-}
-
 async function searchNewLocation(params: URLParams) {
-  return getListings<ListingSearchResponse>(
-    'geocode',
+  return http<ListingSearchResponse>(
+    '/api/listing/search/geocode',
     removeNonListingServiceParams(params)
   )
 }
 
 async function searchCurrentLocation(params: URLParams) {
-  return getListings<ListingSearchResponse>(
-    `boundary/${params.boundary_id}`,
+  return http<ListingSearchResponse>(
+    `/api/listing/search/boundary/${params.boundary_id}`,
     paramsForGeospatialSearch(params)
   )
 }
 
 async function searchBounds(params: URLParams) {
-  return getListings<ListingSearchResponse>(
-    'bounds',
+  return http<ListingSearchResponse>(
+    '/api/listing/search/bounds',
     paramsForGeospatialSearch(params)
   )
 }
 
-// TODO: Do we actually need to await these functions?
 export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
   if (searchParams.size === 0) return {}
   const params = Object.fromEntries(searchParams.entries())
@@ -68,7 +62,7 @@ export async function fetchListings(searchParams: ReadonlyURLSearchParams) {
   }
   // We have previously performed a new search and now we are performing subsequent
   // searches on the same location with different criteria
-  if (location && boundary_id) {
+  if (location && bounds && boundary_id) {
     return await searchCurrentLocation(params)
   }
   // The user removed the location boundary so we are just performing searches
