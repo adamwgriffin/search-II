@@ -1,6 +1,6 @@
 'use client'
 
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 import { useMap } from '@vis.gl/react-google-maps'
 import type { URLParams } from '~/types'
 
@@ -9,7 +9,7 @@ export type BoundaryControlProps = {
 }
 
 export function BoundaryControl({ loading = false }: BoundaryControlProps) {
-  const updateFilters = useUpdateFilters()
+  const updateSearchParams = useUpdateSearchParams()
   const map = useMap()
 
   return (
@@ -24,7 +24,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
         onClick={() => {
           if (!map) return
           const bounds = map?.getBounds()?.toUrlValue()
-          if (!bounds) throw new Error('No bounds available for map')
+          if (!bounds) throw new Error('No bounds present in map instance')
           // Setting params to null removes them from the request and indicates
           // to the fetchListings function that we should search by bounds
           // instead of location
@@ -34,7 +34,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
             place_id: null,
             boundary_id: null
           }
-          updateFilters(updatedFilters)
+          updateSearchParams(updatedFilters)
         }}
       >
         Remove Boundary

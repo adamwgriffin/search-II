@@ -7,19 +7,19 @@ import { MapBoundary } from '~/components/MapBoundary'
 import { ZoomControl } from '~/components/ZoomControl'
 import { useSearchParamsState } from '~/hooks/useSearchParamsState'
 import { useSearchResultsData } from '~/hooks/useSearchResultsData'
-import { useUpdateFilters } from '~/hooks/useUpdateFilters'
+import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 import { getAvailableBoundsFromSearchResults } from '~/lib/boundary'
 import {
   GoogleMapsMapOptions,
   MapBoundaryStyleOptions
 } from '~/lib/googleMapsOptions'
-import type { URLParams } from '~/types'
 import { ListingMarker } from './ListingMarker'
+import { getNewParamsFromCurrentState } from '~/lib/listingSearchParams'
 
 export function ListingMap() {
   const map = useMap()
   const updateFiltersOnMapIdle = useRef(false)
-  const updateFilters = useUpdateFilters()
+  const updateSearchParams = useUpdateSearchParams()
   const params = useSearchParamsState()
   const results = useSearchResultsData()
 
@@ -28,44 +28,24 @@ export function ListingMap() {
   const handleIdle = useCallback(() => {
     if (!updateFiltersOnMapIdle.current) return
     updateFiltersOnMapIdle.current = false
-    const bounds = map?.getBounds()?.toUrlValue()
-    if (!bounds) throw new Error('No bounds available for map')
-    const updatedFilters: URLParams = { bounds }
-    const mapZoom = map?.getZoom()
-    if (results.boundaryId) {
-      updatedFilters.boundary_id = results.boundaryId
-    }
-    if (mapZoom) {
-      updatedFilters.zoom = mapZoom
-    }
-    updateFilters(updatedFilters)
-  }, [results.boundaryId, map, updateFilters])
+    if (!map) return
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
+    updateSearchParams(newParams)
+  }, [results.boundaryId, map, updateSearchParams])
 
   const handleZoomIn = useCallback(() => {
     if (!map) return
-    const bounds = map?.getBounds()?.toUrlValue()
-    if (!bounds) throw new Error('No bounds available for map')
-    const updatedFilters: URLParams = { bounds }
-    if (results.boundaryId) {
-      updatedFilters.boundary_id = results.boundaryId
-    }
-    const currentZoom = map.getZoom()
-    updatedFilters.zoom = currentZoom !== undefined ? currentZoom + 1 : 1
-    updateFilters(updatedFilters)
-  }, [map, results.boundaryId, updateFilters])
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
+    newParams.zoom = typeof newParams.zoom === 'number' ? newParams.zoom + 1 : 1
+    updateSearchParams(newParams)
+  }, [map, results.boundaryId, updateSearchParams])
 
   const handleZoomOut = useCallback(() => {
     if (!map) return
-    const bounds = map?.getBounds()?.toUrlValue()
-    if (!bounds) throw new Error('No bounds available for map')
-    const updatedFilters: URLParams = { bounds }
-    if (results.boundaryId) {
-      updatedFilters.boundary_id = results.boundaryId
-    }
-    const currentZoom = map.getZoom()
-    updatedFilters.zoom = currentZoom !== undefined ? currentZoom - 1 : 1
-    updateFilters(updatedFilters)
-  }, [map, results.boundaryId, updateFilters])
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
+    newParams.zoom = typeof newParams.zoom === 'number' ? newParams.zoom - 1 : 1
+    updateSearchParams(newParams)
+  }, [map, results.boundaryId, updateSearchParams])
 
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true

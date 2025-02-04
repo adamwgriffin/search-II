@@ -37,7 +37,10 @@ export function objectToQueryString(params: URLParams) {
     .replace(/%2C/g, ',') // Don't encode commas in url params
 }
 
-export function updateParams(currentParams: URLParams, newParams: URLParams) {
+export function getUpdatedParams(
+  currentParams: URLParams,
+  newParams: URLParams
+) {
   const merged = { ...currentParams, ...newParams }
   return removeUnwantedParams(merged)
 }
@@ -46,5 +49,22 @@ export function getUpdatedQueryString(
   currentParams: URLParams,
   newParams: URLParams
 ) {
-  return objectToQueryString(updateParams(currentParams, newParams))
+  return objectToQueryString(getUpdatedParams(currentParams, newParams))
+}
+
+export function getNewParamsFromCurrentState(
+  map: google.maps.Map,
+  boundaryId: string | undefined
+) {
+  const bounds = map.getBounds()?.toUrlValue()
+  if (!bounds) throw new Error('No bounds present in map instance')
+  const params: URLParams = { bounds }
+  if (boundaryId) {
+    params.boundary_id = boundaryId
+  }
+  const zoom = map.getZoom()
+  if (zoom) {
+    params.zoom = zoom
+  }
+  return params
 }
