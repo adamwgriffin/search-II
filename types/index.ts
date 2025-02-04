@@ -5,8 +5,6 @@ export type SearchParamsInit =
   | URLSearchParams
   | undefined
 
-export type NextSearchParams = { [key: string]: string | string[] | undefined }
-
 export type PhotoGalleryImage = {
   _id: string
   url: string
@@ -34,8 +32,6 @@ export type ListingSearchPagination = {
   page: number
   numberReturned: number
 }
-
-export type PolygonPaths = Array<Array<google.maps.LatLngLiteral>>
 
 export type Position = [longitude: number, latitude: number]
 
