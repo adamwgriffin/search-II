@@ -15,10 +15,9 @@ export function useSearchParamsState() {
 
   const zoom = params.zoom ? Number(params.zoom) : null
 
-  const showMapBoundary = Boolean(
-    (params.boundary_id && params.bounds) ||
-      (!params.boundary_id && !params.bounds)
+  const showRemoveBoundaryButton = Boolean(
+    params.address || params.place_id || params.boundary_id
   )
 
-  return { bounds, zoom, showMapBoundary }
+  return { bounds, zoom, showRemoveBoundaryButton }
 }

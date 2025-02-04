@@ -112,7 +112,9 @@ export function ListingMap() {
         boundary={results.geoJSONBoundary}
         {...MapBoundaryStyleOptions}
       />
-      <BoundaryControl loading={isFetching} />
+      {params.showRemoveBoundaryButton && (
+        <BoundaryControl loading={isFetching} />
+      )}
       <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
     </Map>
   )
