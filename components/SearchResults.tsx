@@ -1,7 +1,7 @@
 'use client'
 
 import { ListingCard } from '~/components/ListingCard'
-import { ListingResultsHeader } from '~/components/ListingResultsHeader'
+import { SearchResultsHeader } from '~/components/SearchResultsHeader'
 import { SearchResultsLoading } from '~/components/SearchResultsLoading'
 import { useSearchResults } from '~/hooks/useSearchResults'
 
@@ -15,6 +15,7 @@ export function SearchResults() {
   return (
     <div>
       <ListingResultsHeader
+      <SearchResultsHeader
         listingCount={results?.pagination?.numberAvailable}
         loading={isFetching}
       />

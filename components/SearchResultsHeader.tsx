@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { SortMenu } from '~/components/SortMenu'
 
-export type ListingResultsHeaderProps = {
+export type SearchResultsHeaderProps = {
   listingCount: number | undefined
   loading?: boolean
 }
@@ -13,10 +13,10 @@ function listingsFoundMessage(listingCount: number | undefined) {
     : `${listingCount.toLocaleString()} Homes`
 }
 
-export function ListingResultsHeader({
+export function SearchResultsHeader({
   listingCount,
   loading = false
-}: ListingResultsHeaderProps) {
+}: SearchResultsHeaderProps) {
   return (
     <div className='flex items-center justify-between pb-4'>
       <div>
