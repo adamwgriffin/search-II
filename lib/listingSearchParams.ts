@@ -45,8 +45,14 @@ export function getUpdatedParams(
   currentParams: URLParams,
   newParams: URLParams
 ) {
-  const merged = { ...currentParams, ...newParams }
-  return removeUnwantedParams(merged)
+  // Only keep the page_index if it was specifically added to the update in
+  // newParams. Any other type of search adjustment should request results
+  // starting on the first page
+  const mergedParams = {
+    ...omit(currentParams, 'page_index'),
+    ...newParams
+  }
+  return removeUnwantedParams(mergedParams)
 }
 
 export function getUpdatedQueryString(
