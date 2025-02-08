@@ -17,16 +17,19 @@ export const ParamDefaults: Partial<URLParams> = Object.freeze({
 })
 
 /**
- * Remove params marked for removal as well as params that use default values.
- * Setting a param to these falsey values indicates that it should be removed
- * from the filters if present.
+ * Remove params marked for removal, as well as params that use default values,
+ * or params that otherwise could cause a conflict. Setting a param to the
+ * falsey values below indicates indicates that it was marked for removal.
  */
 export function removeUnwantedParams(params: URLParams) {
-  return omitBy(
-    params,
-    (value, key) =>
-      value === null || value === '' || isEqual(ParamDefaults[key], value)
-  )
+  return omitBy(params, (value, key) => {
+    return (
+      value === null ||
+      value === undefined ||
+      value === '' ||
+      isEqual(ParamDefaults[key], value)
+    )
+  })
 }
 
 export function objectToQueryString(params: URLParams) {
