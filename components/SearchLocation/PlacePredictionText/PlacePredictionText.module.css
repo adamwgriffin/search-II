@@ -1,0 +1,12 @@
+.matched {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+.mainText {
+  padding: 0 .25rem;
+}
+
+.secondaryText {
+  color: var(--foreground-disabled);
+}
