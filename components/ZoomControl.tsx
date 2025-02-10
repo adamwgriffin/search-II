@@ -1,11 +1,17 @@
 import { Plus, Minus } from 'lucide-react'
+import { TextLoading } from '~/components/TextLoading'
 
 export type ZoomControlProps = {
+  loading?: boolean
   onZoomIn?: () => void
   onZoomOut?: () => void
 }
 
-export function ZoomControl({ onZoomIn, onZoomOut }: ZoomControlProps) {
+export function ZoomControl({
+  loading = false,
+  onZoomIn,
+  onZoomOut
+}: ZoomControlProps) {
   return (
     <div
       className='
@@ -14,10 +20,14 @@ export function ZoomControl({ onZoomIn, onZoomOut }: ZoomControlProps) {
       '
     >
       <button aria-label='Zoom in' className='' onClick={onZoomIn}>
-        <Plus />
+        <TextLoading loading={loading}>
+          <Plus />
+        </TextLoading>
       </button>
       <button aria-label='Zoom out' className='' onClick={onZoomOut}>
-        <Minus />
+        <TextLoading loading={loading}>
+          <Minus />
+        </TextLoading>
       </button>
     </div>
   )

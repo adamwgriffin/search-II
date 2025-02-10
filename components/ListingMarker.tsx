@@ -1,7 +1,7 @@
 import { AdvancedMarker } from '@vis.gl/react-google-maps'
-import { type Listing } from '~/types'
+import { TextLoading } from '~/components/TextLoading'
 import { formatPriceAbbreviated } from '~/lib/listingHelpers'
-import { cn } from '~/lib/utils'
+import { type Listing } from '~/types'
 
 export type ListingMarkerProps = Pick<
   Listing,
@@ -28,13 +28,9 @@ export function ListingMarker({
           shadow-md shadow-gray-500 
           font-medium text-black dark:text-white bg-background dark:bg-gray-600'
       >
-        <span
-          className={cn(
-            loading && 'animate-pulse text-gray-400 dark:text-gray-300'
-          )}
-        >
+        <TextLoading loading={loading}>
           {formatPriceAbbreviated(soldPrice || listPrice)}
-        </span>
+        </TextLoading>
       </div>
     </AdvancedMarker>
   )

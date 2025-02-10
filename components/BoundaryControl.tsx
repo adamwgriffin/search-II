@@ -1,7 +1,8 @@
 'use client'
 
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 import { useMap } from '@vis.gl/react-google-maps'
+import { TextLoading } from '~/components/TextLoading'
+import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
 import type { URLParams } from '~/types'
 
 export type BoundaryControlProps = {
@@ -16,11 +17,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
     <div className='absolute bottom-2 left-1/2 transform -translate-x-1/2'>
       <button
         disabled={loading}
-        className='
-        rounded-md shadow-sm p-2 shadow-gray-500 bg-background dark:bg-gray-600
-        disabled:text-gray-400
-        disabled:dark:text-gray-300
-        '
+        className='rounded-md shadow-sm p-2 shadow-gray-500 bg-background dark:bg-gray-600'
         onClick={() => {
           if (!map) return
           const bounds = map?.getBounds()?.toUrlValue()
@@ -37,7 +34,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
           updateSearchParams(updatedFilters)
         }}
       >
-        Remove Boundary
+        <TextLoading loading={loading}>Remove Boundary</TextLoading>
       </button>
     </div>
   )
