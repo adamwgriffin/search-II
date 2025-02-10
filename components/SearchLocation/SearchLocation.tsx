@@ -24,16 +24,18 @@ export function SearchLocation() {
   }
 
   return (
-    <SearchField
-      value={value}
-      options={data || []}
-      onInput={(details) => setValue(details)}
-      onGetPlaceAutocompletePredictions={(val) => setSearchString(val)}
-      onClearPlaceAutocompletePredictions={() => setSearchString(null)}
-      onSearchInitiated={() => searchNewLocation({ address: value })}
-      onOptionSelected={(autocompletePrediction) => {
-        searchNewLocation({ address: autocompletePrediction.description })
-      }}
-    />
+    <form name='search-form' onSubmit={(e) => e.preventDefault()}>
+      <SearchField
+        value={value}
+        options={data || []}
+        onInput={(details) => setValue(details)}
+        onGetPlaceAutocompletePredictions={(val) => setSearchString(val)}
+        onClearPlaceAutocompletePredictions={() => setSearchString(null)}
+        onSearchInitiated={() => searchNewLocation({ address: value })}
+        onOptionSelected={(autocompletePrediction) => {
+          searchNewLocation({ address: autocompletePrediction.description })
+        }}
+      />
+    </form>
   )
 }
