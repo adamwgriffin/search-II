@@ -115,7 +115,11 @@ export function ListingMap() {
       {params.showRemoveBoundaryButton && (
         <BoundaryControl loading={isFetching} />
       )}
-      <ZoomControl onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
+      <ZoomControl
+        loading={isFetching}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+      />
     </Map>
   )
 }

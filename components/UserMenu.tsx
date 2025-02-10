@@ -14,7 +14,7 @@ export function UserMenu() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className='shrink cursor-pointer rounded-full border border-gray-400 p-2'>
-            <FaUser className='text-3xl text-gray-400' />
+            <FaUser className='text-2xl text-gray-400' />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

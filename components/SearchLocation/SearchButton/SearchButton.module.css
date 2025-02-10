@@ -1,0 +1,25 @@
+.searchButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 0 1.25rem 1.25rem 0;
+  min-width: 2.8rem;
+  padding: 0;
+  margin: 0;
+  /* background-color: MediumPurple; */
+  background-color: rgb(168, 85, 247);
+}
+
+.searchButton:hover {
+  background-color: rgb(162, 69, 248);
+}
+
+:global(.dark) .searchButton {
+  background-color: rgb(203, 155, 255);
+}
+
+:global(.dark) .searchButton:hover {
+  background-color: rgb(190, 135, 250);
+}
