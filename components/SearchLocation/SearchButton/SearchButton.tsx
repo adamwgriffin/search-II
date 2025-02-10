@@ -1,12 +1,9 @@
-import type { NextPage } from 'next'
-import SearchButtonIcon from '~/components/icons/SearchButtonIcon/SearchButtonIcon'
 import styles from './SearchButton.module.css'
+import { IoIosSearch } from 'react-icons/io'
 
-export interface SearchButtonProps {
-  onClick?: () => void
-}
-
-const SearchButton: NextPage<SearchButtonProps> = ({ onClick }) => {
+const SearchButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = (
+  props
+) => {
   return (
     <button
       className={styles.searchButton}
@@ -14,11 +11,10 @@ const SearchButton: NextPage<SearchButtonProps> = ({ onClick }) => {
       form='search-form'
       value='Submit'
       tabIndex={0}
-      title='Execute search'
-      aria-label='Execute search'
-      onClick={onClick}
+      aria-label='Search location'
+      {...props}
     >
-      <SearchButtonIcon />
+      <IoIosSearch className='text-2xl text-white' />
     </button>
   )
 }

@@ -224,7 +224,6 @@ const SearchField: React.FC<SearchFieldProps> = ({
             className={styles.locationSearchField}
             aria-label='Location Search'
             aria-autocomplete='list'
-            // aria-controls={listboxId}
             aria-activedescendant={ariaActivedescendant()}
             type='text'
             autoComplete='off'
