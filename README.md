@@ -5,13 +5,18 @@ in the URL only, instead of relying on a state manager.
 
 Uses Next.js app router, React Google Maps, React Query, Tailwind and Shadcn/UI.
 
+## Requirements
+
+* Node.js 23
+* Bun 1.2
+
 ## Setup
 
-Save `env.example` as `.env.local` and add Google Maps API key and Map ID
+[Listing Service](https://github.com/adamwgriffin/listing_service) needs to be
+installed locally running on port 3001 to fetch listing data.
 
-Run `yarn install`
+Save `env.example` as `.env.local` and add a Google Maps API key and Map ID.
 
-Run `yarn dev`
+Run `bun install`
 
-(Listing Service needs to be installed locally running on port 3001 to fetch
-listing data)
+Run `bun run dev`
