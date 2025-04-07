@@ -54,12 +54,16 @@
   z-index: 2;
   overflow-x: hidden;
   list-style: none;
-  background-color: #4b5563;
+  background-color: white;
   width: 100%;
   max-height: 250px;
   box-shadow: 0px 3px 3px 0 rgba(0, 0, 0, 0.4);
   margin: 0;
   padding: 0;
+}
+
+:global(.dark) .listboxOpen {
+  background-color: #4b5563;
 }
 
 .listboxClosed {
@@ -76,11 +80,20 @@
 
 .listItemSelected {
   composes: listItem;
-  background-color: #737a83;
 }
 
+.listItemSelected,
 .listItem:hover {
-  background-color: #737a83;
+  background-color: #e1d8f1;
+}
+
+:global(.dark) .listItemSelected,
+:global(.dark) .listItem:hover {
+  background-color: rgb(162, 69, 248);
+}
+
+:global(.dark) .listboxOpen {
+  background-color: #4b5563;
 }
 
 .locationPinFilledIcon {
