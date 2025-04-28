@@ -27,7 +27,7 @@ export function SearchResultsPagination({
             updateSearchParams({ page_index: String(currentPage - 1) })
           }}
           aria-label='Go to previous page'
-          className='disabled:text-gray-300 disabled:dark:text-gray-600'
+          className='disabled:text-gray-300 dark:disabled:text-gray-600'
         >
           <ChevronLeft />
         </button>
@@ -43,7 +43,7 @@ export function SearchResultsPagination({
             updateSearchParams({ page_index: String(currentPage + 1) })
           }}
           aria-label='Go to next page'
-          className='disabled:text-gray-300 disabled:dark:text-gray-600'
+          className='disabled:text-gray-300 dark:disabled:text-gray-600'
         >
           <ChevronRight />
         </button>

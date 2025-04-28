@@ -17,7 +17,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
     <div className='absolute bottom-2 left-1/2 transform -translate-x-1/2'>
       <button
         disabled={loading}
-        className='rounded-md shadow-sm p-2 shadow-gray-500 bg-background dark:bg-gray-600'
+        className='rounded-md shadow-xs p-2 shadow-gray-500 bg-background dark:bg-gray-600'
         onClick={() => {
           if (!map) return
           const bounds = map?.getBounds()?.toUrlValue()
