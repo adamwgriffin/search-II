@@ -1,23 +1,23 @@
-import inRange from 'lodash/inRange'
-import range from 'lodash/range'
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
-import { PaginationButton } from '~/components/PaginationButton'
-import { MoreHorizontal } from 'lucide-react'
+import inRange from 'lodash/inRange';
+import range from 'lodash/range';
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { PaginationButton } from '~/components/PaginationButton';
+import { MoreHorizontal } from 'lucide-react';
 
 export type PaginationGroupsProps = {
-  numberOfPages: number
-  currentPage: number
-}
+  numberOfPages: number;
+  currentPage: number;
+};
 
-const ShowAllPagesThreshold = 7
-const WithinPagesThreshold = 3
-const PageGroupLength = 4
+const ShowAllPagesThreshold = 7;
+const WithinPagesThreshold = 3;
+const PageGroupLength = 4;
 
 export function PaginationGroups({
   numberOfPages,
   currentPage
 }: PaginationGroupsProps) {
-  const updateSearchParams = useUpdateSearchParams()
+  const { updateSearchParams } = useSearchParamsState();
 
   // If there aren't that many pages just show them all
   if (numberOfPages <= ShowAllPagesThreshold) {
@@ -34,40 +34,40 @@ export function PaginationGroups({
           </li>
         ))}
       </>
-    )
+    );
   }
 
   // If there are a lot of pages selectively show groups of pages depending on
   // where the current page is inside the list, e.g., < 1 ... 3 (4) 5 ... 13 >
-  const firstPage = 0
-  const lastPage = numberOfPages - 1
+  const firstPage = 0;
+  const lastPage = numberOfPages - 1;
 
   // Find which group the current page is within
   const currentPageWithinFirstGroup = inRange(
     currentPage,
     firstPage,
     WithinPagesThreshold
-  )
+  );
   const currentPageWithinLastGroup = inRange(
     currentPage,
     numberOfPages - WithinPagesThreshold,
     numberOfPages
-  )
+  );
   const currentPageWithinMiddleGroup =
-    !currentPageWithinFirstGroup && !currentPageWithinLastGroup
+    !currentPageWithinFirstGroup && !currentPageWithinLastGroup;
 
   // Create a set of arrays to represent the pages for each group
   const firstPageGroup = currentPageWithinFirstGroup
     ? range(PageGroupLength)
-    : [firstPage]
+    : [firstPage];
   // Middle page group is 3 pages and always shows the current page in the
   // middle. Don't show it if the current page isn't inside it
   const middlePageGroup = currentPageWithinMiddleGroup
     ? [currentPage - 1, currentPage, currentPage + 1]
-    : null
+    : null;
   const lastPageGroup = currentPageWithinLastGroup
     ? range(numberOfPages - PageGroupLength, numberOfPages)
-    : [lastPage]
+    : [lastPage];
 
   return (
     <>
@@ -113,5 +113,5 @@ export function PaginationGroups({
         </li>
       ))}
     </>
-  )
+  );
 }

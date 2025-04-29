@@ -1,13 +1,15 @@
-'use client'
+'use client';
 
-import { useSearchParams } from 'next/navigation'
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
 
-const Values = ['', '1', '2', '3', '4', '5']
+const Values = ['', '1', '2', '3', '4', '5'];
 
 export function Baths() {
-  const searchParams = useSearchParams()
-  const updateSearchParams = useUpdateSearchParams()
+  const { searchParamsState, updateSearchParams } = useSearchParamsState();
+
+  const bathsMin = searchParamsState.baths_min
+    ? String(searchParamsState.baths_min)
+    : '';
 
   return (
     <fieldset className='flex gap-2'>
@@ -18,12 +20,12 @@ export function Baths() {
             type='radio'
             name='baths'
             value={value}
-            checked={(searchParams.get('baths_min') || '') === value}
+            checked={bathsMin === value}
             onChange={() => updateSearchParams({ baths_min: value })}
           />
           {value ? `${value}+` : 'Any'}
         </label>
       ))}
     </fieldset>
-  )
+  );
 }

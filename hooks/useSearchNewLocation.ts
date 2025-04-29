@@ -1,17 +1,19 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { getNewLocationQueryString } from '~/lib/listingSearchParams'
-import type { URLParams } from '~/types'
+import { usePathname, useRouter } from 'next/navigation';
+import { getNewLocationQueryString } from '~/lib/listingSearchParams';
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import type { URLParams } from '~/types';
 
 export function useSearchNewLocation() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const { searchParamsState } = useSearchParamsState();
 
   return function (newLocationParams: URLParams) {
     const updatedQueryString = getNewLocationQueryString(
-      Object.fromEntries(searchParams),
+      searchParamsState,
       newLocationParams
-    )
-    router.push(`${pathname}?${updatedQueryString}`)
-  }
+    );
+    console.log(updatedQueryString);
+    router.push(`${pathname}?${updatedQueryString}`);
+  };
 }

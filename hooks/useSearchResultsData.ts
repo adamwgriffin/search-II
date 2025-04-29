@@ -1,16 +1,15 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
-import { sortListingsByLatLng } from '~/lib/listingHelpers'
-import { searchQueryOptions } from '~/lib/queries'
-import type { GeoJSONBoundary } from '~/types'
-import { convertBoundaryToGeoJSON } from '~/lib/boundary'
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { convertBoundaryToGeoJSON } from '~/lib/boundary';
+import { sortListingsByLatLng } from '~/lib/listingHelpers';
+import { searchQueryOptions } from '~/lib/queries';
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
 
 /**
  * A hook that handles computing derived data from the search results.
  */
 export function useSearchResultsData() {
-  const searchParams = useSearchParams()
+  const { searchParamsState } = useSearchParamsState();
   // Using keepPreviousData with placeholderData keeps the data from the last
   // request so that we can still show the current data while new data is being
   // fetched. We're doing this so that the map markers won't blink from being
@@ -18,11 +17,11 @@ export function useSearchResultsData() {
   // details:
   // https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries
   const queryResult = useQuery({
-    ...searchQueryOptions(searchParams),
+    ...searchQueryOptions(searchParamsState),
     placeholderData: keepPreviousData
-  })
+  });
 
-  const results = queryResult.data
+  const results = queryResult.data;
 
   // If the user changes the sort criteria, it will cause the markers to
   // re-render on the map, even if the have the exact same listing data, which
@@ -31,19 +30,25 @@ export function useSearchResultsData() {
   // order they were rendered in. Keeping the order stable by making sure they
   // always sort the same way fixes this.
   const listings = useMemo(() => {
-    if (!results?.listings) return []
-    return sortListingsByLatLng(results.listings)
-  }, [results?.listings])
+    return Array.isArray(results?.listings)
+      ? sortListingsByLatLng(results.listings)
+      : [];
+  }, [results?.listings]);
 
-  const geoJSONBoundary: GeoJSONBoundary | null = results?.boundary
-    ? convertBoundaryToGeoJSON(results.boundary)
-    : null
+  const boundary =
+    results?.boundary && typeof results.boundary === 'object'
+      ? results.boundary
+      : null;
+
+  const geoJSONBoundary = boundary ? convertBoundaryToGeoJSON(boundary) : null;
+
+  const boundaryId = boundary ? boundary._id : null;
 
   return {
     queryResult,
-    boundaryId: results?.boundary?._id,
+    boundaryId,
     listings,
     geoJSONBoundary,
     viewport: results?.viewport
-  }
+  };
 }

@@ -1,13 +1,15 @@
-'use client'
+'use client';
 
-import { useSearchParams } from 'next/navigation'
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
 
-const Values = ['', '1', '2', '3', '4', '5']
+const Values = ['', '1', '2', '3', '4', '5'];
 
 export function Beds() {
-  const searchParams = useSearchParams()
-  const updateSearchParams = useUpdateSearchParams()
+  const { searchParamsState, updateSearchParams } = useSearchParamsState();
+
+  const bedsMin = searchParamsState.beds_min
+    ? String(searchParamsState.beds_min)
+    : '';
 
   return (
     <fieldset className='flex gap-2'>
@@ -18,12 +20,12 @@ export function Beds() {
             type='radio'
             name='beds'
             value={value}
-            checked={(searchParams.get('beds_min') || '') === value}
+            checked={bedsMin === value}
             onChange={() => updateSearchParams({ beds_min: value })}
           />
           {value ? `${value}+` : 'Any'}
         </label>
       ))}
     </fieldset>
-  )
+  );
 }

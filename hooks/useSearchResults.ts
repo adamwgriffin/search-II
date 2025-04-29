@@ -1,9 +1,9 @@
-import { useSearchParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
-import { searchQueryOptions } from '~/lib/queries'
+import { useQuery } from '@tanstack/react-query';
+import { searchQueryOptions } from '~/lib/queries';
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
 
 export function useSearchResults() {
-  const searchParams = useSearchParams()
+  const { searchParamsState } = useSearchParamsState();
 
-  return useQuery(searchQueryOptions(searchParams))
+  return useQuery(searchQueryOptions(searchParamsState));
 }

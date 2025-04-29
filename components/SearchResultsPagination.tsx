@@ -1,11 +1,11 @@
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { PaginationGroups } from '~/components/PaginationGroups'
+import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { PaginationGroups } from '~/components/PaginationGroups';
 
 export type SearchResultsPaginationProps = {
-  numberOfPages: number
-  currentPage: number
-}
+  numberOfPages: number;
+  currentPage: number;
+};
 
 // TODO: If anything besides a pagination event triggers a search we need to
 // remove the page_index param to start over at the beginning
@@ -13,7 +13,7 @@ export function SearchResultsPagination({
   numberOfPages,
   currentPage
 }: SearchResultsPaginationProps) {
-  const updateSearchParams = useUpdateSearchParams()
+  const { updateSearchParams } = useSearchParamsState();
 
   return (
     <nav className='relative pt-6 pb-2' aria-labelledby='pagination'>
@@ -24,7 +24,7 @@ export function SearchResultsPagination({
         <button
           disabled={currentPage === 0}
           onClick={() => {
-            updateSearchParams({ page_index: String(currentPage - 1) })
+            updateSearchParams({ page_index: String(currentPage - 1) });
           }}
           aria-label='Go to previous page'
           className='disabled:text-gray-300 dark:disabled:text-gray-600'
@@ -40,7 +40,7 @@ export function SearchResultsPagination({
         <button
           disabled={currentPage === numberOfPages - 1}
           onClick={() => {
-            updateSearchParams({ page_index: String(currentPage + 1) })
+            updateSearchParams({ page_index: String(currentPage + 1) });
           }}
           aria-label='Go to next page'
           className='disabled:text-gray-300 dark:disabled:text-gray-600'
@@ -49,5 +49,5 @@ export function SearchResultsPagination({
         </button>
       </ul>
     </nav>
-  )
+  );
 }
