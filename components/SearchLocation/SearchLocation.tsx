@@ -23,7 +23,7 @@ export function SearchLocation() {
   });
 
   if (isError) {
-    console.log('Error fetching autocomplete:', error);
+    console.error('Error fetching autocomplete:', error);
   }
 
   return (
