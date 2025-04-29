@@ -1,92 +1,105 @@
-'use client'
+'use client';
 
-import { Map, useMap } from '@vis.gl/react-google-maps'
-import { useCallback, useEffect, useRef } from 'react'
-import { BoundaryControl } from '~/components/BoundaryControl'
-import { MapBoundary } from '~/components/MapBoundary'
-import { ZoomControl } from '~/components/ZoomControl'
-import { useSearchParamsState } from '~/hooks/useSearchParamsState'
-import { useSearchResultsData } from '~/hooks/useSearchResultsData'
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
-import { getAvailableBoundsFromSearchResults } from '~/lib/boundary'
+import { Map, useMap } from '@vis.gl/react-google-maps';
+import { useCallback, useEffect, useRef } from 'react';
+import { BoundaryControl } from '~/components/BoundaryControl';
+import { MapBoundary } from '~/components/MapBoundary';
+import { ZoomControl } from '~/components/ZoomControl';
+import { useSearchResultsData } from '~/hooks/useSearchResultsData';
+import { useSearchState } from '~/providers/SearchStateProvider';
+import {
+  convertURLBoundsParamToLatLngBoundsLiteral,
+  getAvailableBoundsFromSearchResults
+} from '~/lib/boundary';
 import {
   GoogleMapsMapOptions,
   MapBoundaryStyleOptions
-} from '~/lib/googleMapsOptions'
-import { ListingMarker } from './ListingMarker'
-import { getNewParamsFromCurrentState } from '~/lib/listingSearchParams'
+} from '~/lib/googleMapsOptions';
+import { ListingMarker } from './ListingMarker';
+import { getNewParamsFromCurrentState } from '~/lib/listingSearchParams';
 
 export function ListingMap() {
-  const map = useMap()
-  const updateFiltersOnMapIdle = useRef(false)
-  const updateSearchParams = useUpdateSearchParams()
-  const params = useSearchParamsState()
-  const results = useSearchResultsData()
+  const map = useMap();
+  const updateFiltersOnMapIdle = useRef(false);
+  const { searchState, setSearchState } = useSearchState();
+  const results = useSearchResultsData();
 
-  const { isFetching } = results.queryResult
+  const { isFetching } = results.queryResult;
+
+  const bounds = searchState.bounds
+    ? convertURLBoundsParamToLatLngBoundsLiteral(searchState.bounds)
+    : null;
+
+  const zoom = searchState.zoom ?? null;
+
+  const showRemoveBoundaryButton = Boolean(
+    searchState.address || searchState.place_id || searchState.boundary_id
+  );
 
   const handleIdle = useCallback(() => {
-    if (!updateFiltersOnMapIdle.current) return
-    updateFiltersOnMapIdle.current = false
-    if (!map) return
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
-    updateSearchParams(newParams)
-  }, [results.boundaryId, map, updateSearchParams])
+    if (!updateFiltersOnMapIdle.current) return;
+    updateFiltersOnMapIdle.current = false;
+    if (!map) return;
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    setSearchState(newParams);
+  }, [results.boundaryId, map, setSearchState]);
 
   const handleZoomIn = useCallback(() => {
-    if (!map) return
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
-    newParams.zoom = typeof newParams.zoom === 'number' ? newParams.zoom + 1 : 1
-    updateSearchParams(newParams)
-  }, [map, results.boundaryId, updateSearchParams])
+    if (!map) return;
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    newParams.zoom =
+      typeof newParams.zoom === 'number' ? newParams.zoom + 1 : 1;
+    setSearchState(newParams);
+  }, [map, results.boundaryId, setSearchState]);
 
   const handleZoomOut = useCallback(() => {
-    if (!map) return
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId)
-    newParams.zoom = typeof newParams.zoom === 'number' ? newParams.zoom - 1 : 1
-    updateSearchParams(newParams)
-  }, [map, results.boundaryId, updateSearchParams])
+    if (!map) return;
+    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    newParams.zoom =
+      typeof newParams.zoom === 'number' ? newParams.zoom - 1 : 1;
+    setSearchState(newParams);
+  }, [map, results.boundaryId, setSearchState]);
 
   const handleUserAdjustedMap = useCallback(() => {
-    updateFiltersOnMapIdle.current = true
-  }, [])
+    updateFiltersOnMapIdle.current = true;
+  }, []);
 
   useEffect(() => {
-    map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap)
+    map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap);
     return () =>
-      map?.getDiv()?.removeEventListener('wheel', handleUserAdjustedMap)
-  }, [handleUserAdjustedMap, map])
+      map?.getDiv()?.removeEventListener('wheel', handleUserAdjustedMap);
+  }, [handleUserAdjustedMap, map]);
 
   // No bounds param in the url means it's a new search, so call fitBounds()
   // to adjust the map to fit the new boundary that was returned from the
   // search results
   useEffect(() => {
-    if (!map || params.bounds) return
+    if (!map || bounds) return;
     const feature = results.geoJSONBoundary?.id
       ? map.data.getFeatureById(results.geoJSONBoundary.id)
-      : undefined
-    const bounds = getAvailableBoundsFromSearchResults(
+      : undefined;
+    const searchResultsBounds = getAvailableBoundsFromSearchResults(
       feature,
       results.viewport
-    )
-    if (bounds) {
-      map.fitBounds(bounds)
+    );
+    if (searchResultsBounds) {
+      map.fitBounds(searchResultsBounds);
     }
-  }, [map, results.geoJSONBoundary, params.bounds, results.viewport])
+  }, [map, results.geoJSONBoundary, bounds, results.viewport]);
 
   // Bounds param is present in the URL, which means we're searching an
   // existing location, so use the bounds & zoom from the url to adjust the
   // map
   useEffect(() => {
-    if (!map) return
-    if (params.bounds) {
-      const center = new google.maps.LatLngBounds(params.bounds).getCenter()
-      map.setCenter(center)
-      if (params.zoom) {
-        map.setZoom(params.zoom)
+    if (!map) return;
+    if (bounds) {
+      const center = new google.maps.LatLngBounds(bounds).getCenter();
+      map.setCenter(center);
+      if (zoom) {
+        map.setZoom(zoom);
       }
     }
-  }, [map, params.bounds, params.zoom])
+  }, [map, bounds, zoom]);
 
   return (
     <Map
@@ -112,14 +125,12 @@ export function ListingMap() {
         boundary={results.geoJSONBoundary}
         {...MapBoundaryStyleOptions}
       />
-      {params.showRemoveBoundaryButton && (
-        <BoundaryControl loading={isFetching} />
-      )}
+      {showRemoveBoundaryButton && <BoundaryControl loading={isFetching} />}
       <ZoomControl
         loading={isFetching}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
       />
     </Map>
-  )
+  );
 }

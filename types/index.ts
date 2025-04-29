@@ -3,84 +3,78 @@ export type SearchParamsInit =
   | string[][]
   | Record<string, string>
   | URLSearchParams
-  | undefined
+  | undefined;
 
 export type PhotoGalleryImage = {
-  _id: string
-  url: string
-  caption?: string
-}
+  _id: string;
+  url: string;
+  caption?: string;
+};
 
 export type Address = {
-  city: string
-  line1: string
-  state: string
-  zip: string
-}
+  city: string;
+  line1: string;
+  state: string;
+  zip: string;
+};
 
 export type Listing = {
-  _id: string
-  latitude: number
-  longitude: number
-  photoGallery: PhotoGalleryImage[]
-  address: Address
-  listPrice: number
-  soldPrice?: number
-}
+  _id: string;
+  latitude: number;
+  longitude: number;
+  photoGallery: PhotoGalleryImage[];
+  address: Address;
+  listPrice: number;
+  soldPrice?: number;
+};
 
 export type ListingSearchPagination = {
-  numberAvailable: number
-  numberOfPages: number
-  numberReturned: number
-  page: number
-  pageSize: number
-}
+  numberAvailable: number;
+  numberOfPages: number;
+  numberReturned: number;
+  page: number;
+  pageSize: number;
+};
 
-export type Position = [longitude: number, latitude: number]
+export type Position = [longitude: number, latitude: number];
 
 export type Polygon = {
-  type: 'Polygon'
-  coordinates: Position[][]
-}
+  type: 'Polygon';
+  coordinates: Position[][];
+};
 
 export type MultiPolygon = {
-  type: 'MultiPolygon'
-  coordinates: Position[][][]
-}
+  type: 'MultiPolygon';
+  coordinates: Position[][][];
+};
 
-export type Geometry = (Polygon | MultiPolygon) & { _id: string }
+export type Geometry = (Polygon | MultiPolygon) & { _id: string };
 
 export type Boundary = {
-  _id: string
-  name: string
-  placeId: string
-  type: string
-  geometry: Geometry
-}
+  _id: string;
+  name: string;
+  placeId: string;
+  type: string;
+  geometry: Geometry;
+};
 
 export type GeoJSONBoundary = {
-  type: 'Feature'
-  id: string
+  type: 'Feature';
+  id: string;
   geometry: {
-    type: 'Polygon' | 'MultiPolygon'
-    coordinates: Position[][] | Position[][][]
-  }
-}
+    type: 'Polygon' | 'MultiPolygon';
+    coordinates: Position[][] | Position[][][];
+  };
+};
 
 export type ViewportLatLngBounds = {
-  northeast: google.maps.LatLngLiteral
-  southwest: google.maps.LatLngLiteral
-}
+  northeast: google.maps.LatLngLiteral;
+  southwest: google.maps.LatLngLiteral;
+};
 
 export type ListingSearchResponse = {
-  boundary?: Boundary
-  listings?: Listing[]
-  pagination?: ListingSearchPagination
-  viewport?: ViewportLatLngBounds
-}
-
-export type URLParams = Record<string, string | number | null>
-
-export type SortType = 'listedDate' | 'listPrice' | 'beds' | 'baths' | 'sqft'
-
-export type SortDirection = 'asc' | 'desc'
+  boundary?: Boundary;
+  listings?: Listing[];
+  pagination?: ListingSearchPagination;
+  viewport?: ViewportLatLngBounds;
+};

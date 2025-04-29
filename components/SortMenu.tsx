@@ -1,22 +1,24 @@
-'use client'
+'use client';
 
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams'
-import type { SortDirection, SortType } from '~/types'
+import type {
+  SortType,
+  SortDirection
+} from '~/zod_schemas/listingSearchParamsSchema';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '~/components/ui/select'
-import { useSearchParams } from 'next/navigation'
-import { ParamDefaults } from '~/lib/listingSearchParams'
+} from '~/components/ui/select';
+import { ParamDefaults } from '~/lib/listingSearchParams';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 export type SortTypeLabels = {
-  label: string
-  type: SortType
-  direction: SortDirection
-}
+  label: string;
+  type: SortType;
+  direction: SortDirection;
+};
 
 export const SortTypeLabels: SortTypeLabels[] = [
   {
@@ -49,33 +51,32 @@ export const SortTypeLabels: SortTypeLabels[] = [
     type: 'sqft',
     direction: 'desc'
   }
-]
+];
 
 export function SortMenu() {
-  const searchParams = useSearchParams()
-  const updateSearchParams = useUpdateSearchParams()
+  const { searchState, setSearchState } = useSearchState();
 
   function findSortTypeByLabel(sortLabel: string) {
-    return SortTypeLabels.find(({ label }) => label === sortLabel)
+    return SortTypeLabels.find(({ label }) => label === sortLabel);
   }
 
   function getCurrentSortType() {
     return SortTypeLabels.find(
       ({ type, direction }) => type === sort_by && direction === sort_direction
-    )
+    );
   }
 
-  const sort_by = searchParams.get('sort_by') || ParamDefaults.sort_by
+  const sort_by = String(searchState.sort_by) || ParamDefaults.sort_by;
   const sort_direction =
-    searchParams.get('sort_direction') || ParamDefaults.sort_direction
+    String(searchState.sort_direction) || ParamDefaults.sort_direction;
 
   function handleChange(value: string) {
-    const sortTypeLabel = findSortTypeByLabel(value)
-    if (!sortTypeLabel) return
-    updateSearchParams({
+    const sortTypeLabel = findSortTypeByLabel(value);
+    if (!sortTypeLabel) return;
+    setSearchState({
       sort_by: sortTypeLabel.type,
       sort_direction: sortTypeLabel.direction
-    })
+    });
   }
 
   return (
@@ -91,5 +92,5 @@ export function SortMenu() {
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }

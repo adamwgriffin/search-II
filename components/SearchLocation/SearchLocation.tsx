@@ -1,26 +1,29 @@
-'use client'
+'use client';
 
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import SearchField from '~/components/SearchLocation/SearchField/SearchField'
-import { useSearchNewLocation } from '~/hooks/useSearchNewLocation'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { getPlaceAutocompletePredictions } from '~/lib/getPlaceAutocompletePredictions'
+import { useState } from 'react';
+import SearchField from '~/components/SearchLocation/SearchField/SearchField';
+import { useSearchNewLocation } from '~/hooks/useSearchNewLocation';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { getPlaceAutocompletePredictions } from '~/lib/getPlaceAutocompletePredictions';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 export function SearchLocation() {
-  const searchParams = useSearchParams()
-  const searchNewLocation = useSearchNewLocation()
-  const [value, setValue] = useState(searchParams.get('address') ?? '')
-  const [searchString, setSearchString] = useState<string | null>(null)
+  const { searchState } = useSearchState();
+  // TODO: Move searchNewLocation into SearchParamsProvider
+  const searchNewLocation = useSearchNewLocation();
+  const [value, setValue] = useState(
+    searchState.address ? String(searchState.address) : ''
+  );
+  const [searchString, setSearchString] = useState<string | null>(null);
   const { data, isError, error } = useQuery({
     queryKey: ['searchString', searchString],
     queryFn: () => getPlaceAutocompletePredictions(searchString),
     staleTime: 1000 * 60,
     placeholderData: keepPreviousData
-  })
+  });
 
   if (isError) {
-    console.log('Error fetching autocomplete:', error)
+    console.error('Error fetching autocomplete:', error);
   }
 
   return (
@@ -33,9 +36,9 @@ export function SearchLocation() {
         onClearPlaceAutocompletePredictions={() => setSearchString(null)}
         onSearchInitiated={() => searchNewLocation({ address: value })}
         onOptionSelected={(autocompletePrediction) => {
-          searchNewLocation({ address: autocompletePrediction.description })
+          searchNewLocation({ address: autocompletePrediction.description });
         }}
       />
     </form>
-  )
+  );
 }
