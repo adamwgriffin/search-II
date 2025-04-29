@@ -1,6 +1,6 @@
 import { z } from 'zod';
+import { booleanEnum } from '~/zod_schemas';
 import {
-  booleanEnum,
   sortDirectionSchema,
   sortTypeSchema
 } from './listingSearchParamsSchema';

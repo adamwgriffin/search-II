@@ -17,6 +17,7 @@ import {
   type SearchStateUpdate,
   searchStateSchema
 } from '~/zod_schemas/searchStateSchema';
+import { parseAndStripInvalidProperties } from '~/zod_schemas';
 
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
@@ -40,9 +41,7 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
-    // TODO: Handle schema errors after parsing. Remove any error keys and try
-    // parsing again.
-    const parsed = searchStateSchema.parse(params);
+    const parsed = parseAndStripInvalidProperties(searchStateSchema, params);
     setSearchParamsState(Object.freeze(parsed));
   }, [searchParams]);
 
