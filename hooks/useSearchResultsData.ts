@@ -3,13 +3,13 @@ import { useMemo } from 'react';
 import { convertBoundaryToGeoJSON } from '~/lib/boundary';
 import { sortListingsByLatLng } from '~/lib/listingHelpers';
 import { searchQueryOptions } from '~/lib/queries';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 /**
  * A hook that handles computing derived data from the search results.
  */
 export function useSearchResultsData() {
-  const { searchParamsState } = useSearchParamsState();
+  const { searchState } = useSearchState();
   // Using keepPreviousData with placeholderData keeps the data from the last
   // request so that we can still show the current data while new data is being
   // fetched. We're doing this so that the map markers won't blink from being
@@ -17,7 +17,7 @@ export function useSearchResultsData() {
   // details:
   // https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries
   const queryResult = useQuery({
-    ...searchQueryOptions(searchParamsState),
+    ...searchQueryOptions(searchState),
     placeholderData: keepPreviousData
   });
 

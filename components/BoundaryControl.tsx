@@ -2,14 +2,14 @@
 
 import { useMap } from '@vis.gl/react-google-maps';
 import { TextLoading } from '~/components/TextLoading';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 export type BoundaryControlProps = {
   loading?: boolean;
 };
 
 export function BoundaryControl({ loading = false }: BoundaryControlProps) {
-  const { updateSearchParams } = useSearchParamsState();
+  const { setSearchState } = useSearchState();
   const map = useMap();
 
   return (
@@ -24,7 +24,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
           // Setting params to null removes them from the request and indicates
           // to the fetchListings function that we should search by bounds
           // instead of location
-          updateSearchParams({
+          setSearchState({
             bounds,
             address: null,
             place_id: null,

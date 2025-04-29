@@ -1,6 +1,6 @@
 import inRange from 'lodash/inRange';
 import range from 'lodash/range';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 import { PaginationButton } from '~/components/PaginationButton';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -17,7 +17,7 @@ export function PaginationGroups({
   numberOfPages,
   currentPage
 }: PaginationGroupsProps) {
-  const { updateSearchParams } = useSearchParamsState();
+  const { setSearchState } = useSearchState();
 
   // If there aren't that many pages just show them all
   if (numberOfPages <= ShowAllPagesThreshold) {
@@ -27,7 +27,7 @@ export function PaginationGroups({
           <li key={page}>
             <PaginationButton
               currentPage={page === currentPage}
-              onClick={() => updateSearchParams({ page_index: page })}
+              onClick={() => setSearchState({ page_index: page })}
             >
               {page + 1}
             </PaginationButton>
@@ -75,7 +75,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: page })}
+            onClick={() => setSearchState({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>
@@ -91,7 +91,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: page })}
+            onClick={() => setSearchState({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>
@@ -106,7 +106,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: page })}
+            onClick={() => setSearchState({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>

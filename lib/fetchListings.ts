@@ -4,12 +4,12 @@ import { http } from '~/lib/http';
 import type { ListingSearchResponse } from '~/types';
 import { type SearchState } from '~/zod_schemas/searchStateSchema';
 
-function removeNonListingServiceParams(params: SearchState) {
-  return omit(params, 'bounds', 'boundary_id', 'zoom');
+function removeNonListingServiceParams(state: SearchState) {
+  return omit(state, 'bounds', 'boundary_id', 'zoom');
 }
 
-function removeNonGeospatialParams(params: SearchState) {
-  return omit(params, 'address', 'place_id');
+function removeNonGeospatialParams(state: SearchState) {
+  return omit(state, 'address', 'place_id');
 }
 
 function convertBoundsParamToListingServiceBounds(boundsString: string) {
@@ -18,58 +18,58 @@ function convertBoundsParamToListingServiceBounds(boundsString: string) {
   return { bounds_south, bounds_west, bounds_north, bounds_east };
 }
 
-function paramsForGeospatialSearch(params: SearchState) {
-  if (typeof params.bounds !== 'string') {
+function paramsForGeospatialSearch(state: SearchState) {
+  if (typeof state.bounds !== 'string') {
     throw new Error('Bounds not included in params');
   }
   const listingServiceBounds = convertBoundsParamToListingServiceBounds(
-    params.bounds
+    state.bounds
   );
   const newParams = removeNonListingServiceParams(
-    removeNonGeospatialParams(params)
+    removeNonGeospatialParams(state)
   );
   return { ...newParams, ...listingServiceBounds };
 }
 
-async function searchNewLocation(params: SearchState) {
+async function searchNewLocation(state: SearchState) {
   return http<ListingSearchResponse>(
     '/api/listing/search/geocode',
-    removeNonListingServiceParams(params)
+    removeNonListingServiceParams(state)
   );
 }
 
-async function searchCurrentLocation(params: SearchState) {
+async function searchCurrentLocation(state: SearchState) {
   return http<ListingSearchResponse>(
-    `/api/listing/search/boundary/${params.boundary_id}`,
-    paramsForGeospatialSearch(params)
+    `/api/listing/search/boundary/${state.boundary_id}`,
+    paramsForGeospatialSearch(state)
   );
 }
 
-async function searchBounds(params: SearchState) {
+async function searchBounds(state: SearchState) {
   return http<ListingSearchResponse>(
     '/api/listing/search/bounds',
-    paramsForGeospatialSearch(params)
+    paramsForGeospatialSearch(state)
   );
 }
 
-export async function fetchListings(params: SearchState) {
-  if (isEmpty(params)) return {};
+export async function fetchListings(state: SearchState) {
+  if (isEmpty(state)) return {};
 
-  const location = params.place_id || params.address;
-  const { bounds, boundary_id } = params;
+  const location = state.place_id || state.address;
+  const { bounds, boundary_id } = state;
   // The user entered a new search in the search field
   if (location && !bounds) {
-    return await searchNewLocation(params);
+    return await searchNewLocation(state);
   }
   // We have previously performed a new search and now we are performing subsequent
   // searches on the same location with different criteria
   if (location && bounds && boundary_id) {
-    return await searchCurrentLocation(params);
+    return await searchCurrentLocation(state);
   }
   // The user removed the location boundary so we are just performing searches
   // on the bounds of the map viewport
   if (bounds && !location && !boundary_id) {
-    return await searchBounds(params);
+    return await searchBounds(state);
   }
   return {};
 }

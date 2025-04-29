@@ -2,9 +2,9 @@ import type { SearchParamsInit } from '~/types';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
-import {
-  type SearchParamsUpdate,
-  type SearchState
+import type {
+  SearchStateUpdate,
+  SearchState
 } from '~/zod_schemas/searchStateSchema';
 
 export const NonGeocodeParams = ['bounds', 'boundary_id', 'zoom', 'page_index'];
@@ -26,7 +26,7 @@ export const ParamDefaults: SearchState = Object.freeze({
  * or params that otherwise could cause a conflict. Setting a param to the
  * falsey values below indicates indicates that it was marked for removal.
  */
-export function removeUnwantedParams(params: SearchParamsUpdate) {
+export function removeUnwantedParams(params: SearchStateUpdate) {
   return omitBy(params, (value, key) => {
     return (
       value === null ||
@@ -46,35 +46,35 @@ export function objectToQueryString(params: SearchState) {
 }
 
 export function getUpdatedParams(
-  currentParams: SearchState,
-  newParams: SearchParamsUpdate
+  currentState: SearchState,
+  newState: SearchStateUpdate
 ) {
   // Only keep the page_index if it was specifically added to the update in
   // newParams. Any other type of search adjustment should request results
   // starting on the first page
   const mergedParams = {
-    ...omit(currentParams, 'page_index'),
-    ...newParams
+    ...omit(currentState, 'page_index'),
+    ...newState
   };
   return removeUnwantedParams(mergedParams);
 }
 
 export function getUpdatedQueryString(
-  currentParams: SearchState,
-  newParams: SearchParamsUpdate
+  currentState: SearchState,
+  newState: SearchStateUpdate
 ) {
-  return objectToQueryString(getUpdatedParams(currentParams, newParams));
+  return objectToQueryString(getUpdatedParams(currentState, newState));
 }
 
 export function getNewLocationQueryString(
-  currentParams: SearchState,
-  newLocationParams: SearchState
+  currentState: SearchState,
+  newState: SearchState
 ) {
   // Remove params for searching current location with a geospatial search
   // since we're now going to be geocoding a new location. We no only want
   // filter params.
-  const filterParams = omit(currentParams, NonGeocodeParams);
-  return objectToQueryString({ ...filterParams, ...newLocationParams });
+  const filterParams = omit(currentState, NonGeocodeParams);
+  return objectToQueryString({ ...filterParams, ...newState });
 }
 
 export function getNewParamsFromCurrentState(

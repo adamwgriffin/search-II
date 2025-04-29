@@ -6,7 +6,7 @@ import { BoundaryControl } from '~/components/BoundaryControl';
 import { MapBoundary } from '~/components/MapBoundary';
 import { ZoomControl } from '~/components/ZoomControl';
 import { useSearchResultsData } from '~/hooks/useSearchResultsData';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 import {
   convertURLBoundsParamToLatLngBoundsLiteral,
   getAvailableBoundsFromSearchResults
@@ -21,21 +21,19 @@ import { getNewParamsFromCurrentState } from '~/lib/listingSearchParams';
 export function ListingMap() {
   const map = useMap();
   const updateFiltersOnMapIdle = useRef(false);
-  const { searchParamsState, updateSearchParams } = useSearchParamsState();
+  const { searchState, setSearchState } = useSearchState();
   const results = useSearchResultsData();
 
   const { isFetching } = results.queryResult;
 
-  const bounds = searchParamsState.bounds
-    ? convertURLBoundsParamToLatLngBoundsLiteral(searchParamsState.bounds)
+  const bounds = searchState.bounds
+    ? convertURLBoundsParamToLatLngBoundsLiteral(searchState.bounds)
     : null;
 
-  const zoom = searchParamsState.zoom ?? null;
+  const zoom = searchState.zoom ?? null;
 
   const showRemoveBoundaryButton = Boolean(
-    searchParamsState.address ||
-      searchParamsState.place_id ||
-      searchParamsState.boundary_id
+    searchState.address || searchState.place_id || searchState.boundary_id
   );
 
   const handleIdle = useCallback(() => {
@@ -43,24 +41,24 @@ export function ListingMap() {
     updateFiltersOnMapIdle.current = false;
     if (!map) return;
     const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
-    updateSearchParams(newParams);
-  }, [results.boundaryId, map, updateSearchParams]);
+    setSearchState(newParams);
+  }, [results.boundaryId, map, setSearchState]);
 
   const handleZoomIn = useCallback(() => {
     if (!map) return;
     const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
     newParams.zoom =
       typeof newParams.zoom === 'number' ? newParams.zoom + 1 : 1;
-    updateSearchParams(newParams);
-  }, [map, results.boundaryId, updateSearchParams]);
+    setSearchState(newParams);
+  }, [map, results.boundaryId, setSearchState]);
 
   const handleZoomOut = useCallback(() => {
     if (!map) return;
     const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
     newParams.zoom =
       typeof newParams.zoom === 'number' ? newParams.zoom - 1 : 1;
-    updateSearchParams(newParams);
-  }, [map, results.boundaryId, updateSearchParams]);
+    setSearchState(newParams);
+  }, [map, results.boundaryId, setSearchState]);
 
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true;

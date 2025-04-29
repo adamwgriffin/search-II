@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { searchQueryOptions } from '~/lib/queries';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 export function useSearchResults() {
-  const { searchParamsState } = useSearchParamsState();
+  const { searchState } = useSearchState();
 
-  return useQuery(searchQueryOptions(searchParamsState));
+  return useQuery(searchQueryOptions(searchState));
 }

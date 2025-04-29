@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import { ListingMap } from '~/components/ListingMap';
 import { SearchHeader } from '~/components/SearchHeader';
 import { SearchResults } from '~/components/SearchResults';
-import { SearchParamsProvider } from '~/providers/SearchParamsProvider';
+import { SearchStateProvider } from '~/providers/SearchStateProvider';
 
 export default async function Home() {
   return (
-    <SearchParamsProvider>
+    <SearchStateProvider>
       <main className='grid grid-rows-[auto_1fr] h-full'>
         <SearchHeader />
         <div className='grid grid-cols-2 h-full min-h-0 min-w-0'>
@@ -22,6 +22,6 @@ export default async function Home() {
           </div>
         </div>
       </main>
-    </SearchParamsProvider>
+    </SearchStateProvider>
   );
 }

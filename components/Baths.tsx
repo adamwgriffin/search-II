@@ -1,11 +1,11 @@
 'use client';
 
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 const Values = [undefined, 1, 2, 3, 4, 5];
 
 export function Baths() {
-  const { searchParamsState, updateSearchParams } = useSearchParamsState();
+  const { searchState, setSearchState } = useSearchState();
 
   return (
     <fieldset className='flex gap-2'>
@@ -16,8 +16,8 @@ export function Baths() {
             type='radio'
             name='baths'
             value={value}
-            checked={searchParamsState.baths_min === value}
-            onChange={() => updateSearchParams({ baths_min: value })}
+            checked={searchState.baths_min === value}
+            onChange={() => setSearchState({ baths_min: value })}
           />
           {value ? `${value}+` : 'Any'}
         </label>

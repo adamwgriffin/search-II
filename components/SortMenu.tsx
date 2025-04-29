@@ -12,7 +12,7 @@ import {
   SelectValue
 } from '~/components/ui/select';
 import { ParamDefaults } from '~/lib/listingSearchParams';
-import { useSearchParamsState } from '~/providers/SearchParamsProvider';
+import { useSearchState } from '~/providers/SearchStateProvider';
 
 export type SortTypeLabels = {
   label: string;
@@ -54,7 +54,7 @@ export const SortTypeLabels: SortTypeLabels[] = [
 ];
 
 export function SortMenu() {
-  const { searchParamsState, updateSearchParams } = useSearchParamsState();
+  const { searchState, setSearchState } = useSearchState();
 
   function findSortTypeByLabel(sortLabel: string) {
     return SortTypeLabels.find(({ label }) => label === sortLabel);
@@ -66,14 +66,14 @@ export function SortMenu() {
     );
   }
 
-  const sort_by = String(searchParamsState.sort_by) || ParamDefaults.sort_by;
+  const sort_by = String(searchState.sort_by) || ParamDefaults.sort_by;
   const sort_direction =
-    String(searchParamsState.sort_direction) || ParamDefaults.sort_direction;
+    String(searchState.sort_direction) || ParamDefaults.sort_direction;
 
   function handleChange(value: string) {
     const sortTypeLabel = findSortTypeByLabel(value);
     if (!sortTypeLabel) return;
-    updateSearchParams({
+    setSearchState({
       sort_by: sortTypeLabel.type,
       sort_direction: sortTypeLabel.direction
     });

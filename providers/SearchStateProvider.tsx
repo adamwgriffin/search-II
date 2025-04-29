@@ -14,21 +14,21 @@ import {
 } from '~/lib/listingSearchParams';
 import {
   type SearchState,
-  type SearchParamsUpdate,
+  type SearchStateUpdate,
   searchStateSchema
 } from '~/zod_schemas/searchStateSchema';
 
-type SearchParamsContextValue = {
-  searchParamsState: Readonly<SearchState>;
-  updateSearchParams: (newParams: SearchParamsUpdate) => void;
-  clearSearchParamsFilters: () => void;
+type SearchStateContextValue = {
+  searchState: Readonly<SearchState>;
+  setSearchState: (newParams: SearchStateUpdate) => void;
+  clearFilters: () => void;
 };
 
-const SearchParamsContext = createContext<SearchParamsContextValue | undefined>(
+const SearchStateContext = createContext<SearchStateContextValue | undefined>(
   undefined
 );
 
-export const SearchParamsProvider: React.FC<{ children: ReactNode }> = ({
+export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
   children
 }) => {
   const searchParams = useSearchParams();
@@ -46,7 +46,7 @@ export const SearchParamsProvider: React.FC<{ children: ReactNode }> = ({
     setSearchParamsState(Object.freeze(parsed));
   }, [searchParams]);
 
-  const updateSearchParams = (newParams: SearchParamsUpdate) => {
+  const setSearchState = (newParams: SearchStateUpdate) => {
     const updatedQueryString = getUpdatedQueryString(
       searchParamsState,
       newParams
@@ -58,7 +58,7 @@ export const SearchParamsProvider: React.FC<{ children: ReactNode }> = ({
     router.push(url);
   };
 
-  const clearSearchParamsFilters = () => {
+  const clearFilters = () => {
     const address = searchParams.get('address');
     const url = address
       ? `${pathname}?${objectToQueryString({ address })}`
@@ -67,20 +67,20 @@ export const SearchParamsProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <SearchParamsContext.Provider
+    <SearchStateContext.Provider
       value={{
-        searchParamsState,
-        updateSearchParams,
-        clearSearchParamsFilters
+        searchState: searchParamsState,
+        setSearchState,
+        clearFilters
       }}
     >
       {children}
-    </SearchParamsContext.Provider>
+    </SearchStateContext.Provider>
   );
 };
 
-export const useSearchParamsState = (): SearchParamsContextValue => {
-  const context = useContext(SearchParamsContext);
+export const useSearchState = (): SearchStateContextValue => {
+  const context = useContext(SearchStateContext);
   if (context === undefined) {
     throw new Error('useSearchState must be used within a SearchStateProvider');
   }
