@@ -24,7 +24,7 @@ export function SearchResultsPagination({
         <button
           disabled={currentPage === 0}
           onClick={() => {
-            updateSearchParams({ page_index: String(currentPage - 1) });
+            updateSearchParams({ page_index: currentPage - 1 });
           }}
           aria-label='Go to previous page'
           className='disabled:text-gray-300 dark:disabled:text-gray-600'
@@ -40,7 +40,7 @@ export function SearchResultsPagination({
         <button
           disabled={currentPage === numberOfPages - 1}
           onClick={() => {
-            updateSearchParams({ page_index: String(currentPage + 1) });
+            updateSearchParams({ page_index: currentPage + 1 });
           }}
           aria-label='Go to next page'
           className='disabled:text-gray-300 dark:disabled:text-gray-600'

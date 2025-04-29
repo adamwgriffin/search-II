@@ -27,12 +27,10 @@ export function ListingMap() {
   const { isFetching } = results.queryResult;
 
   const bounds = searchParamsState.bounds
-    ? convertURLBoundsParamToLatLngBoundsLiteral(
-        String(searchParamsState.bounds)
-      )
+    ? convertURLBoundsParamToLatLngBoundsLiteral(searchParamsState.bounds)
     : null;
 
-  const zoom = searchParamsState.zoom ? Number(searchParamsState.zoom) : null;
+  const zoom = searchParamsState.zoom ?? null;
 
   const showRemoveBoundaryButton = Boolean(
     searchParamsState.address ||

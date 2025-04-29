@@ -27,7 +27,7 @@ export function PaginationGroups({
           <li key={page}>
             <PaginationButton
               currentPage={page === currentPage}
-              onClick={() => updateSearchParams({ page_index: String(page) })}
+              onClick={() => updateSearchParams({ page_index: page })}
             >
               {page + 1}
             </PaginationButton>
@@ -75,7 +75,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: String(page) })}
+            onClick={() => updateSearchParams({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>
@@ -91,7 +91,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: String(page) })}
+            onClick={() => updateSearchParams({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>
@@ -106,7 +106,7 @@ export function PaginationGroups({
         <li key={page}>
           <PaginationButton
             currentPage={page === currentPage}
-            onClick={() => updateSearchParams({ page_index: String(page) })}
+            onClick={() => updateSearchParams({ page_index: page })}
           >
             {page + 1}
           </PaginationButton>

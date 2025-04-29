@@ -30,23 +30,16 @@ export function useSearchResultsData() {
   // order they were rendered in. Keeping the order stable by making sure they
   // always sort the same way fixes this.
   const listings = useMemo(() => {
-    return Array.isArray(results?.listings)
-      ? sortListingsByLatLng(results.listings)
-      : [];
+    return results?.listings ? sortListingsByLatLng(results.listings) : [];
   }, [results?.listings]);
 
-  const boundary =
-    results?.boundary && typeof results.boundary === 'object'
-      ? results.boundary
-      : null;
-
-  const geoJSONBoundary = boundary ? convertBoundaryToGeoJSON(boundary) : null;
-
-  const boundaryId = boundary ? boundary._id : null;
+  const geoJSONBoundary = results?.boundary
+    ? convertBoundaryToGeoJSON(results.boundary)
+    : null;
 
   return {
     queryResult,
-    boundaryId,
+    boundaryId: results?.boundary?._id ?? null,
     listings,
     geoJSONBoundary,
     viewport: results?.viewport

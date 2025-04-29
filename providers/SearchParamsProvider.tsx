@@ -1,22 +1,26 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   createContext,
   useContext,
-  useState,
   useEffect,
+  useState,
   type ReactNode
 } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import {
   getUpdatedQueryString,
   objectToQueryString
 } from '~/lib/listingSearchParams';
-import { type URLParams } from '~/types';
+import {
+  type SearchState,
+  type SearchParamsUpdate,
+  searchStateSchema
+} from '~/zod_schemas/searchStateSchema';
 
 type SearchParamsContextValue = {
-  searchParamsState: Readonly<URLParams>;
-  updateSearchParams: (newParams: URLParams) => void;
+  searchParamsState: Readonly<SearchState>;
+  updateSearchParams: (newParams: SearchParamsUpdate) => void;
   clearSearchParamsFilters: () => void;
 };
 
@@ -31,17 +35,18 @@ export const SearchParamsProvider: React.FC<{ children: ReactNode }> = ({
   const router = useRouter();
   const pathname = usePathname();
   const [searchParamsState, setSearchParamsState] = useState<
-    Readonly<URLParams>
+    Readonly<SearchState>
   >({});
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
-    // TODO: Parse and validate params with Zod. Parse will convert params to
-    // proper types and validate will allow us to throw away invalid params.
-    setSearchParamsState(params);
+    // TODO: Handle schema errors after parsing. Remove any error keys and try
+    // parsing again.
+    const parsed = searchStateSchema.parse(params);
+    setSearchParamsState(Object.freeze(parsed));
   }, [searchParams]);
 
-  const updateSearchParams = (newParams: URLParams) => {
+  const updateSearchParams = (newParams: SearchParamsUpdate) => {
     const updatedQueryString = getUpdatedQueryString(
       searchParamsState,
       newParams

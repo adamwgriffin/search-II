@@ -3,7 +3,6 @@
 import { useMap } from '@vis.gl/react-google-maps';
 import { TextLoading } from '~/components/TextLoading';
 import { useSearchParamsState } from '~/providers/SearchParamsProvider';
-import type { URLParams } from '~/types';
 
 export type BoundaryControlProps = {
   loading?: boolean;
@@ -25,13 +24,12 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
           // Setting params to null removes them from the request and indicates
           // to the fetchListings function that we should search by bounds
           // instead of location
-          const updatedFilters: URLParams = {
+          updateSearchParams({
             bounds,
             address: null,
             place_id: null,
             boundary_id: null
-          };
-          updateSearchParams(updatedFilters);
+          });
         }}
       >
         <TextLoading loading={loading}>Remove Boundary</TextLoading>

@@ -1,13 +1,14 @@
 import omit from 'lodash/omit';
 import isEmpty from 'lodash/isEmpty';
 import { http } from '~/lib/http';
-import type { ListingSearchResponse, URLParams } from '~/types';
+import type { ListingSearchResponse } from '~/types';
+import { type SearchState } from '~/zod_schemas/searchStateSchema';
 
-function removeNonListingServiceParams(params: URLParams) {
+function removeNonListingServiceParams(params: SearchState) {
   return omit(params, 'bounds', 'boundary_id', 'zoom');
 }
 
-function removeNonGeospatialParams(params: URLParams) {
+function removeNonGeospatialParams(params: SearchState) {
   return omit(params, 'address', 'place_id');
 }
 
@@ -17,7 +18,7 @@ function convertBoundsParamToListingServiceBounds(boundsString: string) {
   return { bounds_south, bounds_west, bounds_north, bounds_east };
 }
 
-function paramsForGeospatialSearch(params: URLParams) {
+function paramsForGeospatialSearch(params: SearchState) {
   if (typeof params.bounds !== 'string') {
     throw new Error('Bounds not included in params');
   }
@@ -30,28 +31,28 @@ function paramsForGeospatialSearch(params: URLParams) {
   return { ...newParams, ...listingServiceBounds };
 }
 
-async function searchNewLocation(params: URLParams) {
+async function searchNewLocation(params: SearchState) {
   return http<ListingSearchResponse>(
     '/api/listing/search/geocode',
     removeNonListingServiceParams(params)
   );
 }
 
-async function searchCurrentLocation(params: URLParams) {
+async function searchCurrentLocation(params: SearchState) {
   return http<ListingSearchResponse>(
     `/api/listing/search/boundary/${params.boundary_id}`,
     paramsForGeospatialSearch(params)
   );
 }
 
-async function searchBounds(params: URLParams) {
+async function searchBounds(params: SearchState) {
   return http<ListingSearchResponse>(
     '/api/listing/search/bounds',
     paramsForGeospatialSearch(params)
   );
 }
 
-export async function fetchListings(params: Readonly<URLParams>) {
+export async function fetchListings(params: SearchState) {
   if (isEmpty(params)) return {};
 
   const location = params.place_id || params.address;

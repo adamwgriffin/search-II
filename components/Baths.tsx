@@ -2,25 +2,21 @@
 
 import { useSearchParamsState } from '~/providers/SearchParamsProvider';
 
-const Values = ['', '1', '2', '3', '4', '5'];
+const Values = [undefined, 1, 2, 3, 4, 5];
 
 export function Baths() {
   const { searchParamsState, updateSearchParams } = useSearchParamsState();
-
-  const bathsMin = searchParamsState.baths_min
-    ? String(searchParamsState.baths_min)
-    : '';
 
   return (
     <fieldset className='flex gap-2'>
       <legend>Baths</legend>
       {Values.map((value) => (
-        <label key={`baths-${value || 'Any'}`} className='flex gap-1'>
+        <label key={`baths-${value ?? 'any'}`} className='flex gap-1'>
           <input
             type='radio'
             name='baths'
             value={value}
-            checked={bathsMin === value}
+            checked={searchParamsState.baths_min === value}
             onChange={() => updateSearchParams({ baths_min: value })}
           />
           {value ? `${value}+` : 'Any'}

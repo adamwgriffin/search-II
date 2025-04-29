@@ -1,7 +1,9 @@
 'use client';
 
-import { useUpdateSearchParams } from '~/hooks/useUpdateSearchParams';
-import type { SortDirection, SortType } from '~/types';
+import type {
+  SortType,
+  SortDirection
+} from '~/zod_schemas/listingSearchParamsSchema';
 import {
   Select,
   SelectContent,
