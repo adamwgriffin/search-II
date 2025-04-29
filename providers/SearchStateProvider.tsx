@@ -1,6 +1,11 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  type ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams
+} from 'next/navigation';
 import {
   createContext,
   useContext,
@@ -29,6 +34,14 @@ const SearchStateContext = createContext<SearchStateContextValue | undefined>(
   undefined
 );
 
+function getStateFromParams(
+  searchParams: ReadonlyURLSearchParams
+): Readonly<SearchState> {
+  const params = Object.fromEntries(searchParams.entries());
+  const parsed = parseAndStripInvalidProperties(searchStateSchema, params);
+  return Object.freeze(parsed);
+}
+
 export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
   children
 }) => {
@@ -37,12 +50,10 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
   const pathname = usePathname();
   const [searchParamsState, setSearchParamsState] = useState<
     Readonly<SearchState>
-  >({});
+  >(getStateFromParams(searchParams));
 
   useEffect(() => {
-    const params = Object.fromEntries(searchParams.entries());
-    const parsed = parseAndStripInvalidProperties(searchStateSchema, params);
-    setSearchParamsState(Object.freeze(parsed));
+    setSearchParamsState(getStateFromParams(searchParams));
   }, [searchParams]);
 
   const setSearchState = (newParams: SearchStateUpdate) => {
