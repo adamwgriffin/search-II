@@ -9,7 +9,6 @@ import { useSearchState } from '~/providers/SearchStateProvider';
 
 export function SearchLocation() {
   const { searchState } = useSearchState();
-  // TODO: Move searchNewLocation into SearchParamsProvider
   const searchNewLocation = useSearchNewLocation();
   const [value, setValue] = useState(
     searchState.address ? String(searchState.address) : ''
@@ -36,6 +35,7 @@ export function SearchLocation() {
         onClearPlaceAutocompletePredictions={() => setSearchString(null)}
         onSearchInitiated={() => searchNewLocation({ address: value })}
         onOptionSelected={(autocompletePrediction) => {
+          setValue(autocompletePrediction.description);
           searchNewLocation({ address: autocompletePrediction.description });
         }}
       />
