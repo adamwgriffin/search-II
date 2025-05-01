@@ -7,7 +7,12 @@ import type {
   SearchState
 } from '~/zod_schemas/searchStateSchema';
 
-export const NonGeocodeParams = ['bounds', 'boundary_id', 'zoom', 'page_index'];
+export const NonGeocodeParams = Object.freeze([
+  'bounds',
+  'boundary_id',
+  'zoom',
+  'page_index'
+]);
 
 /**
  * Keep track of a subset of Listing Service param defaults so that we can avoid
@@ -64,17 +69,6 @@ export function getUpdatedQueryString(
   newState: SearchStateUpdate
 ) {
   return objectToQueryString(getUpdatedParams(currentState, newState));
-}
-
-export function getNewLocationQueryString(
-  currentState: SearchState,
-  newState: SearchState
-) {
-  // Remove params for searching current location with a geospatial search
-  // since we're now going to be geocoding a new location. We no only want
-  // filter params.
-  const filterParams = omit(currentState, NonGeocodeParams);
-  return objectToQueryString({ ...filterParams, ...newState });
 }
 
 export function getNewParamsFromCurrentState(
