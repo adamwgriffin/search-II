@@ -36,7 +36,9 @@ export function SearchLocation() {
         onSearchInitiated={() => searchNewLocation({ address: value })}
         onOptionSelected={(autocompletePrediction) => {
           setValue(autocompletePrediction.description);
-          searchNewLocation({ address: autocompletePrediction.description });
+          searchNewLocation({
+            place_id: autocompletePrediction.place_id
+          });
         }}
       />
     </form>
