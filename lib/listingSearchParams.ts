@@ -7,12 +7,15 @@ import type {
   SearchState
 } from "@/zod_schemas/searchStateSchema";
 
-export const NonGeocodeParams = Object.freeze([
-  "bounds",
-  "boundary_id",
-  "zoom",
-  "page_index"
-]);
+export const NonGeocodeParams: ReadonlyArray<keyof SearchState> = Object.freeze(
+  ["bounds", "boundary_id", "zoom", "page_index"]
+);
+
+/**
+ * Params to keep when when clearing filters from search state
+ */
+export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
+  Object.freeze(["address", "place_id", "bounds", "boundary_id", "zoom"]);
 
 /**
  * Keep track of a subset of Listing Service param defaults so that we can avoid
