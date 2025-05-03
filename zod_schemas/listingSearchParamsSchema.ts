@@ -1,17 +1,17 @@
-import { z } from 'zod';
-import { booleanEnum } from '~/zod_schemas';
+import { z } from "zod";
+import { booleanEnum } from "~/zod_schemas";
 
 export const sortTypeSchema = z.enum([
-  'listedDate',
-  'listPrice',
-  'beds',
-  'baths',
-  'sqft'
+  "listedDate",
+  "listPrice",
+  "beds",
+  "baths",
+  "sqft"
 ]);
 
 export type SortType = z.infer<typeof sortTypeSchema>;
 
-export const sortDirectionSchema = z.enum(['asc', 'desc']);
+export const sortDirectionSchema = z.enum(["asc", "desc"]);
 
 export type SortDirection = z.infer<typeof sortDirectionSchema>;
 

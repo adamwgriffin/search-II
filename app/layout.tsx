@@ -1,25 +1,25 @@
-import type { Metadata } from 'next'
-import GoogleMapsProvider from '~/providers/GoogleMapsProvider'
-import ReactQueryClientProvider from '~/providers/ReactQueryClientProvider'
-import { ThemeProvider } from '~/providers/ThemeProvider'
-import './globals.css'
+import type { Metadata } from "next";
+import GoogleMapsProvider from "~/providers/GoogleMapsProvider";
+import ReactQueryClientProvider from "~/providers/ReactQueryClientProvider";
+import { ThemeProvider } from "~/providers/ThemeProvider";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Awsom',
-  description: 'Awsome Homes for sale'
-}
+  title: "Awsom",
+  description: "Awsome Homes for sale"
+};
 
 export default function RootLayout({
   children
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
+          attribute="class"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
@@ -29,5 +29,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

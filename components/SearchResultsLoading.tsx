@@ -1,4 +1,4 @@
-import { ListingCardLoading } from '~/components/ListingCardLoading'
+import { ListingCardLoading } from "~/components/ListingCardLoading";
 
 export function SearchResultsLoading() {
   return (
@@ -22,5 +22,5 @@ export function SearchResultsLoading() {
         <ListingCardLoading />
       </li>
     </>
-  )
+  );
 }

@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
 import {
   type ReadonlyURLSearchParams,
   usePathname,
   useRouter,
   useSearchParams
-} from 'next/navigation';
+} from "next/navigation";
 import {
   createContext,
   useContext,
   useEffect,
   useState,
   type ReactNode
-} from 'react';
+} from "react";
 import {
   getUpdatedQueryString,
   objectToQueryString
-} from '~/lib/listingSearchParams';
+} from "~/lib/listingSearchParams";
 import {
   type SearchState,
   type SearchStateUpdate,
   searchStateSchema
-} from '~/zod_schemas/searchStateSchema';
-import { parseAndStripInvalidProperties } from '~/zod_schemas';
+} from "~/zod_schemas/searchStateSchema";
+import { parseAndStripInvalidProperties } from "~/zod_schemas";
 
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
@@ -62,14 +62,14 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
       newParams
     );
     const url =
-      updatedQueryString === ''
+      updatedQueryString === ""
         ? pathname
         : `${pathname}?${updatedQueryString}`;
     router.push(url);
   };
 
   const clearFilters = () => {
-    const address = searchParams.get('address');
+    const address = searchParams.get("address");
     const url = address
       ? `${pathname}?${objectToQueryString({ address })}`
       : pathname;
@@ -92,7 +92,7 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
 export const useSearchState = (): SearchStateContextValue => {
   const context = useContext(SearchStateContext);
   if (context === undefined) {
-    throw new Error('useSearchState must be used within a SearchStateProvider');
+    throw new Error("useSearchState must be used within a SearchStateProvider");
   }
   return context;
 };

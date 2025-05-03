@@ -1,23 +1,23 @@
-import { z } from 'zod';
-import { booleanEnum } from '~/zod_schemas';
+import { z } from "zod";
+import { booleanEnum } from "~/zod_schemas";
 import {
   sortDirectionSchema,
   sortTypeSchema
-} from './listingSearchParamsSchema';
+} from "./listingSearchParamsSchema";
 
 /** A type which represents params that can be added to the url. Most of these
  * are listing service request filters but there are additional params for app
  * state as well. */
 export const searchStateSchema = z
   .object({
-    search_type: z.enum(['buy', 'rent', 'sold']),
+    search_type: z.enum(["buy", "rent", "sold"]),
     address: z.string(),
     place_id: z.string(),
     bounds: z.string(),
     boundary_id: z.string(),
     zoom: z.coerce.number(),
     property_type: z.string(),
-    include_pending: booleanEnum.default('false'),
+    include_pending: booleanEnum.default("false"),
     open_houses: booleanEnum,
     page_index: z.coerce.number(),
     price_min: z.coerce.number(),

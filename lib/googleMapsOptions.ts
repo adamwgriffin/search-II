@@ -1,16 +1,16 @@
-import { type MapProps } from '@vis.gl/react-google-maps'
+import { type MapProps } from "@vis.gl/react-google-maps";
 
 export const GoogleMapsStreetViewURL =
-  'https://maps.googleapis.com/maps/api/streetview'
+  "https://maps.googleapis.com/maps/api/streetview";
 
-export const GoogleStreetViewMaxImageSize = 640
+export const GoogleStreetViewMaxImageSize = 640;
 
 export const MapBoundaryStyleOptions: google.maps.Data.StyleOptions = {
-  strokeColor: 'darkgray',
+  strokeColor: "darkgray",
   strokeOpacity: 1,
   strokeWeight: 2,
   fillOpacity: 0
-}
+};
 
 export const GoogleMapsMapOptions: MapProps = {
   // Using a mapId is required for using AdvancedMarkerView
@@ -21,9 +21,9 @@ export const GoogleMapsMapOptions: MapProps = {
   },
   defaultZoom: 12,
   disableDefaultUI: true,
-  gestureHandling: 'greedy',
+  gestureHandling: "greedy",
   clickableIcons: false
-}
+};
 
 export const GoogleMapsAutocompleteOptions = {
   // types restricts the autocomplete results to only a specific set of place
@@ -32,6 +32,6 @@ export const GoogleMapsAutocompleteOptions = {
   // has weird, strict rules about what types you can and can't use, which makes
   // it really difficult to get very granular with the specific types we would
   // normally want to use.
-  types: ['geocode'],
-  componentRestrictions: { country: ['us'] }
-}
+  types: ["geocode"],
+  componentRestrictions: { country: ["us"] }
+};

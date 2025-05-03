@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import SearchField from '~/components/SearchLocation/SearchField/SearchField';
-import { useSearchNewLocation } from '~/hooks/useSearchNewLocation';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { getPlaceAutocompletePredictions } from '~/lib/getPlaceAutocompletePredictions';
-import { useSearchState } from '~/providers/SearchStateProvider';
+import { useState } from "react";
+import SearchField from "~/components/SearchLocation/SearchField/SearchField";
+import { useSearchNewLocation } from "~/hooks/useSearchNewLocation";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { getPlaceAutocompletePredictions } from "~/lib/getPlaceAutocompletePredictions";
+import { useSearchState } from "~/providers/SearchStateProvider";
 
 export function SearchLocation() {
   const { searchState } = useSearchState();
   const searchNewLocation = useSearchNewLocation();
   const [value, setValue] = useState(
-    searchState.address ? String(searchState.address) : ''
+    searchState.address ? String(searchState.address) : ""
   );
   const [searchString, setSearchString] = useState<string | null>(null);
   const { data, isError, error } = useQuery({
-    queryKey: ['searchString', searchString],
+    queryKey: ["searchString", searchString],
     queryFn: () => getPlaceAutocompletePredictions(searchString),
     staleTime: 1000 * 60,
     placeholderData: keepPreviousData
   });
 
   if (isError) {
-    console.error('Error fetching autocomplete:', error);
+    console.error("Error fetching autocomplete:", error);
   }
 
   return (
-    <form name='search-form' onSubmit={(e) => e.preventDefault()}>
+    <form name="search-form" onSubmit={(e) => e.preventDefault()}>
       <SearchField
         value={value}
         options={data || []}
