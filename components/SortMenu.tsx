@@ -80,7 +80,10 @@ export function SortMenu() {
   }
 
   return (
-    <Select onValueChange={handleChange} value={getCurrentSortType()?.label}>
+    <Select
+      onValueChange={handleChange}
+      value={getCurrentSortType()?.label ?? ""}
+    >
       <SelectTrigger className="w-44 rounded-full dark:bg-gray-600 dark:text-inherit">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
