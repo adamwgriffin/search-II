@@ -1,26 +1,26 @@
-import omit from 'lodash/omit';
-import isEmpty from 'lodash/isEmpty';
-import { http } from '~/lib/http';
-import type { ListingSearchResponse } from '~/types';
-import { type SearchState } from '~/zod_schemas/searchStateSchema';
+import omit from "lodash/omit";
+import isEmpty from "lodash/isEmpty";
+import { http } from "~/lib/http";
+import type { ListingSearchResponse } from "~/types";
+import { type SearchState } from "~/zod_schemas/searchStateSchema";
 
 function removeNonListingServiceParams(state: SearchState) {
-  return omit(state, 'bounds', 'boundary_id', 'zoom');
+  return omit(state, "bounds", "boundary_id", "zoom");
 }
 
 function removeNonGeospatialParams(state: SearchState) {
-  return omit(state, 'address', 'place_id');
+  return omit(state, "address", "place_id");
 }
 
 function convertBoundsParamToListingServiceBounds(boundsString: string) {
   const [bounds_south, bounds_west, bounds_north, bounds_east] =
-    boundsString.split(',');
+    boundsString.split(",");
   return { bounds_south, bounds_west, bounds_north, bounds_east };
 }
 
 function paramsForGeospatialSearch(state: SearchState) {
-  if (typeof state.bounds !== 'string') {
-    throw new Error('Bounds not included in params');
+  if (typeof state.bounds !== "string") {
+    throw new Error("Bounds not included in params");
   }
   const listingServiceBounds = convertBoundsParamToListingServiceBounds(
     state.bounds
@@ -33,7 +33,7 @@ function paramsForGeospatialSearch(state: SearchState) {
 
 async function searchNewLocation(state: SearchState) {
   return http<ListingSearchResponse>(
-    '/api/listing/search/geocode',
+    "/api/listing/search/geocode",
     removeNonListingServiceParams(state)
   );
 }
@@ -47,7 +47,7 @@ async function searchCurrentLocation(state: SearchState) {
 
 async function searchBounds(state: SearchState) {
   return http<ListingSearchResponse>(
-    '/api/listing/search/bounds',
+    "/api/listing/search/bounds",
     paramsForGeospatialSearch(state)
   );
 }

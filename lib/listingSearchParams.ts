@@ -1,17 +1,17 @@
-import type { SearchParamsInit } from '~/types';
-import isEqual from 'lodash/isEqual';
-import omit from 'lodash/omit';
-import omitBy from 'lodash/omitBy';
+import type { SearchParamsInit } from "~/types";
+import isEqual from "lodash/isEqual";
+import omit from "lodash/omit";
+import omitBy from "lodash/omitBy";
 import type {
   SearchStateUpdate,
   SearchState
-} from '~/zod_schemas/searchStateSchema';
+} from "~/zod_schemas/searchStateSchema";
 
 export const NonGeocodeParams = Object.freeze([
-  'bounds',
-  'boundary_id',
-  'zoom',
-  'page_index'
+  "bounds",
+  "boundary_id",
+  "zoom",
+  "page_index"
 ]);
 
 /**
@@ -22,8 +22,8 @@ export const NonGeocodeParams = Object.freeze([
 export const ParamDefaults: SearchState = Object.freeze({
   page_index: 0,
   page_size: 20,
-  sort_by: 'listedDate',
-  sort_direction: 'desc'
+  sort_by: "listedDate",
+  sort_direction: "desc"
 });
 
 /**
@@ -36,7 +36,7 @@ export function removeUnwantedParams(params: SearchStateUpdate) {
     return (
       value === null ||
       value === undefined ||
-      value === '' ||
+      value === "" ||
       isEqual(ParamDefaults[key as keyof SearchState], value)
     );
   });
@@ -47,7 +47,7 @@ export function objectToQueryString(params: SearchState) {
   // Typescript for this is not correct
   return new URLSearchParams(params as SearchParamsInit)
     .toString()
-    .replace(/%2C/g, ','); // Don't encode commas in url params
+    .replace(/%2C/g, ","); // Don't encode commas in url params
 }
 
 export function getUpdatedParams(
@@ -58,7 +58,7 @@ export function getUpdatedParams(
   // newParams. Any other type of search adjustment should request results
   // starting on the first page
   const mergedParams = {
-    ...omit(currentState, 'page_index'),
+    ...omit(currentState, "page_index"),
     ...newState
   };
   return removeUnwantedParams(mergedParams);
@@ -76,7 +76,7 @@ export function getNewParamsFromCurrentState(
   boundaryId: string | null | undefined
 ) {
   const bounds = map.getBounds()?.toUrlValue();
-  if (!bounds) throw new Error('No bounds present in map instance');
+  if (!bounds) throw new Error("No bounds present in map instance");
   const params: SearchState = { bounds };
   if (boundaryId) {
     params.boundary_id = boundaryId;

@@ -1,4 +1,4 @@
-import { z, type ZodObject, type ZodRawShape } from 'zod';
+import { z, type ZodObject, type ZodRawShape } from "zod";
 
 export function parseAndStripInvalidProperties<
   T extends ZodObject<ZodRawShape>
@@ -14,5 +14,5 @@ export function parseAndStripInvalidProperties<
 }
 
 export const booleanEnum = z
-  .enum(['true', 'false'])
-  .transform((value) => value === 'true');
+  .enum(["true", "false"])
+  .transform((value) => value === "true");

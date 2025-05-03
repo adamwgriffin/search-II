@@ -1,11 +1,11 @@
-import type { Boundary, GeoJSONBoundary, ViewportLatLngBounds } from '../types';
+import type { Boundary, GeoJSONBoundary, ViewportLatLngBounds } from "../types";
 
 // Setting id on the top level instead of inside "properties" makes it so
 // map.data.getFeatureById() will find it automatically without us having to
 // specify idPropertyName when adding the geojson.
 export function convertBoundaryToGeoJSON(boundary: Boundary): GeoJSONBoundary {
   return {
-    type: 'Feature',
+    type: "Feature",
     id: boundary._id,
     geometry: {
       type: boundary.geometry.type,
@@ -17,7 +17,7 @@ export function convertBoundaryToGeoJSON(boundary: Boundary): GeoJSONBoundary {
 export function convertURLBoundsParamToLatLngBoundsLiteral(
   boundsString: string
 ): google.maps.LatLngBoundsLiteral {
-  const [south, west, north, east] = boundsString.split(',').map(Number);
+  const [south, west, north, east] = boundsString.split(",").map(Number);
   return { south, west, north, east };
 }
 

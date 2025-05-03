@@ -1,8 +1,8 @@
-import inRange from 'lodash/inRange';
-import range from 'lodash/range';
-import { useSearchState } from '~/providers/SearchStateProvider';
-import { PaginationButton } from '~/components/PaginationButton';
-import { MoreHorizontal } from 'lucide-react';
+import inRange from "lodash/inRange";
+import range from "lodash/range";
+import { useSearchState } from "~/providers/SearchStateProvider";
+import { PaginationButton } from "~/components/PaginationButton";
+import { MoreHorizontal } from "lucide-react";
 
 export type PaginationGroupsProps = {
   numberOfPages: number;

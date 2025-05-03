@@ -39,12 +39,12 @@ export type ListingSearchPagination = {
 export type Position = [longitude: number, latitude: number];
 
 export type Polygon = {
-  type: 'Polygon';
+  type: "Polygon";
   coordinates: Position[][];
 };
 
 export type MultiPolygon = {
-  type: 'MultiPolygon';
+  type: "MultiPolygon";
   coordinates: Position[][][];
 };
 
@@ -59,10 +59,10 @@ export type Boundary = {
 };
 
 export type GeoJSONBoundary = {
-  type: 'Feature';
+  type: "Feature";
   id: string;
   geometry: {
-    type: 'Polygon' | 'MultiPolygon';
+    type: "Polygon" | "MultiPolygon";
     coordinates: Position[][] | Position[][][];
   };
 };

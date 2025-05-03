@@ -1,19 +1,19 @@
-import type { Listing } from '~/types'
+import type { Listing } from "~/types";
 
 export function formatPrice(price: number) {
-  return Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     maximumFractionDigits: 0 // (causes 2500.99 to be printed as $2,501)
-  }).format(price)
+  }).format(price);
 }
 
 export function formatPriceAbbreviated(price: number) {
-  return Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact'
-  }).format(price)
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact"
+  }).format(price);
 }
 
 /**
@@ -25,9 +25,9 @@ export function sortListingsByLatLng(listings: Listing[]) {
   return listings.toSorted((a, b) => {
     // Sort by longitude if latitude was already sorted
     if (a.latitude === b.latitude) {
-      return b.longitude - a.longitude
+      return b.longitude - a.longitude;
     }
     // Sort by latitude first.
-    return b.latitude - a.latitude
-  })
+    return b.latitude - a.latitude;
+  });
 }

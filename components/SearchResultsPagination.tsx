@@ -1,6 +1,6 @@
-import { useSearchState } from '~/providers/SearchStateProvider';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { PaginationGroups } from '~/components/PaginationGroups';
+import { useSearchState } from "~/providers/SearchStateProvider";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PaginationGroups } from "~/components/PaginationGroups";
 
 export type SearchResultsPaginationProps = {
   numberOfPages: number;
@@ -16,18 +16,18 @@ export function SearchResultsPagination({
   const { setSearchState } = useSearchState();
 
   return (
-    <nav className='relative pt-6 pb-2' aria-labelledby='pagination'>
-      <h2 id='pagination' className='sr-only'>
+    <nav className="relative pt-6 pb-2" aria-labelledby="pagination">
+      <h2 id="pagination" className="sr-only">
         Pagination
       </h2>
-      <ul className='flex gap-2 items-center justify-center'>
+      <ul className="flex gap-2 items-center justify-center">
         <button
           disabled={currentPage === 0}
           onClick={() => {
             setSearchState({ page_index: currentPage - 1 });
           }}
-          aria-label='Go to previous page'
-          className='disabled:text-gray-300 dark:disabled:text-gray-600'
+          aria-label="Go to previous page"
+          className="disabled:text-gray-300 dark:disabled:text-gray-600"
         >
           <ChevronLeft />
         </button>
@@ -42,8 +42,8 @@ export function SearchResultsPagination({
           onClick={() => {
             setSearchState({ page_index: currentPage + 1 });
           }}
-          aria-label='Go to next page'
-          className='disabled:text-gray-300 dark:disabled:text-gray-600'
+          aria-label="Go to next page"
+          className="disabled:text-gray-300 dark:disabled:text-gray-600"
         >
           <ChevronRight />
         </button>

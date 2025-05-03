@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { Map, useMap } from '@vis.gl/react-google-maps';
-import { useCallback, useEffect, useRef } from 'react';
-import { BoundaryControl } from '~/components/BoundaryControl';
-import { MapBoundary } from '~/components/MapBoundary';
-import { ZoomControl } from '~/components/ZoomControl';
-import { useSearchResultsData } from '~/hooks/useSearchResultsData';
-import { useSearchState } from '~/providers/SearchStateProvider';
+import { Map, useMap } from "@vis.gl/react-google-maps";
+import { useCallback, useEffect, useRef } from "react";
+import { BoundaryControl } from "~/components/BoundaryControl";
+import { MapBoundary } from "~/components/MapBoundary";
+import { ZoomControl } from "~/components/ZoomControl";
+import { useSearchResultsData } from "~/hooks/useSearchResultsData";
+import { useSearchState } from "~/providers/SearchStateProvider";
 import {
   convertURLBoundsParamToLatLngBoundsLiteral,
   getAvailableBoundsFromSearchResults
-} from '~/lib/boundary';
+} from "~/lib/boundary";
 import {
   GoogleMapsMapOptions,
   MapBoundaryStyleOptions
-} from '~/lib/googleMapsOptions';
-import { ListingMarker } from './ListingMarker';
-import { getNewParamsFromCurrentState } from '~/lib/listingSearchParams';
+} from "~/lib/googleMapsOptions";
+import { ListingMarker } from "./ListingMarker";
+import { getNewParamsFromCurrentState } from "~/lib/listingSearchParams";
 
 export function ListingMap() {
   const map = useMap();
@@ -48,7 +48,7 @@ export function ListingMap() {
     if (!map) return;
     const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
     newParams.zoom =
-      typeof newParams.zoom === 'number' ? newParams.zoom + 1 : 1;
+      typeof newParams.zoom === "number" ? newParams.zoom + 1 : 1;
     setSearchState(newParams);
   }, [map, results.boundaryId, setSearchState]);
 
@@ -56,7 +56,7 @@ export function ListingMap() {
     if (!map) return;
     const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
     newParams.zoom =
-      typeof newParams.zoom === 'number' ? newParams.zoom - 1 : 1;
+      typeof newParams.zoom === "number" ? newParams.zoom - 1 : 1;
     setSearchState(newParams);
   }, [map, results.boundaryId, setSearchState]);
 
@@ -65,9 +65,9 @@ export function ListingMap() {
   }, []);
 
   useEffect(() => {
-    map?.getDiv()?.addEventListener('wheel', handleUserAdjustedMap);
+    map?.getDiv()?.addEventListener("wheel", handleUserAdjustedMap);
     return () =>
-      map?.getDiv()?.removeEventListener('wheel', handleUserAdjustedMap);
+      map?.getDiv()?.removeEventListener("wheel", handleUserAdjustedMap);
   }, [handleUserAdjustedMap, map]);
 
   // No bounds param in the url means it's a new search, so call fitBounds()
@@ -104,8 +104,8 @@ export function ListingMap() {
   return (
     <Map
       style={{
-        overflow: 'hidden',
-        borderRadius: '.5rem'
+        overflow: "hidden",
+        borderRadius: ".5rem"
       }}
       {...GoogleMapsMapOptions}
       onDragend={handleUserAdjustedMap}
