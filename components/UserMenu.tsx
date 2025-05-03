@@ -5,8 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "~/components/ui/dropdown-menu";
-import { ThemeSwitcher } from "~/components/ThemeSwitcher";
+} from "@/components/ui/dropdown-menu";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 export function UserMenu() {
   return (

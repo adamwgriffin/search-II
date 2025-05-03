@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { formatPrice } from "~/lib/listingHelpers";
-import { type Listing } from "~/types";
+import { formatPrice } from "@/lib/listingHelpers";
+import { type Listing } from "@/types";
 
 export type ListingCardsProps = {
   listing: Listing;

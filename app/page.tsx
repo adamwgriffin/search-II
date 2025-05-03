@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { ListingMap } from "~/components/ListingMap";
-import { SearchHeader } from "~/components/SearchHeader";
-import { SearchResults } from "~/components/SearchResults";
-import { SearchStateProvider } from "~/providers/SearchStateProvider";
+import { ListingMap } from "@/components/ListingMap";
+import { SearchHeader } from "@/components/SearchHeader";
+import { SearchResults } from "@/components/SearchResults";
+import { SearchStateProvider } from "@/providers/SearchStateProvider";
 
 export default async function Home() {
   return (

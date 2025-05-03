@@ -1,5 +1,5 @@
 import { Plus, Minus } from "lucide-react";
-import { TextLoading } from "~/components/TextLoading";
+import { TextLoading } from "@/components/TextLoading";
 
 export type ZoomControlProps = {
   loading?: boolean;

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { http } from "~/lib/http";
+import { http } from "@/lib/http";
 
 type BoundaryParams = Promise<{
   boundary_id: string;

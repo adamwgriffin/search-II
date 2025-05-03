@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useClickAway } from "react-use";
 import SearchButton from "../SearchButton/SearchButton";
-import LocationPinFilledIcon from "~/components/icons/LocationPinFilledIcon/LocationPinFilledIcon";
+import LocationPinFilledIcon from "@/components/icons/LocationPinFilledIcon/LocationPinFilledIcon";
 import PlacePredictionText from "../PlacePredictionText/PlacePredictionText";
 import styles from "./SearchField.module.css";
 

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { http } from "~/lib/http";
+import { http } from "@/lib/http";
 
 export async function GET(request: NextRequest) {
   if (request.nextUrl.searchParams.toString() === "") {

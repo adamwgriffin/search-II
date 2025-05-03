@@ -1,8 +1,8 @@
 "use client";
 
 import { useMap } from "@vis.gl/react-google-maps";
-import { TextLoading } from "~/components/TextLoading";
-import { useSearchState } from "~/providers/SearchStateProvider";
+import { TextLoading } from "@/components/TextLoading";
+import { useSearchState } from "@/providers/SearchStateProvider";
 
 export type BoundaryControlProps = {
   loading?: boolean;

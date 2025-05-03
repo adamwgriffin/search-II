@@ -1,7 +1,7 @@
-import { Filters } from "~/components/Filters";
-import { Logo } from "~/components/Logo";
-import { SearchLocation } from "~/components/SearchLocation/SearchLocation";
-import { UserMenu } from "~/components/UserMenu";
+import { Filters } from "@/components/Filters";
+import { Logo } from "@/components/Logo";
+import { SearchLocation } from "@/components/SearchLocation/SearchLocation";
+import { UserMenu } from "@/components/UserMenu";
 import { Suspense } from "react";
 
 export function SearchHeader() {

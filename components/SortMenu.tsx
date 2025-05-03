@@ -3,16 +3,16 @@
 import type {
   SortType,
   SortDirection
-} from "~/zod_schemas/listingSearchParamsSchema";
+} from "@/zod_schemas/listingSearchParamsSchema";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from "~/components/ui/select";
-import { ParamDefaults } from "~/lib/listingSearchParams";
-import { useSearchState } from "~/providers/SearchStateProvider";
+} from "@/components/ui/select";
+import { ParamDefaults } from "@/lib/listingSearchParams";
+import { useSearchState } from "@/providers/SearchStateProvider";
 
 export type SortTypeLabels = {
   label: string;

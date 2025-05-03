@@ -1,6 +1,6 @@
 import { useMap } from "@vis.gl/react-google-maps";
 import { useEffect } from "react";
-import type { GeoJSONBoundary } from "~/types";
+import type { GeoJSONBoundary } from "@/types";
 
 export type MapBoundaryProps = {
   boundary: GeoJSONBoundary | null;

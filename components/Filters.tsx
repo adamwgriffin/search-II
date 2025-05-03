@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import { Baths } from "~/components/Baths";
-import { Beds } from "~/components/Beds";
-import { Button } from "~/components/ui/button";
+import { Baths } from "@/components/Baths";
+import { Beds } from "@/components/Beds";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
-} from "~/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 export function Filters() {
   return (

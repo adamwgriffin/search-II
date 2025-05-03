@@ -1,10 +1,10 @@
 "use client";
 
-import { ListingCard } from "~/components/ListingCard";
-import { SearchResultsHeader } from "~/components/SearchResultsHeader";
-import { SearchResultsLoading } from "~/components/SearchResultsLoading";
-import { SearchResultsPagination } from "~/components/SearchResultsPagination";
-import { useSearchResults } from "~/hooks/useSearchResults";
+import { ListingCard } from "@/components/ListingCard";
+import { SearchResultsHeader } from "@/components/SearchResultsHeader";
+import { SearchResultsLoading } from "@/components/SearchResultsLoading";
+import { SearchResultsPagination } from "@/components/SearchResultsPagination";
+import { useSearchResults } from "@/hooks/useSearchResults";
 
 export function SearchResults() {
   const { data: results, isFetching, isError } = useSearchResults();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchState } from "~/providers/SearchStateProvider";
+import { useSearchState } from "@/providers/SearchStateProvider";
 
 const Values = [undefined, 1, 2, 3, 4, 5];
 

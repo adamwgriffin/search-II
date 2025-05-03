@@ -1,6 +1,6 @@
 import { objectToQueryString } from "./listingSearchParams";
 import isEmpty from "lodash/isEmpty";
-import { sleep } from "~/lib";
+import { sleep } from "@/lib";
 
 export async function http<T = unknown>(
   url: string,

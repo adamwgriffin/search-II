@@ -1,6 +1,6 @@
-import { useSearchState } from "~/providers/SearchStateProvider";
+import { useSearchState } from "@/providers/SearchStateProvider";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { PaginationGroups } from "~/components/PaginationGroups";
+import { PaginationGroups } from "@/components/PaginationGroups";
 
 export type SearchResultsPaginationProps = {
   numberOfPages: number;

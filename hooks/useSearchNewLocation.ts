@@ -1,11 +1,11 @@
 import { usePathname, useRouter } from "next/navigation";
-import { useSearchState } from "~/providers/SearchStateProvider";
-import { type SearchState } from "~/zod_schemas/searchStateSchema";
+import { useSearchState } from "@/providers/SearchStateProvider";
+import { type SearchState } from "@/zod_schemas/searchStateSchema";
 import omit from "lodash/omit";
 import {
   NonGeocodeParams,
   objectToQueryString
-} from "~/lib/listingSearchParams";
+} from "@/lib/listingSearchParams";
 
 export function useSearchNewLocation() {
   const router = useRouter();

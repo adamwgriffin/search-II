@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import GoogleMapsProvider from "~/providers/GoogleMapsProvider";
-import ReactQueryClientProvider from "~/providers/ReactQueryClientProvider";
-import { ThemeProvider } from "~/providers/ThemeProvider";
+import GoogleMapsProvider from "@/providers/GoogleMapsProvider";
+import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {

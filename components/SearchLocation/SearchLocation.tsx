@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import SearchField from "~/components/SearchLocation/SearchField/SearchField";
-import { useSearchNewLocation } from "~/hooks/useSearchNewLocation";
+import SearchField from "@/components/SearchLocation/SearchField/SearchField";
+import { useSearchNewLocation } from "@/hooks/useSearchNewLocation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { getPlaceAutocompletePredictions } from "~/lib/getPlaceAutocompletePredictions";
-import { useSearchState } from "~/providers/SearchStateProvider";
+import { getPlaceAutocompletePredictions } from "@/lib/getPlaceAutocompletePredictions";
+import { useSearchState } from "@/providers/SearchStateProvider";
 
 export function SearchLocation() {
   const { searchState } = useSearchState();

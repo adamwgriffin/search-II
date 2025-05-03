@@ -1,11 +1,11 @@
-import type { SearchParamsInit } from "~/types";
+import type { SearchParamsInit } from "@/types";
 import isEqual from "lodash/isEqual";
 import omit from "lodash/omit";
 import omitBy from "lodash/omitBy";
 import type {
   SearchStateUpdate,
   SearchState
-} from "~/zod_schemas/searchStateSchema";
+} from "@/zod_schemas/searchStateSchema";
 
 export const NonGeocodeParams = Object.freeze([
   "bounds",

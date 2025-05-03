@@ -1,8 +1,8 @@
 import omit from "lodash/omit";
 import isEmpty from "lodash/isEmpty";
-import { http } from "~/lib/http";
-import type { ListingSearchResponse } from "~/types";
-import { type SearchState } from "~/zod_schemas/searchStateSchema";
+import { http } from "@/lib/http";
+import type { ListingSearchResponse } from "@/types";
+import { type SearchState } from "@/zod_schemas/searchStateSchema";
 
 function removeNonListingServiceParams(state: SearchState) {
   return omit(state, "bounds", "boundary_id", "zoom");

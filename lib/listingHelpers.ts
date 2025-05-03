@@ -1,4 +1,4 @@
-import type { Listing } from "~/types";
+import type { Listing } from "@/types";
 
 export function formatPrice(price: number) {
   return Intl.NumberFormat("en-US", {

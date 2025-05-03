@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { SortMenu } from "~/components/SortMenu";
+import { SortMenu } from "@/components/SortMenu";
 
 export type SearchResultsHeaderProps = {
   listingCount: number | undefined;

@@ -1,7 +1,7 @@
 import { AdvancedMarker } from "@vis.gl/react-google-maps";
-import { TextLoading } from "~/components/TextLoading";
-import { formatPriceAbbreviated } from "~/lib/listingHelpers";
-import { type Listing } from "~/types";
+import { TextLoading } from "@/components/TextLoading";
+import { formatPriceAbbreviated } from "@/lib/listingHelpers";
+import { type Listing } from "@/types";
 
 export type ListingMarkerProps = Pick<
   Listing,

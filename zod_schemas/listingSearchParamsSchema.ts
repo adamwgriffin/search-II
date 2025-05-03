@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { booleanEnum } from "~/zod_schemas";
+import { booleanEnum } from "@/zod_schemas";
 
 export const sortTypeSchema = z.enum([
   "listedDate",
