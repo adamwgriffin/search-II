@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { ClearFilters } from "@/components/ClearFilters";
 
 export function Filters() {
   return (
@@ -24,6 +25,7 @@ export function Filters() {
           <Suspense>
             <Beds />
             <Baths />
+            <ClearFilters />
           </Suspense>
         </form>
       </DropdownMenuContent>
