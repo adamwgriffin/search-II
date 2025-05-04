@@ -29,7 +29,7 @@ import {
   useState
 } from "react";
 
-type NewLocationState = Pick<SearchState, "address" | "place_id">;
+type NewLocationState = { address: string } | { place_id: string };
 
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;

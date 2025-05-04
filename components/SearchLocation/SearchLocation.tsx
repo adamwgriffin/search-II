@@ -8,9 +8,7 @@ import { useState } from "react";
 
 export function SearchLocation() {
   const { searchState, setNewLocation } = useSearchState();
-  const [value, setValue] = useState(
-    searchState.address ? searchState.address : ""
-  );
+  const [value, setValue] = useState(searchState.address);
   const [searchString, setSearchString] = useState<string | null>(null);
   const { data, isError, error } = useQuery({
     queryKey: ["searchString", searchString],
@@ -26,12 +24,14 @@ export function SearchLocation() {
   return (
     <form name="search-form" onSubmit={(e) => e.preventDefault()}>
       <SearchField
-        value={value}
+        value={value ?? ""}
         options={data || []}
         onInput={(details) => setValue(details)}
         onGetPlaceAutocompletePredictions={(val) => setSearchString(val)}
         onClearPlaceAutocompletePredictions={() => setSearchString(null)}
-        onSearchInitiated={() => setNewLocation({ address: value })}
+        onSearchInitiated={() => {
+          if (value) setNewLocation({ address: value });
+        }}
         onOptionSelected={(autocompletePrediction) => {
           setValue(autocompletePrediction.description);
           setNewLocation({
