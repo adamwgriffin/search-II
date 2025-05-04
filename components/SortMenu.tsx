@@ -56,6 +56,10 @@ export const SortTypeLabels: SortTypeLabels[] = [
 export function SortMenu() {
   const { searchState, setSearchState } = useSearchState();
 
+  const sort_by = searchState.sort_by ?? ParamDefaults.sort_by;
+  const sort_direction =
+    searchState.sort_direction ?? ParamDefaults.sort_direction;
+
   function findSortTypeByLabel(sortLabel: string) {
     return SortTypeLabels.find(({ label }) => label === sortLabel);
   }
@@ -65,10 +69,6 @@ export function SortMenu() {
       ({ type, direction }) => type === sort_by && direction === sort_direction
     );
   }
-
-  const sort_by = String(searchState.sort_by) || ParamDefaults.sort_by;
-  const sort_direction =
-    String(searchState.sort_direction) || ParamDefaults.sort_direction;
 
   function handleChange(value: string) {
     const sortTypeLabel = findSortTypeByLabel(value);
