@@ -1,17 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import SearchField from "@/components/SearchLocation/SearchField/SearchField";
-import { useSearchNewLocation } from "@/hooks/useSearchNewLocation";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { getPlaceAutocompletePredictions } from "@/lib/getPlaceAutocompletePredictions";
 import { useSearchState } from "@/providers/SearchStateProvider";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export function SearchLocation() {
-  const { searchState } = useSearchState();
-  const searchNewLocation = useSearchNewLocation();
+  const { searchState, setNewLocation } = useSearchState();
   const [value, setValue] = useState(
-    searchState.address ? String(searchState.address) : ""
+    searchState.address ? searchState.address : ""
   );
   const [searchString, setSearchString] = useState<string | null>(null);
   const { data, isError, error } = useQuery({
@@ -33,10 +31,10 @@ export function SearchLocation() {
         onInput={(details) => setValue(details)}
         onGetPlaceAutocompletePredictions={(val) => setSearchString(val)}
         onClearPlaceAutocompletePredictions={() => setSearchString(null)}
-        onSearchInitiated={() => searchNewLocation({ address: value })}
+        onSearchInitiated={() => setNewLocation({ address: value })}
         onOptionSelected={(autocompletePrediction) => {
           setValue(autocompletePrediction.description);
-          searchNewLocation({
+          setNewLocation({
             place_id: autocompletePrediction.place_id
           });
         }}

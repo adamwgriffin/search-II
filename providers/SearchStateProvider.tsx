@@ -3,6 +3,7 @@
 import {
   ClearFiltersParams,
   getUpdatedQueryString,
+  NonGeocodeParams,
   objectToQueryString
 } from "@/lib/listingSearchParams";
 import { parseAndStripInvalidProperties } from "@/zod_schemas";
@@ -12,6 +13,7 @@ import {
   searchStateSchema
 } from "@/zod_schemas/searchStateSchema";
 import isEmpty from "lodash/isEmpty";
+import omit from "lodash/omit";
 import pick from "lodash/pick";
 import {
   type ReadonlyURLSearchParams,
@@ -27,9 +29,12 @@ import {
   useState
 } from "react";
 
+type NewLocationState = Pick<SearchState, "address" | "place_id">;
+
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
   setSearchState: (newParams: SearchStateUpdate) => void;
+  setNewLocation: (newLocationState: NewLocationState) => void;
   clearFilters: () => void;
 };
 
@@ -71,6 +76,20 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
     router.push(url);
   };
 
+  const setNewLocation = (newLocationState: NewLocationState) => {
+    // Remove params for searching current location with a geospatial search.
+    // Since we're now going to be geocoding a new location, we only want filter
+    // params. Remove address/place_id for existing location so that we can
+    // replace it with new state
+    const params = omit(searchParamsState, [
+      ...NonGeocodeParams,
+      "address",
+      "place_id"
+    ]);
+    Object.assign(params, newLocationState);
+    router.push(`${pathname}?${objectToQueryString(params)}`);
+  };
+
   const clearFilters = () => {
     const keptParams = pick(searchParamsState, ClearFiltersParams);
     const url = isEmpty(keptParams)
@@ -84,6 +103,7 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         searchState: searchParamsState,
         setSearchState,
+        setNewLocation,
         clearFilters
       }}
     >
