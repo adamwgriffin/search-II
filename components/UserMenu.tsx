@@ -3,6 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
@@ -22,9 +23,9 @@ export function UserMenu() {
           <DropdownMenuItem>Saved Homes</DropdownMenuItem>
           <DropdownMenuItem>Saved Searches</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="justify-center">
+          <DropdownMenuLabel className="flex justify-center">
             <ThemeSwitcher />
-          </DropdownMenuItem>
+          </DropdownMenuLabel>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
