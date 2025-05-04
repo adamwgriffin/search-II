@@ -22,12 +22,11 @@ export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
  * sending them in the request if the service would behave this way be default
  * anyway
  */
-export const ParamDefaults: SearchState = Object.freeze({
+export const ParamDefaults = Object.freeze({
   page_index: 0,
-  page_size: 20,
   sort_by: "listedDate",
   sort_direction: "desc"
-});
+} satisfies SearchState);
 
 /**
  * Remove params marked for removal, as well as params that use default values,
@@ -40,7 +39,7 @@ export function removeUnwantedParams(params: SearchStateUpdate) {
       value === null ||
       value === undefined ||
       value === "" ||
-      isEqual(ParamDefaults[key as keyof SearchState], value)
+      isEqual(ParamDefaults[key as keyof typeof ParamDefaults], value)
     );
   });
 }
