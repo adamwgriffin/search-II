@@ -23,10 +23,9 @@ export function ListingMarker({
       }}
     >
       <div
-        className="flex items-center justify-center
-          rounded-full min-h-6 min-w-12
-          shadow-md shadow-gray-500 
-          font-medium text-black dark:text-white bg-background dark:bg-gray-600"
+        className="flex items-center justify-center rounded-full min-h-6 min-w-12 shadow-md
+          shadow-gray-500 font-medium text-black dark:text-white bg-background
+          dark:bg-gray-600"
       >
         <TextLoading loading={loading}>
           {formatPriceAbbreviated(soldPrice || listPrice)}

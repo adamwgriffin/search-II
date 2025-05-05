@@ -15,7 +15,8 @@ export function UserMenu() {
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label="Navigation and Settings"
-          className="rounded-full p-2 border text-2xl border-gray-400 text-gray-400 hover:border-purple-500 hover:text-purple-500"
+          className="not-only:border-gray-400 text-2xl rounded-full border p-2 text-gray-400
+            hover:border-purple-500 hover:text-purple-500"
         >
           <FaUser />
         </DropdownMenuTrigger>
