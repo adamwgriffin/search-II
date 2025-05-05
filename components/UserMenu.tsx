@@ -13,10 +13,11 @@ export function UserMenu() {
   return (
     <div className="flex justify-end">
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <div className="shrink cursor-pointer rounded-full border border-gray-400 p-2">
-            <FaUser className="text-2xl text-gray-400" />
-          </div>
+        <DropdownMenuTrigger
+          aria-label="Navigation and Settings"
+          className="rounded-full border border-gray-400 p-2"
+        >
+          <FaUser className="text-2xl text-gray-400" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>My Account</DropdownMenuItem>

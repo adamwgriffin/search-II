@@ -84,7 +84,10 @@ export function SortMenu() {
       onValueChange={handleChange}
       value={getCurrentSortType()?.label ?? ""}
     >
-      <SelectTrigger className="w-44 rounded-full dark:bg-gray-600 dark:text-inherit">
+      <SelectTrigger
+        aria-label="Sort Listings"
+        className="w-44 rounded-full dark:bg-gray-600 dark:text-inherit"
+      >
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
       <SelectContent>
