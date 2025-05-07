@@ -17,7 +17,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
         className="w-full rounded-lg aspect-square object-cover"
         priority
       />
-      <div className="font-medium text-xl">
+      <div className="font-medium text-xl pt-2">
         {formatPrice(listing.soldPrice || listing.listPrice)}
       </div>
       <div className="flex gap-x-2">
