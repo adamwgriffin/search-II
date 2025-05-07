@@ -8,7 +8,7 @@ export type ListingCardsProps = {
 
 export function ListingCard({ listing }: ListingCardsProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-1">
       <Image
         src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${listing.photoGallery[0].url}`}
         alt="Listing Image"
@@ -17,8 +17,13 @@ export function ListingCard({ listing }: ListingCardsProps) {
         className="w-full rounded-lg aspect-square object-cover"
         priority
       />
-      <div className="">
+      <div className="font-medium text-xl">
         {formatPrice(listing.soldPrice || listing.listPrice)}
+      </div>
+      <div className="flex gap-x-2">
+        {!!listing.beds && <div>{listing.beds}bd</div>}
+        {!!listing.baths && <div>{listing.baths}ba</div>}
+        {!!listing.sqft && <div>{listing.sqft.toLocaleString()} sqft</div>}
       </div>
       <address className="not-italic">
         <div>{listing.address.line1}</div>

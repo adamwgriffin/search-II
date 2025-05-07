@@ -26,6 +26,9 @@ export type Listing = {
   address: Address;
   listPrice: number;
   soldPrice?: number;
+  beds: number;
+  baths: number;
+  sqft: number;
 };
 
 export type ListingSearchPagination = {
