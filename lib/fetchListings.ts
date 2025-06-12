@@ -15,6 +15,7 @@ function removeNonListingServiceParams(
   return omit(state, "bounds", "boundary_id", "zoom", "open_houses");
 }
 
+/** Params that should only be used for a new search with the /geocode endpoint */
 function removeNonGeospatialParams(state: SearchState) {
   return omit(state, "address", "place_id");
 }
