@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { ClearFilters } from "@/components/ClearFilters";
+import { PropertyTypes } from "@/components/PropertyTypes";
 
 export function Filters() {
   return (
@@ -24,9 +25,10 @@ export function Filters() {
       <DropdownMenuContent align="end">
         <form className="flex flex-col gap-4 p-4">
           <Suspense>
-            <OpenHouses />
             <Beds />
             <Baths />
+            <OpenHouses />
+            <PropertyTypes />
             <ClearFilters />
           </Suspense>
         </form>
