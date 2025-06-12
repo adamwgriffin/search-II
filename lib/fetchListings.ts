@@ -26,23 +26,48 @@ function convertBoundsParamToListingServiceBounds(boundsString: string) {
   return { bounds_south, bounds_west, bounds_north, bounds_east };
 }
 
-function paramsForGeospatialSearch(state: SearchState) {
+/**
+ * Computes some listing service params based on certain state values that do
+ * not have a one-to-one mapping with the equivalent listing service params.
+ */
+function paramsComputedFromState(
+  state: SearchState
+): Partial<ListingFilterParams> {
+  const params: Partial<ListingFilterParams> = {};
+  if (state.open_houses) {
+    params.open_house_after = new Date().toISOString();
+  }
+  return params;
+}
+
+function paramsForGeospatialSearch(
+  state: SearchState
+): Partial<ListingFilterParams> {
   if (typeof state.bounds !== "string") {
     throw new Error("Bounds not included in params");
   }
   const listingServiceBounds = convertBoundsParamToListingServiceBounds(
     state.bounds
   );
+  const computedParams = paramsComputedFromState(state);
   const newParams = removeNonListingServiceParams(
     removeNonGeospatialParams(state)
   );
-  return { ...newParams, ...listingServiceBounds };
+  return { ...newParams, ...computedParams, ...listingServiceBounds };
+}
+
+function paramsForNewLocationSearch(
+  state: SearchState
+): Partial<ListingFilterParams> {
+  const computedParams = paramsComputedFromState(state);
+  const newParams = removeNonListingServiceParams(state);
+  return { ...newParams, ...computedParams };
 }
 
 async function searchNewLocation(state: SearchState) {
   return http<ListingSearchResponse>(
     "/api/listing/search/geocode",
-    removeNonListingServiceParams(state)
+    paramsForNewLocationSearch(state)
   );
 }
 
@@ -67,17 +92,17 @@ export async function fetchListings(state: SearchState) {
   const { bounds, boundary_id } = state;
   // The user entered a new search in the search field
   if (location && !bounds) {
-    return await searchNewLocation(state);
+    return searchNewLocation(state);
   }
   // We have previously performed a new search and now we are performing subsequent
   // searches on the same location with different criteria
   if (location && bounds && boundary_id) {
-    return await searchCurrentLocation(state);
+    return searchCurrentLocation(state);
   }
   // The user removed the location boundary so we are just performing searches
   // on the bounds of the map viewport
   if (bounds && !location && !boundary_id) {
-    return await searchBounds(state);
+    return searchBounds(state);
   }
   return {};
 }

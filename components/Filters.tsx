@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Baths } from "@/components/Baths";
 import { Beds } from "@/components/Beds";
 import { Button } from "@/components/ui/button";
+import { OpenHouses } from "@/components/OpenHouses";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ export function Filters() {
       <DropdownMenuContent align="end">
         <form className="flex flex-col gap-4 p-4">
           <Suspense>
+            <OpenHouses />
             <Beds />
             <Baths />
             <ClearFilters />
