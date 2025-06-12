@@ -3,9 +3,16 @@ import isEmpty from "lodash/isEmpty";
 import { http } from "@/lib/http";
 import type { ListingSearchResponse } from "@/types";
 import { type SearchState } from "@/zod_schemas/searchStateSchema";
+import { type ListingFilterParams } from "@/zod_schemas/listingSearchParamsSchema";
 
-function removeNonListingServiceParams(state: SearchState) {
-  return omit(state, "bounds", "boundary_id", "zoom");
+/** Remove params from search state that the listing service does not recognize.
+ Some of the params in state are only meant for the app state, or are meant to
+ be transformed into more verbose listing service params once when used to make
+ a request. */
+function removeNonListingServiceParams(
+  state: SearchState
+): Partial<ListingFilterParams> {
+  return omit(state, "bounds", "boundary_id", "zoom", "open_houses");
 }
 
 function removeNonGeospatialParams(state: SearchState) {
