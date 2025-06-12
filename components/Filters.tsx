@@ -23,7 +23,7 @@ export function Filters() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <form className="flex flex-col gap-4 p-4">
+        <form className="flex flex-col gap-4 p-4 max-w-md">
           <Suspense>
             <Beds />
             <Baths />
