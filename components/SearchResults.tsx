@@ -19,7 +19,7 @@ export function SearchResults() {
         listingCount={results?.pagination?.numberAvailable}
         loading={isFetching}
       />
-      <ul className="grow grid auto-rows-min grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-3.5">
+      <ul className="grow grid auto-rows-min grid-cols-[repeat(auto-fit,minmax(16rem,24rem))] gap-3.5">
         {isFetching && <SearchResultsLoading />}
         {!isFetching &&
           results?.listings?.map((listing) => (
