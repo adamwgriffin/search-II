@@ -1,7 +1,8 @@
 "use client";
 
-import { type ChangeEvent, Fragment } from "react";
+import CheckboxButton from "@/components/CheckboxButton";
 import { useSearchState } from "@/providers/SearchStateProvider";
+import { type ChangeEvent } from "react";
 
 export const propertyTypes = Object.freeze([
   {
@@ -46,21 +47,22 @@ export function PropertyTypes() {
   }
 
   return (
-    <fieldset className="flex flex-wrap gap-2">
-      <legend>Property Type</legend>
-      {propertyTypes.map(({ label, id }) => (
-        <Fragment key={`property-type-${label}-${id}`}>
-          <input
-            type="checkbox"
+    <fieldset>
+      <legend className="my-2">Property Type</legend>
+      <div className="flex flex-wrap gap-2">
+        {propertyTypes.map(({ label, id }) => (
+          <CheckboxButton
+            key={`property-type-${label}-${id}`}
             id={id}
             name={id}
             value={id}
             checked={params.includes(id)}
             onChange={(e) => handleChange(e, id)}
-          />
-          <label htmlFor={id}>{label}</label>
-        </Fragment>
-      ))}
+          >
+            {label}
+          </CheckboxButton>
+        ))}
+      </div>
     </fieldset>
   );
 }
