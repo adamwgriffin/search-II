@@ -13,6 +13,7 @@ export const searchStateSchema = z
     search_type: z.enum(["buy", "rent", "sold"]),
     address: z.string(),
     place_id: z.string(),
+    address_types: z.string(),
     bounds: z.string(),
     boundary_id: z.string(),
     zoom: z.coerce.number(),

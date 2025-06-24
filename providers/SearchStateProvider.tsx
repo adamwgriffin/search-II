@@ -29,7 +29,9 @@ import {
   useState
 } from "react";
 
-type NewLocationState = { address: string } | { place_id: string };
+type NewLocationState =
+  | { address: string }
+  | { place_id: string; address_types: string };
 
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
@@ -84,7 +86,8 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
     const params = omit(searchParamsState, [
       ...NonGeocodeParams,
       "address",
-      "place_id"
+      "place_id",
+      "address_types"
     ]);
     Object.assign(params, newLocationState);
     router.push(`${pathname}?${objectToQueryString(params)}`);

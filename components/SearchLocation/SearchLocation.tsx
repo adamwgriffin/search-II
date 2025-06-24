@@ -35,7 +35,8 @@ export function SearchLocation() {
         onOptionSelected={(autocompletePrediction) => {
           setValue(autocompletePrediction.description);
           setNewLocation({
-            place_id: autocompletePrediction.place_id
+            place_id: autocompletePrediction.place_id,
+            address_types: autocompletePrediction.types.join(",")
           });
         }}
       />

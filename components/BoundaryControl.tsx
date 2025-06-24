@@ -28,6 +28,7 @@ export function BoundaryControl({ loading = false }: BoundaryControlProps) {
             bounds,
             address: null,
             place_id: null,
+            address_types: null,
             boundary_id: null
           });
         }}
