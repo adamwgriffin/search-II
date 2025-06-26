@@ -15,7 +15,8 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/consistent-type-imports": "warn",
-      "import/no-cycle": "warn"
+      "import/no-cycle": "warn",
+      "@next/next/no-img-element": "off"
     }
   }
 ];
