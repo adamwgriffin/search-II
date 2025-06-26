@@ -5,6 +5,8 @@ export type SearchParamsInit =
   | URLSearchParams
   | undefined;
 
+export type PropertyStatus = "active" | "pending" | "sold" | "rented";
+
 export type PhotoGalleryImage = {
   _id: string;
   url: string;
@@ -29,6 +31,13 @@ export type Listing = {
   beds: number;
   baths: number;
   sqft: number;
+  slug: string;
+  neighborhood: string;
+  propertyType: string;
+  lotSize: number;
+  description: string;
+  status: PropertyStatus;
+};
 };
 
 export type ListingSearchPagination = {
