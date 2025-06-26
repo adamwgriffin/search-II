@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { ListingCard } from "@/components/ListingCard";
 import { SearchResultsHeader } from "@/components/SearchResultsHeader";
 import { SearchResultsLoading } from "@/components/SearchResultsLoading";
@@ -10,7 +11,7 @@ export function SearchResults() {
   const { data: results, isFetching, isError } = useSearchResults();
 
   if (isError) {
-    return <p>Something went wrong</p>;
+    return <ErrorMessage icon="😕" message="Sorry, something went wrong." />;
   }
 
   return (
