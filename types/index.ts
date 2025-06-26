@@ -20,6 +20,17 @@ export type Address = {
   zip: string;
 };
 
+export type PropertDetail = {
+  name: string;
+  details: string[];
+};
+
+export type PropertDetailsSection = {
+  name: string;
+  description?: string;
+  details: PropertDetail[];
+};
+
 export type Listing = {
   _id: string;
   latitude: number;
@@ -38,6 +49,11 @@ export type Listing = {
   description: string;
   status: PropertyStatus;
 };
+
+export type TListingDetail = Listing & {
+  yearBuilt: number;
+  soldDate?: string;
+  propertyDetails?: PropertDetailsSection[];
 };
 
 export type ListingSearchPagination = {
@@ -85,6 +101,7 @@ export type ViewportLatLngBounds = {
 };
 
 export type ListingSearchResponse = {
+  listingDetail?: TListingDetail;
   boundary?: Boundary;
   listings?: Listing[];
   pagination?: ListingSearchPagination;

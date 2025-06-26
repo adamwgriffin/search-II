@@ -6,9 +6,18 @@ import { SearchResultsHeader } from "@/components/SearchResultsHeader";
 import { SearchResultsLoading } from "@/components/SearchResultsLoading";
 import { SearchResultsPagination } from "@/components/SearchResultsPagination";
 import { useSearchResults } from "@/hooks/useSearchResults";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function SearchResults() {
+  const router = useRouter();
   const { data: results, isFetching, isError } = useSearchResults();
+
+  useEffect(() => {
+    if (results?.listingDetail) {
+      router.push(`/listing/${results.listingDetail.slug}`);
+    }
+  }, [results?.listingDetail, router]);
 
   if (isError) {
     return <ErrorMessage icon="😕" message="Sorry, something went wrong." />;

@@ -4,6 +4,7 @@ import ListingStatus from "@/components/ListingStatus";
 import { formatPrice } from "@/lib/listingHelpers";
 import { type Listing } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 
 export type ListingCardsProps = {
   listing: Listing;
@@ -11,7 +12,11 @@ export type ListingCardsProps = {
 
 export function ListingCard({ listing }: ListingCardsProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <Link
+      href={`/listing/${listing.slug}`}
+      target="_blank"
+      className="flex flex-col gap-1"
+    >
       <div className="relative">
         <div className="absolute p-2">
           <ListingStatus status={listing.status} />
@@ -32,6 +37,6 @@ export function ListingCard({ listing }: ListingCardsProps) {
         <ListingInfo listing={listing} />
       </div>
       <ListingAddress address={listing.address} />
-    </div>
+    </Link>
   );
 }
