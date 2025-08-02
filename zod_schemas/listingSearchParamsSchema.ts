@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod/mini";
 import { booleanEnum } from "@/zod_schemas";
 
 export const sortTypeSchema = z.enum([
@@ -22,8 +22,9 @@ export const paginationParamsSchema = z.object({
 
 export type PaginationParams = z.infer<typeof paginationParamsSchema>;
 
-export const listingFilterParamsSchema = z
-  .object({
+export const listingFilterParamsSchema = z.extend(
+  paginationParamsSchema,
+  z.object({
     address: z.string(),
     price_min: z.coerce.number(),
     price_max: z.coerce.number(),
@@ -54,8 +55,8 @@ export const listingFilterParamsSchema = z
     sold_in_last: z.coerce.number(),
     open_house_after: z.string(),
     open_house_before: z.string()
-  })
-  .extend(paginationParamsSchema.shape);
+  }).shape
+);
 
 export type ListingFilterParams = z.infer<typeof listingFilterParamsSchema>;
 

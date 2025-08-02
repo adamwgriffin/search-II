@@ -1,4 +1,5 @@
-import { z, type ZodObject, type ZodRawShape } from "zod";
+import * as z from "zod/mini";
+import { type ZodObject, type ZodRawShape } from "zod";
 
 export function parseAndStripInvalidProperties<
   T extends ZodObject<ZodRawShape>
@@ -7,12 +8,13 @@ export function parseAndStripInvalidProperties<
 
   if (result.success) return result.data;
 
-  const invalidKeys = new Set(result.error.errors.map((e) => e.path[0]));
+  const invalidKeys = new Set(result.error.issues.map((i) => i.path[0]));
   return Object.fromEntries(
     Object.entries(obj).filter(([key]) => !invalidKeys.has(key))
   ) as Partial<z.infer<T>>;
 }
 
-export const booleanEnum = z
-  .enum(["true", "false"])
-  .transform((value) => value === "true");
+export const booleanEnum = z.stringbool({
+  truthy: ["true"],
+  falsy: ["false"]
+});
