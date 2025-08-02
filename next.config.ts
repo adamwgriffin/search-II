@@ -14,6 +14,14 @@ const nextConfig: NextConfig = {
         hostname: "avatars.githubusercontent.com"
       }
     ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/listing/search/:pathname*",
+        destination: `${process.env.LISTING_SERVICE_HOSTNAME}/listing/search/:pathname*`
+      }
+    ];
   }
 };
 
