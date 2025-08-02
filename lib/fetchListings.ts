@@ -12,7 +12,14 @@ import { type ListingFilterParams } from "@/zod_schemas/listingSearchParamsSchem
 function removeNonListingServiceParams(
   state: SearchState
 ): Partial<ListingFilterParams> {
-  return omit(state, "bounds", "boundary_id", "zoom", "open_houses");
+  return omit(
+    state,
+    "bounds",
+    "boundary_id",
+    "zoom",
+    "open_houses",
+    "include_pending"
+  );
 }
 
 /** Params that should only be used for a new search with the /geocode endpoint */
@@ -36,6 +43,9 @@ function paramsComputedFromState(
   const params: Partial<ListingFilterParams> = {};
   if (state.open_houses) {
     params.open_house_after = new Date().toISOString();
+  }
+  if (state.include_pending) {
+    params.status = "active,pending";
   }
   return params;
 }

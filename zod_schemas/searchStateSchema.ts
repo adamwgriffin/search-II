@@ -18,8 +18,7 @@ export const searchStateSchema = z.partial(
     boundary_id: z.string(),
     zoom: z.coerce.number(),
     property_type: z.string(),
-    // TODO: Need to convert include_pending into correct listing status field
-    // include_pending: z._default(booleanEnum, false),
+    include_pending: booleanEnum,
     open_houses: booleanEnum,
     page_index: z.coerce.number(),
     price_min: z.coerce.number(),

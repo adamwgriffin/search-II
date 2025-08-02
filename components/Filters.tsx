@@ -3,6 +3,7 @@ import { Baths } from "@/components/Baths";
 import { Beds } from "@/components/Beds";
 import { Button } from "@/components/ui/button";
 import { OpenHouses } from "@/components/OpenHouses";
+import { IncludePending } from "@/components/IncludePending";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +29,7 @@ export function Filters() {
             <Beds />
             <Baths />
             <OpenHouses />
+            <IncludePending />
             <PropertyTypes />
             <ClearFilters />
           </Suspense>
