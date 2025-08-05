@@ -48,7 +48,7 @@ export function PropertyTypes() {
 
   return (
     <fieldset>
-      <legend className="my-2">Property Type</legend>
+      <legend className="my-2">Home Type</legend>
       <div className="flex flex-wrap gap-2">
         {propertyTypes.map(({ label, id }) => (
           <CheckboxButton
