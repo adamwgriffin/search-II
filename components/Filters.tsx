@@ -1,8 +1,7 @@
 import { Baths } from "@/components/Baths";
 import { Beds } from "@/components/Beds";
 import { ClearFilters } from "@/components/ClearFilters";
-import { IncludePending } from "@/components/IncludePending";
-import { OpenHouses } from "@/components/OpenHouses";
+import { ForSaleFilters } from "@/components/ForSaleFilters";
 import { PropertyTypes } from "@/components/PropertyTypes";
 import { SearchType } from "@/components/SearchType";
 import { Button } from "@/components/ui/button";
@@ -28,10 +27,7 @@ export function Filters() {
           <SearchType />
           <Beds />
           <Baths />
-          <div className="flex flex-col gap-1">
-            <OpenHouses />
-            <IncludePending />
-          </div>
+          <ForSaleFilters />
           <PropertyTypes />
           <ClearFilters />
         </form>
