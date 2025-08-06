@@ -1,5 +1,6 @@
 "use client";
 
+import { InputButton } from "@/components/InputButton";
 import { useSearchState } from "@/providers/SearchStateProvider";
 
 const Values = [undefined, 1, 2, 3, 4, 5];
@@ -9,18 +10,19 @@ export function Beds() {
 
   return (
     <fieldset className="flex gap-2">
-      <legend>Beds</legend>
+      <legend className="my-2">Beds</legend>
       {Values.map((value) => (
-        <label key={`beds-${value ?? "any"}`} className="flex gap-1">
-          <input
-            type="radio"
-            name="beds"
-            value={value}
-            checked={searchState.beds_min === value}
-            onChange={() => setSearchState({ beds_min: value })}
-          />
+        <InputButton
+          key={`beds-${value ?? "any"}`}
+          type="radio"
+          name="beds"
+          value={value}
+          checked={searchState.beds_min === value}
+          onChange={() => setSearchState({ beds_min: value })}
+          className="rounded-full min-w-14 px-0"
+        >
           {value ? `${value}+` : "Any"}
-        </label>
+        </InputButton>
       ))}
     </fieldset>
   );
