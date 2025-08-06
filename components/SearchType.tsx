@@ -22,7 +22,7 @@ const searchTypeButtons: SearchTypeButton[] = [
   },
   {
     value: SearchTypes.Sold,
-    label: "For Sold",
+    label: "Sold",
     className: "rounded-r-md"
   }
 ];
