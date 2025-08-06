@@ -1,3 +1,5 @@
+"use client";
+
 import { Baths } from "@/components/Baths";
 import { Beds } from "@/components/Beds";
 import { ClearFilters } from "@/components/ClearFilters";
@@ -10,8 +12,15 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useSearchState } from "@/providers/SearchStateProvider";
+import { SearchTypes } from "@/lib";
+import { ParamDefaults } from "@/lib/listingSearchParams";
 
 export function Filters() {
+  const { searchState } = useSearchState();
+
+  const searchType = searchState.search_type ?? ParamDefaults.search_type;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,8 +36,10 @@ export function Filters() {
           <SearchType />
           <Beds />
           <Baths />
-          <ForSaleFilters />
-          <PropertyTypes />
+          {searchType === SearchTypes.Buy && <ForSaleFilters />}
+          {searchType !== SearchTypes.Rent && <PropertyTypes />}
+          {/* TODO: Add SoldDays component */}
+          {/* {searchType === SearchTypes.Sold && <SoldDays />} */}
           <ClearFilters />
         </form>
       </DropdownMenuContent>
