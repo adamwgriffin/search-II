@@ -1,10 +1,11 @@
-import omit from "lodash/omit";
-import isEmpty from "lodash/isEmpty";
-import { http } from "@/lib/http";
-import type { ListingSearchResponse } from "@/types";
-import { type SearchState } from "@/zod_schemas/searchStateSchema";
-import { type ListingFilterParams } from "@/zod_schemas/listingSearchParamsSchema";
 import { DefaultSoldInLast, SearchTypes } from "@/lib";
+import { http } from "@/lib/http";
+import { ParamDefaults } from "@/lib/listingSearchParams";
+import type { ListingSearchResponse } from "@/types";
+import { type ListingFilterParams } from "@/zod_schemas/listingSearchParamsSchema";
+import { type SearchState } from "@/zod_schemas/searchStateSchema";
+import isEmpty from "lodash/isEmpty";
+import omit from "lodash/omit";
 
 /** Remove params from search state that the listing service does not recognize.
  Some of the params in state are only meant for the app state, or are meant to
@@ -46,13 +47,14 @@ function paramsComputedFromState(
   if (state.open_houses) {
     params.open_house_after = new Date().toISOString();
   }
-  if (state.search_type === SearchTypes.Buy && state.include_pending) {
+  const searchType = state.search_type ?? ParamDefaults.search_type;
+  if (searchType === SearchTypes.Buy && state.include_pending) {
     params.status = "active,pending";
   }
-  if (state.search_type === SearchTypes.Rent) {
+  if (searchType === SearchTypes.Rent) {
     params.rental = true;
   }
-  if (state.search_type === SearchTypes.Sold) {
+  if (searchType === SearchTypes.Sold) {
     params.status = "sold";
     params.sold_in_last = state.sold_in_last ?? DefaultSoldInLast;
   }
