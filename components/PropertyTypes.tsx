@@ -4,7 +4,7 @@ import { InputButton } from "@/components/InputButton";
 import { useSearchState } from "@/providers/SearchStateProvider";
 import { type ChangeEvent } from "react";
 
-export const propertyTypes = Object.freeze([
+const propertyTypes = Object.freeze([
   {
     id: "single-family",
     label: "House"
