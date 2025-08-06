@@ -3,6 +3,7 @@
 import { InputButton } from "@/components/InputButton";
 import { SearchTypes } from "@/lib";
 import { useSearchState } from "@/providers/SearchStateProvider";
+import { ParamDefaults } from "@/lib/listingSearchParams";
 
 type SearchTypeButton = {
   value: (typeof SearchTypes)[keyof typeof SearchTypes];
@@ -30,7 +31,7 @@ const searchTypeButtons: SearchTypeButton[] = [
 export function SearchType() {
   const { searchState, setSearchState } = useSearchState();
 
-  const searchType = searchState.search_type ?? SearchTypes.Buy;
+  const searchType = searchState.search_type ?? ParamDefaults.search_type;
 
   return (
     <fieldset>
