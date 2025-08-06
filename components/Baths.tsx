@@ -10,7 +10,7 @@ export function Baths() {
 
   return (
     <fieldset className="flex gap-2">
-      <legend>Baths</legend>
+      <legend className="my-2">Baths</legend>
       {Values.map((value) => (
         <InputButton
           key={`baths-${value ?? "any"}`}
