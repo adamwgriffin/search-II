@@ -6,13 +6,15 @@ import { Suspense } from "react";
 
 export function SearchHeader() {
   return (
-    <header className="grid grid-cols-[1fr_18rem_auto_1fr] items-center gap-8 p-4">
+    <header
+      className="grid grid-cols-[1fr_18rem_auto_1fr] items-center gap-8 p-4"
+    >
       <Logo />
       <Suspense>
         <SearchLocation />
+        <Filters />
+        <UserMenu />
       </Suspense>
-      <Filters />
-      <UserMenu />
     </header>
   );
 }
