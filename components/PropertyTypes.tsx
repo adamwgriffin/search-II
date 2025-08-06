@@ -1,6 +1,6 @@
 "use client";
 
-import CheckboxButton from "@/components/CheckboxButton";
+import { InputButton } from "@/components/InputButton";
 import { useSearchState } from "@/providers/SearchStateProvider";
 import { type ChangeEvent } from "react";
 
@@ -51,8 +51,9 @@ export function PropertyTypes() {
       <legend className="my-2">Home Type</legend>
       <div className="flex flex-wrap gap-2">
         {propertyTypes.map(({ label, id }) => (
-          <CheckboxButton
+          <InputButton
             key={`property-type-${label}-${id}`}
+            type="checkbox"
             id={id}
             name={id}
             value={id}
@@ -60,7 +61,7 @@ export function PropertyTypes() {
             onChange={(e) => handleChange(e, id)}
           >
             {label}
-          </CheckboxButton>
+          </InputButton>
         ))}
       </div>
     </fieldset>
