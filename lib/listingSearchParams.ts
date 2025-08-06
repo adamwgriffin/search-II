@@ -16,7 +16,14 @@ export const NonGeocodeParams: ReadonlyArray<keyof SearchState> = Object.freeze(
  * Params to keep when when clearing filters from search state
  */
 export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
-  Object.freeze(["address", "place_id", "bounds", "boundary_id", "zoom"]);
+  Object.freeze([
+    "address",
+    "place_id",
+    "address_types",
+    "bounds",
+    "boundary_id",
+    "zoom"
+  ]);
 
 /**
  * Keep track of a subset of Listing Service param defaults so that we can avoid
