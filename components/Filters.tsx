@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ClearFilters } from "@/components/ClearFilters";
 import { PropertyTypes } from "@/components/PropertyTypes";
+import { SearchType } from "@/components/SearchType";
 
 export function Filters() {
   return (
@@ -26,6 +27,7 @@ export function Filters() {
       <DropdownMenuContent align="end">
         <form className="flex flex-col gap-4 p-4 max-w-md">
           <Suspense>
+            <SearchType />
             <Beds />
             <Baths />
             <OpenHouses />

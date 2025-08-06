@@ -4,6 +4,7 @@ import { http } from "@/lib/http";
 import type { ListingSearchResponse } from "@/types";
 import { type SearchState } from "@/zod_schemas/searchStateSchema";
 import { type ListingFilterParams } from "@/zod_schemas/listingSearchParamsSchema";
+import { DefaultSoldInLast, SearchTypes } from "@/lib";
 
 /** Remove params from search state that the listing service does not recognize.
  Some of the params in state are only meant for the app state, or are meant to
@@ -18,7 +19,8 @@ function removeNonListingServiceParams(
     "boundary_id",
     "zoom",
     "open_houses",
-    "include_pending"
+    "include_pending",
+    "search_type"
   );
 }
 
@@ -44,8 +46,15 @@ function paramsComputedFromState(
   if (state.open_houses) {
     params.open_house_after = new Date().toISOString();
   }
-  if (state.include_pending) {
+  if (state.search_type === SearchTypes.Buy && state.include_pending) {
     params.status = "active,pending";
+  }
+  if (state.search_type === SearchTypes.Rent) {
+    params.rental = true;
+  }
+  if (state.search_type === SearchTypes.Sold) {
+    params.status = "sold";
+    params.sold_in_last = state.sold_in_last ?? DefaultSoldInLast;
   }
   return params;
 }

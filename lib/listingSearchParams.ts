@@ -1,11 +1,12 @@
+import { SearchTypes } from "@/lib";
 import type { SearchParamsInit } from "@/types";
+import type {
+  SearchState,
+  SearchStateUpdate
+} from "@/zod_schemas/searchStateSchema";
 import isEqual from "lodash/isEqual";
 import omit from "lodash/omit";
 import omitBy from "lodash/omitBy";
-import type {
-  SearchStateUpdate,
-  SearchState
-} from "@/zod_schemas/searchStateSchema";
 
 export const NonGeocodeParams: ReadonlyArray<keyof SearchState> = Object.freeze(
   ["bounds", "boundary_id", "zoom", "page_index"]
@@ -25,7 +26,8 @@ export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
 export const ParamDefaults = Object.freeze({
   page_index: 0,
   sort_by: "listedDate",
-  sort_direction: "desc"
+  sort_direction: "desc",
+  search_type: SearchTypes.Buy
 } satisfies SearchState);
 
 /**
