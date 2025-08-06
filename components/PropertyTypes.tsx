@@ -48,7 +48,7 @@ export function PropertyTypes() {
 
   return (
     <fieldset>
-      <legend className="my-2">Home Type</legend>
+      <legend className="form-heading">Home Type</legend>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(6rem,1fr))] gap-2">
         {propertyTypes.map(({ label, id }) => (
           <InputButton

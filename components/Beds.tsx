@@ -10,7 +10,7 @@ export function Beds() {
 
   return (
     <fieldset className="flex gap-2">
-      <legend className="my-2">Beds</legend>
+      <legend className="form-heading">Beds</legend>
       {Values.map((value) => (
         <InputButton
           key={`beds-${value ?? "any"}`}

@@ -14,7 +14,7 @@ export function SoldInLast() {
 
   return (
     <fieldset>
-      <legend className="my-2">Sold in Last</legend>
+      <legend className="form-heading">Sold in Last</legend>
       <Select
         onValueChange={(value) =>
           setSearchState({ sold_in_last: Number(value) })
