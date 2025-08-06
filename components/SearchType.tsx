@@ -1,13 +1,31 @@
 "use client";
 
+import { InputButton } from "@/components/InputButton";
 import { SearchTypes } from "@/lib";
 import { useSearchState } from "@/providers/SearchStateProvider";
 
-export const SearchTypeLabels = {
-  [SearchTypes.Buy]: "For Sale",
-  [SearchTypes.Rent]: "For Rent",
-  [SearchTypes.Sold]: "Sold"
+type SearchTypeButton = {
+  value: (typeof SearchTypes)[keyof typeof SearchTypes];
+  label: string;
+  className?: string;
 };
+
+const searchTypeButtons: SearchTypeButton[] = [
+  {
+    value: SearchTypes.Buy,
+    label: "For Sale",
+    className: "rounded-l-md"
+  },
+  {
+    value: SearchTypes.Rent,
+    label: "For Rent"
+  },
+  {
+    value: SearchTypes.Sold,
+    label: "For Sold",
+    className: "rounded-r-md"
+  }
+];
 
 export function SearchType() {
   const { searchState, setSearchState } = useSearchState();
@@ -17,22 +35,21 @@ export function SearchType() {
   return (
     <fieldset>
       <legend className="sr-only">Search Type</legend>
-      <div className="flex gap-2">
-        {Object.values(SearchTypes).map((value) => {
-          return (
-            <label key={`search-type-${value}`} className="flex gap-1">
-              <input
-                type="radio"
-                name={`search-type-${value}`}
-                id={`search-type-${value}`}
-                checked={value === searchType}
-                value={value}
-                onChange={() => setSearchState({ search_type: value })}
-              />
-              {SearchTypeLabels[value]}
-            </label>
-          );
-        })}
+      <div className="grid grid-cols-3">
+        {searchTypeButtons.map((s) => (
+          <InputButton
+            key={`search-type-${s.value}`}
+            type="radio"
+            name={`search-type-${s.value}`}
+            id={`search-type-${s.value}`}
+            checked={s.value === searchType}
+            value={s.value}
+            onChange={() => setSearchState({ search_type: s.value })}
+            className={s.className}
+          >
+            {s.label}
+          </InputButton>
+        ))}
       </div>
     </fieldset>
   );
