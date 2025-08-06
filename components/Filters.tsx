@@ -6,15 +6,16 @@ import { ClearFilters } from "@/components/ClearFilters";
 import { ForSaleFilters } from "@/components/ForSaleFilters";
 import { PropertyTypes } from "@/components/PropertyTypes";
 import { SearchType } from "@/components/SearchType";
+import { SoldInLast } from "@/components/SoldInLast";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { useSearchState } from "@/providers/SearchStateProvider";
 import { SearchTypes } from "@/lib";
 import { ParamDefaults } from "@/lib/listingSearchParams";
+import { useSearchState } from "@/providers/SearchStateProvider";
 
 export function Filters() {
   const { searchState } = useSearchState();
@@ -38,8 +39,7 @@ export function Filters() {
           <Baths />
           {searchType === SearchTypes.Buy && <ForSaleFilters />}
           {searchType !== SearchTypes.Rent && <PropertyTypes />}
-          {/* TODO: Add SoldDays component */}
-          {/* {searchType === SearchTypes.Sold && <SoldDays />} */}
+          {searchType === SearchTypes.Sold && <SoldInLast />}
           <ClearFilters />
         </form>
       </DropdownMenuContent>

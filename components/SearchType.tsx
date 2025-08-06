@@ -4,6 +4,7 @@ import { InputButton } from "@/components/InputButton";
 import { SearchTypes } from "@/lib";
 import { useSearchState } from "@/providers/SearchStateProvider";
 import { ParamDefaults } from "@/lib/listingSearchParams";
+import { type SearchStateUpdate } from "@/zod_schemas/searchStateSchema";
 
 type SearchTypeButton = {
   value: (typeof SearchTypes)[keyof typeof SearchTypes];
@@ -45,7 +46,11 @@ export function SearchType() {
             id={`search-type-${s.value}`}
             checked={s.value === searchType}
             value={s.value}
-            onChange={() => setSearchState({ search_type: s.value })}
+            onChange={() => {
+              const state: SearchStateUpdate = { search_type: s.value };
+              if (s.value !== "sold") state.sold_in_last = null;
+              setSearchState(state);
+            }}
             className={s.className}
           >
             {s.label}
