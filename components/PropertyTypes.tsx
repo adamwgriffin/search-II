@@ -49,7 +49,7 @@ export function PropertyTypes() {
   return (
     <fieldset>
       <legend className="my-2">Home Type</legend>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(6rem,1fr))] gap-2">
         {propertyTypes.map(({ label, id }) => (
           <InputButton
             key={`property-type-${label}-${id}`}
@@ -59,6 +59,7 @@ export function PropertyTypes() {
             value={id}
             checked={params.includes(id)}
             onChange={(e) => handleChange(e, id)}
+            className="rounded-md"
           >
             {label}
           </InputButton>
