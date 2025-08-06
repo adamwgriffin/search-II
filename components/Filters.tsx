@@ -30,8 +30,10 @@ export function Filters() {
             <SearchType />
             <Beds />
             <Baths />
-            <OpenHouses />
-            <IncludePending />
+            <div className="flex flex-col gap-1">
+              <OpenHouses />
+              <IncludePending />
+            </div>
             <PropertyTypes />
             <ClearFilters />
           </Suspense>
