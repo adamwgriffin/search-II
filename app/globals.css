@@ -82,7 +82,7 @@
 
 @layer components {
   .form-heading {
-    @apply mb-2;
+    @apply font-medium mb-2;
   }
 }
 
