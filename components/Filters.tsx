@@ -1,18 +1,29 @@
-import { Suspense } from "react";
+"use client";
+
 import { Baths } from "@/components/Baths";
 import { Beds } from "@/components/Beds";
+import { ClearFilters } from "@/components/ClearFilters";
+import { ForSaleFilters } from "@/components/ForSaleFilters";
+import { PropertyTypes } from "@/components/PropertyTypes";
+import { SearchType } from "@/components/SearchType";
+import { SoldInLast } from "@/components/SoldInLast";
 import { Button } from "@/components/ui/button";
-import { OpenHouses } from "@/components/OpenHouses";
-import { IncludePending } from "@/components/IncludePending";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { ClearFilters } from "@/components/ClearFilters";
-import { PropertyTypes } from "@/components/PropertyTypes";
+import { SearchTypes } from "@/lib";
+import { ParamDefaults } from "@/lib/listingSearchParams";
+import { useSearchState } from "@/providers/SearchStateProvider";
+import { LotSize } from "@/components/LotSize";
+import { Features } from "@/components/Features";
 
 export function Filters() {
+  const { searchState } = useSearchState();
+
+  const searchType = searchState.search_type ?? ParamDefaults.search_type;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,14 +36,15 @@ export function Filters() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <form className="flex flex-col gap-4 p-4 max-w-md">
-          <Suspense>
-            <Beds />
-            <Baths />
-            <OpenHouses />
-            <IncludePending />
-            <PropertyTypes />
-            <ClearFilters />
-          </Suspense>
+          <SearchType />
+          <Beds />
+          <Baths />
+          {searchType === SearchTypes.Buy && <ForSaleFilters />}
+          {searchType !== SearchTypes.Rent && <PropertyTypes />}
+          {searchType === SearchTypes.Sold && <SoldInLast />}
+          <LotSize />
+          <Features />
+          <ClearFilters />
         </form>
       </DropdownMenuContent>
     </DropdownMenu>

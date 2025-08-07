@@ -48,6 +48,7 @@ export type Listing = {
   lotSize: number;
   description: string;
   status: PropertyStatus;
+  rental?: boolean;
 };
 
 export type TListingDetail = Listing & {

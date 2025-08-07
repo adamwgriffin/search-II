@@ -1,10 +1,10 @@
 "use client";
 
-import CheckboxButton from "@/components/CheckboxButton";
+import { InputButton } from "@/components/InputButton";
 import { useSearchState } from "@/providers/SearchStateProvider";
 import { type ChangeEvent } from "react";
 
-export const propertyTypes = Object.freeze([
+const propertyTypes = Object.freeze([
   {
     id: "single-family",
     label: "House"
@@ -48,19 +48,21 @@ export function PropertyTypes() {
 
   return (
     <fieldset>
-      <legend className="my-2">Home Type</legend>
-      <div className="flex flex-wrap gap-2">
+      <legend className="form-heading">Home Type</legend>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(6rem,1fr))] gap-2">
         {propertyTypes.map(({ label, id }) => (
-          <CheckboxButton
+          <InputButton
             key={`property-type-${label}-${id}`}
+            type="checkbox"
             id={id}
             name={id}
             value={id}
             checked={params.includes(id)}
             onChange={(e) => handleChange(e, id)}
+            className="rounded-md"
           >
             {label}
-          </CheckboxButton>
+          </InputButton>
         ))}
       </div>
     </fieldset>

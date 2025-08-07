@@ -4,7 +4,8 @@ import {
   ClearFiltersParams,
   getUpdatedQueryString,
   NonGeocodeParams,
-  objectToQueryString
+  objectToQueryString,
+  ParamDefaults
 } from "@/lib/listingSearchParams";
 import { parseAndStripInvalidProperties } from "@/zod_schemas";
 import {
@@ -37,8 +38,11 @@ type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
   setSearchState: (newParams: SearchStateUpdate) => void;
   setNewLocation: (newLocationState: NewLocationState) => void;
+  setSearchType: (newSearchType: Searchtype) => void;
   clearFilters: () => void;
 };
+
+type Searchtype = Exclude<SearchState["search_type"], undefined>;
 
 const SearchStateContext = createContext<SearchStateContextValue | undefined>(
   undefined
@@ -93,6 +97,14 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
     router.push(`${pathname}?${objectToQueryString(params)}`);
   };
 
+  const setSearchType = (newSearchType: Searchtype) => {
+    const newParams = pick<SearchState>(searchParamsState, ClearFiltersParams);
+    if (newSearchType !== ParamDefaults.search_type) {
+      newParams.search_type = newSearchType;
+    }
+    router.push(`${pathname}?${objectToQueryString(newParams)}`);
+  };
+
   const clearFilters = () => {
     const keptParams = pick(searchParamsState, ClearFiltersParams);
     const url = isEmpty(keptParams)
@@ -107,6 +119,7 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
         searchState: searchParamsState,
         setSearchState,
         setNewLocation,
+        setSearchType,
         clearFilters
       }}
     >

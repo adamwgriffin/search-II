@@ -1,11 +1,12 @@
+import { SearchTypes } from "@/lib";
 import type { SearchParamsInit } from "@/types";
+import type {
+  SearchState,
+  SearchStateUpdate
+} from "@/zod_schemas/searchStateSchema";
 import isEqual from "lodash/isEqual";
 import omit from "lodash/omit";
 import omitBy from "lodash/omitBy";
-import type {
-  SearchStateUpdate,
-  SearchState
-} from "@/zod_schemas/searchStateSchema";
 
 export const NonGeocodeParams: ReadonlyArray<keyof SearchState> = Object.freeze(
   ["bounds", "boundary_id", "zoom", "page_index"]
@@ -15,17 +16,27 @@ export const NonGeocodeParams: ReadonlyArray<keyof SearchState> = Object.freeze(
  * Params to keep when when clearing filters from search state
  */
 export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
-  Object.freeze(["address", "place_id", "bounds", "boundary_id", "zoom"]);
+  Object.freeze([
+    "address",
+    "place_id",
+    "address_types",
+    "bounds",
+    "boundary_id",
+    "zoom"
+  ]);
 
 /**
- * Keep track of a subset of Listing Service param defaults so that we can avoid
- * sending them in the request if the service would behave this way be default
- * anyway
+ * Keep track of a subset of search state param defaults so that we can avoid
+ * adding them to the url or sending them in the request if the service would
+ * behave this way be default anyway
  */
 export const ParamDefaults = Object.freeze({
   page_index: 0,
   sort_by: "listedDate",
-  sort_direction: "desc"
+  sort_direction: "desc",
+  search_type: SearchTypes.Buy,
+  include_pending: false,
+  open_houses: false
 } satisfies SearchState);
 
 /**

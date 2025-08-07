@@ -32,6 +32,7 @@ export function ListingCard({ listing }: ListingCardsProps) {
       </div>
       <div className="font-medium text-xl pt-2">
         {formatPrice(listing.soldPrice || listing.listPrice)}
+        {listing.rental && "/mo"}
       </div>
       <div className="flex gap-x-2">
         <ListingInfo listing={listing} />
