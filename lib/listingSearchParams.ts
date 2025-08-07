@@ -26,15 +26,17 @@ export const ClearFiltersParams: ReadonlyArray<keyof SearchState> =
   ]);
 
 /**
- * Keep track of a subset of Listing Service param defaults so that we can avoid
- * sending them in the request if the service would behave this way be default
- * anyway
+ * Keep track of a subset of search state param defaults so that we can avoid
+ * adding them to the url or sending them in the request if the service would
+ * behave this way be default anyway
  */
 export const ParamDefaults = Object.freeze({
   page_index: 0,
   sort_by: "listedDate",
   sort_direction: "desc",
-  search_type: SearchTypes.Buy
+  search_type: SearchTypes.Buy,
+  include_pending: false,
+  open_houses: false
 } satisfies SearchState);
 
 /**
