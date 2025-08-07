@@ -17,6 +17,7 @@ import { SearchTypes } from "@/lib";
 import { ParamDefaults } from "@/lib/listingSearchParams";
 import { useSearchState } from "@/providers/SearchStateProvider";
 import { LotSize } from "@/components/LotSize";
+import { Features } from "@/components/Features";
 
 export function Filters() {
   const { searchState } = useSearchState();
@@ -42,6 +43,7 @@ export function Filters() {
           {searchType !== SearchTypes.Rent && <PropertyTypes />}
           {searchType === SearchTypes.Sold && <SoldInLast />}
           <LotSize />
+          <Features />
           <ClearFilters />
         </form>
       </DropdownMenuContent>
