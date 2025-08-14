@@ -34,6 +34,8 @@ type NewLocationState =
   | { address: string }
   | { place_id: string; address_types: string };
 
+type Searchtype = Exclude<SearchState["search_type"], undefined>;
+
 type SearchStateContextValue = {
   searchState: Readonly<SearchState>;
   setSearchState: (newParams: SearchStateUpdate) => void;
@@ -41,8 +43,6 @@ type SearchStateContextValue = {
   setSearchType: (newSearchType: Searchtype) => void;
   clearFilters: () => void;
 };
-
-type Searchtype = Exclude<SearchState["search_type"], undefined>;
 
 const SearchStateContext = createContext<SearchStateContextValue | undefined>(
   undefined
