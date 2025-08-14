@@ -16,7 +16,7 @@ import {
   MapBoundaryStyleOptions
 } from "@/lib/googleMapsOptions";
 import { ListingMarker } from "./ListingMarker";
-import { getNewParamsFromCurrentState } from "@/lib/listingSearchParams";
+import { getNewSearchStateFromMap } from "@/lib/listingSearchParams";
 
 export function ListingMap() {
   const map = useMap();
@@ -40,13 +40,13 @@ export function ListingMap() {
     if (!updateFiltersOnMapIdle.current) return;
     updateFiltersOnMapIdle.current = false;
     if (!map) return;
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    const newParams = getNewSearchStateFromMap(map, results.boundaryId);
     setSearchState(newParams);
   }, [results.boundaryId, map, setSearchState]);
 
   const handleZoomIn = useCallback(() => {
     if (!map) return;
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    const newParams = getNewSearchStateFromMap(map, results.boundaryId);
     newParams.zoom =
       typeof newParams.zoom === "number" ? newParams.zoom + 1 : 1;
     setSearchState(newParams);
@@ -54,7 +54,7 @@ export function ListingMap() {
 
   const handleZoomOut = useCallback(() => {
     if (!map) return;
-    const newParams = getNewParamsFromCurrentState(map, results.boundaryId);
+    const newParams = getNewSearchStateFromMap(map, results.boundaryId);
     newParams.zoom =
       typeof newParams.zoom === "number" ? newParams.zoom - 1 : 1;
     setSearchState(newParams);

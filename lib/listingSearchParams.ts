@@ -84,7 +84,7 @@ export function getUpdatedQueryString(
   return objectToQueryString(getUpdatedParams(currentState, newState));
 }
 
-export function getNewParamsFromCurrentState(
+export function getNewSearchStateFromMap(
   map: google.maps.Map,
   boundaryId: string | null | undefined
 ) {
