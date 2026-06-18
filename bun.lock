@@ -28,7 +28,6 @@
         "@tailwindcss/postcss": "^4.3.1",
         "@tanstack/eslint-plugin-query": "^5.101.0",
         "@tanstack/react-query-devtools": "^5.101.0",
-        "@types/google.maps": "^3.65.1",
         "@types/lodash": "^4.17.24",
         "@types/node": "^25.9.3",
         "@types/react": "^19.2.17",
