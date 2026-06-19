@@ -6,7 +6,7 @@ export const GoogleMapsStreetViewURL =
 export const GoogleStreetViewMaxImageSize = 640;
 
 export const MapBoundaryStyleOptions: google.maps.Data.StyleOptions = {
-  strokeColor: "darkgray",
+  strokeColor: "#A14DFD",
   strokeOpacity: 1,
   strokeWeight: 2,
   fillOpacity: 0
