@@ -3,7 +3,9 @@ import ListingDetail from "@/components/ListingDetail/ListingDetail";
 import { ErrorMessage } from "@/components/ErrorMessage";
 
 type ListingPageProps = {
-  params: { slug: string };
+  params: Promise<{
+    slug: string;
+  }>;
 };
 
 export default async function ListingPage({ params }: ListingPageProps) {
