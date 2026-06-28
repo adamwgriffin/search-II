@@ -20,6 +20,12 @@ import { getNewSearchStateFromMap } from "@/lib/listingSearchParams";
 
 export function ListingMap() {
   const map = useMap();
+  // We normally want to update filters to cause a new listing data fetch after
+  // the map "idle" event is triggered by a user dragging the map. However, some
+  // other events, such as "zoom" can also trigger this same "idle" event. We
+  // need to handle zoom differently from drag events, so we use this ref as a
+  // flag to be able to tell what occurred between events in order to know
+  // wether we should update based on drag or zoom events.
   const updateFiltersOnMapIdle = useRef(false);
   const { searchState, setSearchState } = useSearchState();
   const results = useSearchResultsData();
@@ -36,6 +42,8 @@ export function ListingMap() {
     searchState.address || searchState.place_id || searchState.boundary_id
   );
 
+  // Handle "idle" map events that were not triggered by the "zoom" event. The
+  // updateFiltersOnMapIdle flag indicates wether or not to do anything.
   const handleIdle = useCallback(() => {
     if (!updateFiltersOnMapIdle.current) return;
     updateFiltersOnMapIdle.current = false;
@@ -60,10 +68,14 @@ export function ListingMap() {
     setSearchState(newParams);
   }, [map, results.boundaryId, setSearchState]);
 
+  // If the user adjusted the map by dragging it, set this flag so that we know
+  // to update filters when the "idle" event is subsequently triggered.
   const handleUserAdjustedMap = useCallback(() => {
     updateFiltersOnMapIdle.current = true;
   }, []);
 
+  // The Map object doesn't have scroll wheel event so you have to add it by
+  // using a native DOM listener yourself.
   useEffect(() => {
     map?.getDiv()?.addEventListener("wheel", handleUserAdjustedMap);
     return () =>
