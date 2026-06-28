@@ -37,10 +37,22 @@ type NewLocationState =
 type Searchtype = Exclude<SearchState["search_type"], undefined>;
 
 type SearchStateContextValue = {
+  /** The current searchState */
   searchState: Readonly<SearchState>;
+  /**
+   * Update params, like filters or map state, for the current location
+   */
   setSearchState: (newParams: SearchStateUpdate) => void;
+  /**
+   * This is used for the inital search when a user chooses a new location
+   */
   setNewLocation: (newLocationState: NewLocationState) => void;
+  /** Changes the search type, like going from active to sold listings for
+   * example. This will clear some of the current filters. */
   setSearchType: (newSearchType: Searchtype) => void;
+  /**
+   * Remove all filters, keeping location params intact
+   */
   clearFilters: () => void;
 };
 
@@ -48,6 +60,10 @@ const SearchStateContext = createContext<SearchStateContextValue | undefined>(
   undefined
 );
 
+/**
+ * Strip invalid params, coerce values from strings into their expected types
+ * (number, boolean, etc.) and convert URLSearchParams into an object type.
+ */
 function getStateFromParams(
   searchParams: ReadonlyURLSearchParams
 ): Readonly<SearchState> {
@@ -128,6 +144,7 @@ export const SearchStateProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+/** A context hook used to work with the listing search state */
 export const useSearchState = (): SearchStateContextValue => {
   const context = useContext(SearchStateContext);
   if (context === undefined) {

@@ -55,6 +55,7 @@ export function removeUnwantedParams(params: SearchStateUpdate) {
   });
 }
 
+/** Convert the searchState object into a URL query string */
 export function objectToQueryString(params: SearchState) {
   // Casting params as SearchParamsInit because the current type provided by
   // Typescript for this is not correct
@@ -84,6 +85,9 @@ export function getUpdatedQueryString(
   return objectToQueryString(getUpdatedParams(currentState, newState));
 }
 
+/**
+ * Get the current state of Map object in order to update the searchState
+ */
 export function getNewSearchStateFromMap(
   map: google.maps.Map,
   boundaryId: string | null | undefined

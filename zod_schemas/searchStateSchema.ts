@@ -46,7 +46,7 @@ export const searchStateSchema = z.partial(
 
 export type SearchState = z.infer<typeof searchStateSchema>;
 
-// Using "null" in an updated indicates that the value should be removed
+// Using "null" in an update indicates that the value should be removed
 export type SearchStateUpdate = {
   [K in keyof SearchState]: SearchState[K] | null;
 };
